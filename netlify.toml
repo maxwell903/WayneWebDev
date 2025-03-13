@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "dist/browser"
+  publish = "dist/waynes-web-dev/browser"
 
 [dev]
   command = "npm run dev:ssr"
