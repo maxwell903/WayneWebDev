@@ -1,22 +1,22 @@
 <section class="projects-section">
-    <div class="container">
-      <div class="projects-header">
-        <h1 class="section-title">My Projects</h1>
-        <p>Here you'll find a selection of my recent work. Each project represents different challenges and solutions.</p>
-      </div>
-      
-      <div class="projects-filters">
-        <button 
-          *ngFor="let filter of filters"
-          class="project-filter-btn"
-          [class.active]="activeFilter === filter"
-          (click)="filterProjects(filter)">
-          {{filter}}
-        </button>
-      </div>
-      
-      <div class="projects-list">
-        <app-project-card *ngFor="let project of filteredProjects" [project]="project"></app-project-card>
-      </div>
+  <div class="container">
+    <div class="projects-header">
+      <h1 class="section-title">My Projects</h1>
+      <p>Here you'll find a selection of my recent work. Each project represents different challenges and solutions.</p>
     </div>
-  </section>
+    
+    <div class="projects-filters">
+      <button 
+        *ngFor="let filter of filters"
+        class="project-filter-btn"
+        [class.active]="activeFilter === filter"
+        (click)="filterProjects(filter)">
+        {{filter}}
+      </button>
+    </div>
+    
+    <div class="projects-list">
+      <app-project-card *ngFor="let project of filteredProjects" [project]="project"></app-project-card>
+    </div>
+  </div>
+</section>

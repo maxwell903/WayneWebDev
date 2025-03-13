@@ -7,45 +7,20 @@
     <h3 class="project-title">{{project.title}}</h3>
     <p class="project-description">{{project.description}}</p>
     
-    <div class="project-skills">
-      <span class="skills-label">Skills:</span>
-      <div class="skills-tags">
-        <span 
-          *ngFor="let skill of project.skills" 
-          class="skill-tag"
-          [@highlightTag]="getSkillState(skill)"
-          (mouseenter)="setHoveredSkill(skill)"
-          (mouseleave)="setHoveredSkill(null)">
-          {{skill}}
-        </span>
-      </div>
-    </div>
-    
-    <div class="project-features">
-      <h4>Key Features</h4>
-      <ul class="features-list">
-        <li *ngFor="let feature of project.features; let i = index" class="feature-item">
-          <div class="feature-header" (click)="toggleFeature(i)">
-            <h5 class="feature-title">{{feature.title}}</h5>
-            <div class="toggle-icon" [@rotateCaret]="getFeatureState(i)">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </div>
-          </div>
-          
-          <div class="feature-detail" [@expandDetail]="getFeatureState(i)">
-            <p>{{feature.description}}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    
     <div class="project-tech">
       <h4>Technologies Used</h4>
       <div class="tech-tags">
         <span class="tech-tag" *ngFor="let tech of project.technologies">{{tech}}</span>
       </div>
+    </div>
+    
+    <div class="project-features" *ngIf="project.features && project.features.length > 0">
+      <h4>Key Features</h4>
+      <ul class="features-list">
+        <li *ngFor="let feature of project.features" class="feature-item">
+          {{feature}}
+        </li>
+      </ul>
     </div>
     
     <div class="project-actions">
