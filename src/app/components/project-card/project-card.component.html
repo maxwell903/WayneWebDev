@@ -1,0 +1,53 @@
+<!-- src/app/components/project-card/project-card.component.html -->
+<div class="project-card">
+    <div class="project-image">
+      <img [src]="project.imageUrl" [alt]="project.title">
+    </div>
+    
+    <div class="project-content">
+      <h3 class="project-title">{{project.title}}</h3>
+      <p class="project-description">{{project.description}}</p>
+      
+      <div class="project-tech">
+        <span class="tech-tag" *ngFor="let tech of project.technologies">{{tech}}</span>
+      </div>
+      
+      <div class="project-actions">
+        <button class="btn btn-text" (click)="toggleDetails()">
+          {{isExpanded ? 'Hide Details' : 'Show Details'}}
+        </button>
+        <a [href]="project.demoUrl" class="btn btn-outline" target="_blank" rel="noopener">Live Demo</a>
+        <a [href]="project.githubUrl" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      
+      <div class="project-details" *ngIf="isExpanded">
+        <div class="project-section">
+          <h4>The Challenge</h4>
+          <p>{{project.challenge || 'Placeholder for project challenge description'}}</p>
+        </div>
+        
+        <div class="project-section">
+          <h4>My Approach</h4>
+          <ul class="approach-list">
+            <li *ngFor="let approach of project.approaches || ['Placeholder approach item 1', 'Placeholder approach item 2']">
+              {{approach}}
+            </li>
+          </ul>
+        </div>
+        
+        <div class="project-section">
+          <h4>Key Features</h4>
+          <ul class="features-list">
+            <li *ngFor="let feature of project.features || ['Placeholder feature 1', 'Placeholder feature 2']">
+              {{feature}}
+            </li>
+          </ul>
+        </div>
+        
+        <div class="project-section">
+          <h4>Outcome</h4>
+          <p>{{project.outcome || 'Placeholder for project outcome description'}}</p>
+        </div>
+      </div>
+    </div>
+  </div>

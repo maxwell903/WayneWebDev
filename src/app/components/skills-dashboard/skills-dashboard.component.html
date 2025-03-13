@@ -1,0 +1,64 @@
+<div class="skills-container">
+    <div class="skills-filters">
+      <button 
+        *ngFor="let category of categories"
+        class="filter-btn"
+        [class.active]="selectedCategory === category"
+        (click)="filterByCategory(category)">
+        {{category}}
+      </button>
+    </div>
+    
+    <div class="skills-grid">
+      <div class="skill-item" *ngFor="let skill of filteredSkills" (click)="showSkillDetails(skill)">
+        <div class="skill-header">
+          <h3 class="skill-name">{{skill.name}}</h3>
+          <span class="skill-category">{{skill.category}}</span>
+        </div>
+        <div class="skill-bar">
+          <div class="skill-progress" [style.width.%]="skill.proficiency"></div>
+        </div>
+        <div class="skill-meta">
+          <span class="skill-label">{{skill.proficiency}}%</span>
+          <span class="skill-years" *ngIf="skill.years">{{skill.years}} years</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Skill Detail Modal -->
+    <div class="skill-modal" *ngIf="selectedSkill" (click)="closeSkillDetails()">
+      <div class="skill-detail" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeSkillDetails()">&times;</button>
+        
+        <div class="skill-detail-header">
+          <h2>{{selectedSkill.name}}</h2>
+          <span class="skill-category-badge">{{selectedSkill.category}}</span>
+        </div>
+        
+        <div class="skill-proficiency">
+          <div class="skill-bar">
+            <div class="skill-progress" [style.width.%]="selectedSkill.proficiency"></div>
+          </div>
+          <span class="skill-percent">{{selectedSkill.proficiency}}%</span>
+        </div>
+        
+        <div class="skill-info">
+          <p class="skill-description">{{selectedSkill.description}}</p>
+          
+          <div class="skill-meta-info">
+            <div class="skill-meta-item">
+              <span class="meta-label">Experience:</span>
+              <span class="meta-value">{{selectedSkill.years}} years</span>
+            </div>
+          </div>
+          
+          <div class="skill-projects" *ngIf="selectedSkill.projects && selectedSkill.projects.length > 0">
+            <h3>Related Projects</h3>
+            <ul>
+              <li *ngFor="let project of selectedSkill.projects">{{project}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

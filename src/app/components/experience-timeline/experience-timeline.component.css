@@ -1,0 +1,123 @@
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 0;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background-color: var(--light-gray);
+    transform: translateX(-50%);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 60px;
+    width: 100%;
+    display: flex;
+  }
+  
+  .timeline-item:nth-child(odd) {
+    justify-content: flex-start;
+  }
+  
+  .timeline-item:nth-child(even) {
+    justify-content: flex-end;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  
+  .timeline-marker.education {
+    background-color: var(--primary);
+  }
+  
+  .timeline-marker.work {
+    background-color: var(--accent);
+  }
+  
+  .timeline-content {
+    width: 45%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  
+  .timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    transform: rotate(45deg);
+  }
+  
+  .timeline-item:nth-child(odd) .timeline-content::before {
+    right: -10px;
+  }
+  
+  .timeline-item:nth-child(even) .timeline-content::before {
+    left: -10px;
+  }
+  
+  .timeline-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .timeline-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--gray);
+  }
+  
+  .timeline-description {
+    color: var(--dark);
+  }
+  
+  @media (max-width: 768px) {
+    .timeline::before {
+      left: 30px;
+    }
+    
+    .timeline-item {
+      justify-content: flex-start;
+      padding-left: 70px;
+    }
+    
+    .timeline-marker {
+      left: 30px;
+    }
+    
+    .timeline-content {
+      width: 100%;
+    }
+    
+    .timeline-content::before {
+      left: -10px;
+    }
+    
+    .timeline-item:nth-child(even) .timeline-content::before {
+      left: -10px;
+    }
+  }
