@@ -1,16 +1,3 @@
 [build]
-  command = "npm run build"
+  command = "ng build"
   publish = "dist/waynes-web-dev/browser"
-
-[edge_functions]
-
-[functions]
-  directory = ".netlify/functions/"
-  
-[dev]
-  functions = ".netlify/functions/"
-  
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/ssr"
-  status = 200

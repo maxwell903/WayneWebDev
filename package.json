@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && ng run waynes-web-dev:server:production && cp src/index.html dist/waynes-web-dev/server/index.server.html",
+    "build": "ng build",
     "prerender": "ng run waynes-web-dev:prerender",
     "dev:ssr": "ng run waynes-web-dev:serve-ssr",
     "watch": "ng build --watch --configuration development",
