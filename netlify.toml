@@ -3,7 +3,6 @@
   publish = "dist/waynes-web-dev/browser"
 
 [edge_functions]
-  function_directory = ".netlify/edge-functions"
 
 [functions]
   directory = ".netlify/functions/"
