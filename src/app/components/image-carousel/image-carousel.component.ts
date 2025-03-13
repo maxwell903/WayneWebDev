@@ -1,9 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { isPlatformBrowser } from '@angular/common';
-
 
 @Component({
   selector: 'app-image-carousel',
@@ -15,29 +13,44 @@ import { isPlatformBrowser } from '@angular/common';
       <div class="carousel">
         <!-- Image container with transitions -->
         <div class="carousel-inner">
-          <img 
-            *ngFor="let image of images; let i = index" 
-            [src]="image" 
-            [alt]="altText" 
-            [class.active]="i === currentIndex"
-            (click)="toggleExpand()"
-          >
+          <ng-container *ngFor="let image of images; let i = index">
+            <img 
+              [src]="image" 
+              [alt]="altText"
+              [class.active]="i === currentIndex"
+              (click)="toggleExpand()"
+              (error)="handleImageError($event, i)"
+            />
+          </ng-container>
+          
+          <!-- Fallback if all images fail to load -->
+          <div *ngIf="images.length === 0 || allImagesFailedToLoad" 
+               class="fallback-placeholder active"
+               (click)="toggleExpand()">
+            <div class="placeholder-content">
+              <span>{{altText || 'Image not available'}}</span>
+            </div>
+          </div>
         </div>
         
-        <!-- Navigation buttons -->
-        <button class="carousel-control prev" (click)="previous(); $event.stopPropagation()">
+        <!-- Navigation buttons (only show if multiple images) -->
+        <button *ngIf="images.length > 1 && !allImagesFailedToLoad" 
+                class="carousel-control prev" 
+                (click)="previous(); $event.stopPropagation()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </button>
-        <button class="carousel-control next" (click)="next(); $event.stopPropagation()">
+        <button *ngIf="images.length > 1 && !allImagesFailedToLoad" 
+                class="carousel-control next" 
+                (click)="next(); $event.stopPropagation()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </button>
         
-        <!-- Indicator dots -->
-        <div class="carousel-dots">
+        <!-- Indicator dots (only show if multiple images) -->
+        <div *ngIf="images.length > 1 && !allImagesFailedToLoad" class="carousel-dots">
           <button 
             *ngFor="let image of images; let i = index" 
             class="dot" 
@@ -58,21 +71,29 @@ import { isPlatformBrowser } from '@angular/common';
           </button>
           
           <div class="expanded-carousel">
-            <img [src]="images[currentIndex]" [alt]="altText">
+            <ng-container *ngIf="!allImagesFailedToLoad; else expandedFallback">
+              <img [src]="images[currentIndex]" [alt]="altText">
+              
+              <button *ngIf="images.length > 1" class="expanded-control prev" (click)="previous(); $event.stopPropagation()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button *ngIf="images.length > 1" class="expanded-control next" (click)="next(); $event.stopPropagation()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </ng-container>
             
-            <button class="expanded-control prev" (click)="previous(); $event.stopPropagation()">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-            <button class="expanded-control next" (click)="next(); $event.stopPropagation()">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
+            <ng-template #expandedFallback>
+              <div class="expanded-fallback">
+                <span>{{altText || 'Image not available'}}</span>
+              </div>
+            </ng-template>
           </div>
           
-          <div class="expanded-indicator">
+          <div *ngIf="!allImagesFailedToLoad && images.length > 1" class="expanded-indicator">
             {{currentIndex + 1}} / {{images.length}}
           </div>
         </div>
@@ -115,6 +136,42 @@ import { isPlatformBrowser } from '@angular/common';
     .carousel-inner img.active {
       opacity: 1;
       z-index: 1;
+    }
+    
+    /* Fallback placeholder styling */
+    .fallback-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    
+    .fallback-placeholder.active {
+      opacity: 1;
+      z-index: 1;
+    }
+    
+    .placeholder-content {
+      padding: 20px;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .expanded-fallback {
+      padding: 30px;
+      background-color: #333;
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      font-style: italic;
     }
     
     /* Navigation buttons */
@@ -320,29 +377,66 @@ export class ImageCarouselComponent implements OnInit, OnDestroy {
   currentIndex = 0;
   isExpanded = false;
   isPaused = false;
+  allImagesFailedToLoad = false;
   
   private destroy$ = new Subject<void>();
   private slideInterval = 6000; // 6 seconds
+  private loadErrors: Set<number> = new Set();
   
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-ngOnInit(): void {
-  // Only start auto-slide in browser environment
-  if (isPlatformBrowser(this.platformId)) {
-    this.startAutoSlide();
+  ngOnInit(): void {
+    // Only start auto-slide in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      // Check if all images are valid
+      if (this.images.length === 0) {
+        this.allImagesFailedToLoad = true;
+      }
+      this.startAutoSlide();
+    }
   }
-}
   
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
   
+  handleImageError(event: Event, index: number): void {
+    // Mark this image as failed to load
+    this.loadErrors.add(index);
+    
+    // Check if all images failed to load
+    if (this.loadErrors.size === this.images.length) {
+      this.allImagesFailedToLoad = true;
+    } else if (index === this.currentIndex) {
+      // If current image fails, move to next valid image
+      this.findNextValidImage();
+    }
+  }
+  
+  findNextValidImage(): void {
+    let nextIndex = this.currentIndex;
+    let attempts = 0;
+    
+    // Try to find a valid image, checking all possible indices
+    while (attempts < this.images.length) {
+      nextIndex = (nextIndex + 1) % this.images.length;
+      if (!this.loadErrors.has(nextIndex)) {
+        this.currentIndex = nextIndex;
+        return;
+      }
+      attempts++;
+    }
+    
+    // If all images failed, set the flag
+    this.allImagesFailedToLoad = true;
+  }
+  
   startAutoSlide(): void {
     interval(this.slideInterval)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (!this.isPaused) {
+        if (!this.isPaused && !this.allImagesFailedToLoad && this.images.length > 1) {
           this.next();
         }
       });
@@ -359,15 +453,43 @@ ngOnInit(): void {
   }
   
   previous(): void {
-    this.currentIndex = this.currentIndex === 0 ? this.images.length - 1 : this.currentIndex - 1;
+    if (this.allImagesFailedToLoad || this.images.length <= 1) return;
+    
+    let prevIndex = this.currentIndex;
+    let attempts = 0;
+    
+    // Try to find previous valid image
+    while (attempts < this.images.length) {
+      prevIndex = prevIndex === 0 ? this.images.length - 1 : prevIndex - 1;
+      if (!this.loadErrors.has(prevIndex)) {
+        this.currentIndex = prevIndex;
+        return;
+      }
+      attempts++;
+    }
   }
   
   next(): void {
-    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    if (this.allImagesFailedToLoad || this.images.length <= 1) return;
+    
+    let nextIndex = this.currentIndex;
+    let attempts = 0;
+    
+    // Try to find next valid image
+    while (attempts < this.images.length) {
+      nextIndex = (nextIndex + 1) % this.images.length;
+      if (!this.loadErrors.has(nextIndex)) {
+        this.currentIndex = nextIndex;
+        return;
+      }
+      attempts++;
+    }
   }
   
   goToSlide(index: number): void {
-    this.currentIndex = index;
+    if (!this.loadErrors.has(index)) {
+      this.currentIndex = index;
+    }
   }
   
   toggleExpand(): void {

@@ -10,15 +10,15 @@ export class ProjectService {
       id: 'groshme-beta',
       title: 'GroshmeBeta - Comprehensive Meal Planning Platform',
       description: 'A full-stack application designed to simplify meal planning, grocery shopping, and recipe management. The platform allows users to create and manage recipes, plan weekly meals, generate grocery lists, track kitchen inventory, and monitor fitness with workout scheduling tools.',
-      // Multiple images for carousel
+      // Multiple images for carousel - using relative paths that match the assets structure
       imageUrls: [
-        '/assets/images/groshme-preview-1.jpg',
-        '/assets/images/groshme-preview-2.jpg',
-        '/assets/images/groshme-preview-3.jpg',
-        '/assets/images/groshme-preview-4.jpg'
+        'assets/images/groshme/preview-1.jpg',
+        'assets/images/groshme/preview-2.jpg',
+        'assets/images/groshme/preview-3.jpg',
+        'assets/images/groshme/preview-4.jpg'
       ],
       // Legacy single image support
-      imageUrl: '/assets/images/groshme-preview-1.jpg',
+      imageUrl: 'assets/images/groshme/preview-1.jpg',
       demoUrl: 'https://groshmebeta.netlify.app',
       githubUrl: 'https://github.com/yourusername/groshme-beta',
       technologies: [
@@ -49,13 +49,13 @@ export class ProjectService {
       description: 'A modern, engaging website for a personal training business featuring animated UI components, responsive design, and customer engagement tools. The site showcases trainer services, qualifications, and provides easy contact methods for potential clients.',
       // Multiple images for carousel
       imageUrls: [
-        '/assets/images/sophit-preview-1.jpg',
-        '/assets/images/sophit-preview-2.jpg',
-        '/assets/images/sophit-preview-3.jpg',
-        '/assets/images/sophit-preview-4.jpg'
+        'assets/images/sophit/preview-1.jpg',
+        'assets/images/sophit/preview-2.jpg',
+        'assets/images/sophit/preview-3.jpg',
+        'assets/images/sophit/preview-4.jpg'
       ],
       // Legacy single image support
-      imageUrl: '/assets/images/sophit-preview-1.jpg',
+      imageUrl: 'assets/images/sophit/preview-1.jpg',
       demoUrl: 'https://sophittrainingco.com',
       githubUrl: 'https://github.com/yourusername/sophit-training',
       technologies: [
@@ -99,7 +99,7 @@ export class ProjectService {
     // If no multiple images are defined, use the fallback single image 
     // or a placeholder if even that doesn't exist
     if (!project.imageUrls || project.imageUrls.length === 0) {
-      const defaultImage = project.imageUrl || '/assets/images/project-placeholder.jpg';
+      const defaultImage = project.imageUrl || 'assets/images/project-placeholder.jpg';
       return [defaultImage];
     }
     return project.imageUrls;
