@@ -1,41 +1,65 @@
+.projects-section {
+  padding: 80px 0;
+  background-color: var(--light);
+}
+
+.container {
+  width: 90%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
 .projects-header {
-    text-align: center;
-    margin-bottom: 60px;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.projects-header p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: var(--gray);
+}
+
+.projects-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.project-filter-btn {
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--light-gray);
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.project-filter-btn:hover,
+.project-filter-btn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Updated grid layout to use 2 columns instead of 3 */
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Changed from auto-fill to 2 columns */
+  gap: 30px;
+}
+
+/* Make sure single column on mobile */
+@media (max-width: 768px) {
+  .projects-list {
+    grid-template-columns: 1fr;
   }
   
-  .projects-header p {
-    max-width: 700px;
-    margin: 0 auto;
-    color: var(--gray);
-  }
-  
-  .projects-filters {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
+  .projects-header {
     margin-bottom: 40px;
   }
-  
-  .project-filter-btn {
-    padding: 8px 20px;
-    background: none;
-    border: 1px solid var(--light-gray);
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: var(--transition);
-  }
-  
-  .project-filter-btn:hover,
-  .project-filter-btn.active {
-    background-color: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
-  
-  .projects-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 30px;
-  }
+}

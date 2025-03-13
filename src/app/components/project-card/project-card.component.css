@@ -14,8 +14,9 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
+/* Increase image height for larger cards */
 .project-image {
-  height: 240px;
+  height: 320px; /* Increased from 240px */
   overflow: hidden;
   position: relative;
 }
@@ -31,52 +32,55 @@
   transform: scale(1.05);
 }
 
+/* Increase padding for more spacious content */
 .project-content {
-  padding: 24px;
+  padding: 32px; /* Increased from 24px */
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
+/* Increase font sizes for larger cards */
 .project-title {
-  font-size: 1.5rem;
+  font-size: 1.75rem; /* Increased from 1.5rem */
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 16px; /* Increased from 12px */
   color: var(--secondary);
 }
 
 .project-description {
   color: var(--gray);
-  margin-bottom: 20px;
+  margin-bottom: 24px; /* Increased from 20px */
   line-height: 1.6;
+  font-size: 1.1rem; /* Slightly larger text */
 }
 
 .project-tech {
-  margin-bottom: 24px;
+  margin-bottom: 28px; /* Increased from 24px */
 }
 
 .project-tech h4, 
 .project-features h4,
 .project-challenge h4,
 .project-outcome h4 {
-  font-size: 1.1rem;
+  font-size: 1.2rem; /* Increased from 1.1rem */
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 16px; /* Increased from 12px */
   color: var(--secondary);
 }
 
 .tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px; /* Increased from 8px */
 }
 
 .tech-tag {
   background-color: rgba(52, 152, 219, 0.1);
   color: var(--primary);
-  padding: 4px 10px;
+  padding: 6px 12px; /* Increased from 4px 10px */
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.9rem; /* Increased from 0.8rem */
   transition: all 0.2s ease;
 }
 
@@ -86,46 +90,48 @@
 }
 
 .project-features {
-  margin-bottom: 24px;
+  margin-bottom: 28px; /* Increased from 24px */
 }
 
 .features-list {
   list-style-type: disc;
-  padding-left: 20px;
+  padding-left: 24px; /* Increased from 20px */
   color: var(--gray);
 }
 
 .feature-item {
-  margin-bottom: 8px;
+  margin-bottom: 10px; /* Increased from 8px */
   line-height: 1.5;
+  font-size: 1.05rem; /* Slightly larger */
 }
 
 .project-challenge, 
 .project-outcome {
-  margin-bottom: 24px;
+  margin-bottom: 28px; /* Increased from 24px */
 }
 
 .project-challenge p, 
 .project-outcome p {
   color: var(--gray);
   line-height: 1.6;
+  font-size: 1.05rem; /* Slightly larger */
 }
 
 .project-actions {
   margin-top: auto;
   display: flex;
-  gap: 12px;
+  gap: 16px; /* Increased from 12px */
 }
 
 .btn {
-  padding: 10px 16px;
+  padding: 12px 20px; /* Increased from 10px 16px */
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1rem; /* Increased from 0.9rem */
 }
 
 .btn-primary {
@@ -150,14 +156,24 @@
   transform: translateY(-2px);
 }
 
-/* Added responsive layout adjustments */
+/* Enhanced responsive layout adjustments */
+@media (max-width: 992px) {
+  .project-image {
+    height: 280px;
+  }
+}
+
 @media (max-width: 768px) {
   .project-image {
-    height: 200px;
+    height: 240px;
   }
   
   .project-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+  }
+  
+  .project-content {
+    padding: 24px;
   }
   
   .project-actions {

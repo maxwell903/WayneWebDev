@@ -12,13 +12,13 @@ export class ProjectService {
       description: 'A full-stack application designed to simplify meal planning, grocery shopping, and recipe management. The platform allows users to create and manage recipes, plan weekly meals, generate grocery lists, track kitchen inventory, and monitor fitness with workout scheduling tools.',
       // Multiple images for carousel - using relative paths that match the assets structure
       imageUrls: [
-        'assets/images/groshme/preview-1.jpg',
-        'assets/images/groshme/preview-2.jpg',
-        'assets/images/groshme/preview-3.jpg',
-        'assets/images/groshme/preview-4.jpg'
+        'assets/images/groshme/groshme-preview-1.jpg',
+        'assets/images/groshme/groshme-preview-2.jpg',
+        'assets/images/groshme/groshme-preview-3.jpg',
+        'assets/images/groshme/groshme-preview-4.jpg'
       ],
       // Legacy single image support
-      imageUrl: 'assets/images/groshme/preview-1.jpg',
+      imageUrl: 'assets/images/groshme/groshme-preview-1.jpg',
       demoUrl: 'https://groshmebeta.netlify.app',
       githubUrl: 'https://github.com/yourusername/groshme-beta',
       technologies: [
@@ -49,13 +49,13 @@ export class ProjectService {
       description: 'A modern, engaging website for a personal training business featuring animated UI components, responsive design, and customer engagement tools. The site showcases trainer services, qualifications, and provides easy contact methods for potential clients.',
       // Multiple images for carousel
       imageUrls: [
-        'assets/images/sophit/preview-1.jpg',
-        'assets/images/sophit/preview-2.jpg',
-        'assets/images/sophit/preview-3.jpg',
-        'assets/images/sophit/preview-4.jpg'
+        'assets/images/sophit/sophit-preview-1.jpg',
+        'assets/images/sophit/sophit-preview-2.jpg',
+        'assets/images/sophit/sophit-preview-3.jpg',
+        'assets/images/sophit/sophit-preview-4.jpg'
       ],
       // Legacy single image support
-      imageUrl: 'assets/images/sophit/preview-1.jpg',
+      imageUrl: 'assets/images/sophit/sophit-preview-1.jpg',
       demoUrl: 'https://sophittrainingco.com',
       githubUrl: 'https://github.com/yourusername/sophit-training',
       technologies: [
