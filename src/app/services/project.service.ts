@@ -7,14 +7,14 @@ import { Project } from '../models/project.model';
 export class ProjectService {
   private projects: Project[] = [
     {
-      id: 'project1',
+      id: 'groshme-beta',
       title: 'GroshmeBeta - Comprehensive Meal Planning Platform',
       description: 'A full-stack application designed to simplify meal planning, grocery shopping, and recipe management. The platform allows users to create and manage recipes, plan weekly meals, generate grocery lists, track kitchen inventory, and monitor fitness with workout scheduling tools.',
-      imageUrl: '/assets/images/project-placeholder.jpg',
+      imageUrl: '/assets/images/groshme-preview.jpg',
       demoUrl: 'https://groshmebeta.netlify.app',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/yourusername/groshme-beta',
       technologies: [
-        'React/Next.js', 'Python/Flask', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 
+        'React', 'Next.js', 'Python', 'Flask', 'PostgreSQL', 'Supabase', 'Tailwind CSS', 
         'JWT Authentication', 'RxJS', 'Netlify'
       ],
       details: 'Built a scalable application with dynamic content while ensuring fast load times and intuitive user experience.',
@@ -36,12 +36,12 @@ export class ProjectService {
       ]
     },
     {
-      id: 'project2',
+      id: 'sophit-training',
       title: 'SophitTraining - Personal Training Service Platform',
       description: 'A modern, engaging website for a personal training business featuring animated UI components, responsive design, and customer engagement tools. The site showcases trainer services, qualifications, and provides easy contact methods for potential clients.',
-      imageUrl: '/assets/images/project-placeholder.jpg',
+      imageUrl: '/assets/images/sophit-preview.jpg',
       demoUrl: 'https://sophittrainingco.com',
-      githubUrl: '#',
+      githubUrl: 'https://github.com/yourusername/sophit-training',
       technologies: [
         'Next.js', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 
         'EmailJS', 'Responsive Design', 'Netlify'
@@ -71,5 +71,10 @@ export class ProjectService {
 
   getProjectById(id: string): Project | undefined {
     return this.projects.find(project => project.id === id);
+  }
+
+  // Get featured projects for the home page
+  getFeaturedProjects(): Project[] {
+    return this.projects;
   }
 }

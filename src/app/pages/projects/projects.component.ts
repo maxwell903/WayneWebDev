@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 import { Project } from '../../models/project.model';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-projects',
@@ -15,33 +16,23 @@ export class ProjectsComponent implements OnInit {
   filteredProjects: Project[] = [];
   activeFilter: string = 'All';
   
-  filters: string[] = ['All', 'Angular', 'React', 'Node.js', 'TypeScript'];
+  // Updated filters based on the technologies used in both projects
+  filters: string[] = [
+    'All', 
+    'React', 
+    'Next.js', 
+    'TypeScript', 
+    'Python', 
+    'Flask', 
+    'PostgreSQL', 
+    'Tailwind CSS'
+  ];
+  
+  constructor(private projectService: ProjectService) {}
   
   ngOnInit(): void {
-    // Initialize with sample projects
-    this.projects = [
-      {
-        id: 'project1',
-        title: 'Large Netlify Project',
-        description: 'A comprehensive web application deployed through Netlify and GitHub.',
-        technologies: ['Angular', 'TypeScript', 'Netlify'],
-        imageUrl: '/assets/images/project-placeholder.jpg',
-        demoUrl: 'https://project1.example.com',
-        githubUrl: 'https://github.com/yourusername/project1',
-        details: 'This project showcases my ability to build and deploy complex web applications.'
-      },
-      {
-        id: 'project2',
-        title: 'Small Netlify Project',
-        description: 'A focused single-purpose application with clean architecture.',
-        technologies: ['React', 'JavaScript', 'Netlify'],
-        imageUrl: '/assets/images/project-placeholder.jpg',
-        demoUrl: 'https://project2.example.com',
-        githubUrl: 'https://github.com/yourusername/project2',
-        details: 'This smaller project demonstrates my attention to detail and ability to create efficient solutions.'
-      }
-    ];
-    
+    // Get all projects from the service
+    this.projects = this.projectService.getAllProjects();
     this.filteredProjects = [...this.projects];
   }
   
@@ -52,7 +43,7 @@ export class ProjectsComponent implements OnInit {
       this.filteredProjects = [...this.projects];
     } else {
       this.filteredProjects = this.projects.filter(project => 
-        project.technologies.includes(tech)
+        project.technologies.some(t => t.includes(tech))
       );
     }
   }

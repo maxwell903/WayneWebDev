@@ -17,6 +17,7 @@
 .project-image {
   height: 240px;
   overflow: hidden;
+  position: relative;
 }
 
 .project-image img {
@@ -50,92 +51,14 @@
   line-height: 1.6;
 }
 
-.project-skills {
-  margin-bottom: 24px;
-}
-
-.skills-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-right: 8px;
-  color: var(--dark);
-}
-
-.skills-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.skill-tag {
-  background-color: #e0e7ff;
-  color: #4f46e5;
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.project-features {
-  margin-bottom: 24px;
-}
-
-.project-features h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--secondary);
-}
-
-.features-list {
-  list-style: none;
-  padding: 0;
-}
-
-.feature-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.feature-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  cursor: pointer;
-}
-
-.feature-title {
-  font-weight: 500;
-  margin: 0;
-  color: var(--dark);
-}
-
-.toggle-icon {
-  color: var(--primary);
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
-}
-
-.feature-detail {
-  padding: 0 0 16px;
-  overflow: hidden;
-}
-
-.feature-detail p {
-  margin: 0;
-  line-height: 1.6;
-  color: var(--gray);
-}
-
 .project-tech {
   margin-bottom: 24px;
 }
 
-.project-tech h4 {
+.project-tech h4, 
+.project-features h4,
+.project-challenge h4,
+.project-outcome h4 {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 12px;
@@ -154,6 +77,38 @@
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.tech-tag:hover {
+  background-color: rgba(52, 152, 219, 0.2);
+  transform: translateY(-2px);
+}
+
+.project-features {
+  margin-bottom: 24px;
+}
+
+.features-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: var(--gray);
+}
+
+.feature-item {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.project-challenge, 
+.project-outcome {
+  margin-bottom: 24px;
+}
+
+.project-challenge p, 
+.project-outcome p {
+  color: var(--gray);
+  line-height: 1.6;
 }
 
 .project-actions {
@@ -180,6 +135,7 @@
 
 .btn-primary:hover {
   background-color: var(--primary-dark);
+  transform: translateY(-2px);
 }
 
 .btn-outline {
@@ -191,4 +147,24 @@
 .btn-outline:hover {
   background-color: var(--primary);
   color: white;
+  transform: translateY(-2px);
+}
+
+/* Added responsive layout adjustments */
+@media (max-width: 768px) {
+  .project-image {
+    height: 200px;
+  }
+  
+  .project-title {
+    font-size: 1.3rem;
+  }
+  
+  .project-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
 }

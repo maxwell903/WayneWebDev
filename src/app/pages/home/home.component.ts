@@ -1,5 +1,3 @@
-
-
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -28,6 +26,7 @@ export class HomeComponent implements OnInit {
   constructor(private projectService: ProjectService) {}
   
   ngOnInit() {
-    this.featuredProjects = this.projectService.getAllProjects();
+    // Use the dedicated method for featured projects
+    this.featuredProjects = this.projectService.getFeaturedProjects();
   }
 }

@@ -23,6 +23,16 @@
       </ul>
     </div>
     
+    <div class="project-challenge" *ngIf="project.challenge">
+      <h4>Challenge</h4>
+      <p>{{project.challenge}}</p>
+    </div>
+    
+    <div class="project-outcome" *ngIf="project.outcome">
+      <h4>Outcome</h4>
+      <p>{{project.outcome}}</p>
+    </div>
+    
     <div class="project-actions">
       <a [href]="project.demoUrl" class="btn btn-primary" target="_blank" rel="noopener">Live Demo</a>
       <a [href]="project.githubUrl" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
