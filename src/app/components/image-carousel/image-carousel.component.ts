@@ -1,7 +1,9 @@
-import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+
 
 @Component({
   selector: 'app-image-carousel',
@@ -322,9 +324,14 @@ export class ImageCarouselComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private slideInterval = 6000; // 6 seconds
   
-  ngOnInit(): void {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+ngOnInit(): void {
+  // Only start auto-slide in browser environment
+  if (isPlatformBrowser(this.platformId)) {
     this.startAutoSlide();
   }
+}
   
   ngOnDestroy(): void {
     this.destroy$.next();
