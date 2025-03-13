@@ -1,0 +1,13 @@
+<div class="timeline">
+    <div class="timeline-item" *ngFor="let event of events">
+      <div class="timeline-marker" [class.education]="event.type === 'education'" [class.work]="event.type === 'work'"></div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">{{event.title}}</h3>
+        <div class="timeline-meta">
+          <span class="organization">{{event.organization}}</span>
+          <span class="period">{{event.period}}</span>
+        </div>
+        <p class="timeline-description">{{event.description}}</p>
+      </div>
+    </div>
+  </div>

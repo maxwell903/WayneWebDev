@@ -1,0 +1,37 @@
+<section class="about-section">
+    <div class="container">
+      <h1 class="section-title">About Me</h1>
+      
+      <div class="about-container">
+        <div class="about-image">
+          <img src="/assets/images/profile-placeholder.jpg" alt="Wayne Developer">
+        </div>
+        
+        <div class="about-content">
+          <h2>Full-Stack Developer & MIS Professional</h2>
+          <p>I'm a passionate developer with a strong foundation in business and technology. I graduated from The Ohio State University with a BSBA in Management Information Systems, which has given me a unique perspective on how technology can solve real business problems.</p>
+          
+          <p>What drives me is building elegant, efficient solutions that provide tangible value. I specialize in modern JavaScript frameworks and cloud deployment solutions, creating responsive and scalable web applications.</p>
+          
+          <div class="about-stats">
+            <div class="stat-item" *ngFor="let stat of stats">
+              <div class="stat-number">{{stat.number}}+</div>
+              <div class="stat-title">{{stat.label}}</div>
+            </div>
+          </div>
+          
+          <a href="/assets/resume.pdf" class="btn btn-primary resume-btn" target="_blank">Download Resume</a>
+        </div>
+      </div>
+      
+      <div class="skills-section">
+        <h2 class="section-title">Technical Skills</h2>
+        <app-skills-dashboard></app-skills-dashboard>
+      </div>
+      
+      <div class="experience-section">
+        <h2 class="section-title">Experience & Education</h2>
+        <app-experience-timeline></app-experience-timeline>
+      </div>
+    </div>
+  </section>
