@@ -1,0 +1,231 @@
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Main carousel */
+  .carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .carousel-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .carousel-inner img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .carousel-inner img.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  
+  /* Navigation buttons */
+  .carousel-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s, background-color 0.3s;
+  }
+  
+  .carousel:hover .carousel-control {
+    opacity: 1;
+  }
+  
+  .carousel-control:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .carousel-control.prev {
+    left: 10px;
+  }
+  
+  .carousel-control.next {
+    right: 10px;
+  }
+  
+  .carousel-control svg {
+    stroke: var(--primary);
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Indicator dots */
+  .carousel-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    z-index: 10;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .dot:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .dot.active {
+    background-color: var(--primary);
+    transform: scale(1.2);
+  }
+  
+  /* Expanded view */
+  .expanded-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .expanded-content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+  }
+  
+  .close-btn svg {
+    stroke: white;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .expanded-carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .expanded-carousel img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+  
+  .expanded-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+  }
+  
+  .expanded-control:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .expanded-control.prev {
+    left: 20px;
+  }
+  
+  .expanded-control.next {
+    right: 20px;
+  }
+  
+  .expanded-control svg {
+    stroke: white;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .expanded-indicator {
+    color: white;
+    margin-top: 15px;
+    font-size: 16px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .carousel-control {
+      width: 30px;
+      height: 30px;
+    }
+    
+    .expanded-control {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+    }
+  }

@@ -1,6 +1,9 @@
 <div class="project-card">
   <div class="project-image">
-    <img [src]="project.imageUrl" [alt]="project.title">
+    <app-image-carousel 
+      [images]="projectImages" 
+      [altText]="project.title"
+    ></app-image-carousel>
   </div>
   
   <div class="project-content">
@@ -34,8 +37,12 @@
     </div>
     
     <div class="project-actions">
-      <a [href]="project.demoUrl" class="btn btn-primary" target="_blank" rel="noopener">Live Demo</a>
-      <a [href]="project.githubUrl" class="btn btn-outline" target="_blank" rel="noopener">GitHub</a>
+      <a [href]="project.demoUrl" class="btn btn-primary" target="_blank" rel="noopener">
+        Live Demo
+      </a>
+      <a [href]="project.githubUrl" class="btn btn-outline" target="_blank" rel="noopener">
+        GitHub
+      </a>
     </div>
   </div>
 </div>
