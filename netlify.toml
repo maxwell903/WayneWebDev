@@ -2,11 +2,8 @@
   command = "npm run build"
   publish = "dist/waynes-web-dev/browser"
 
+[functions]
+  directory = ".netlify/functions/"
+  
 [dev]
-  command = "npm run dev:ssr"
-  framework = "#netlify-angular-runtime"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  functions = ".netlify/functions/"
