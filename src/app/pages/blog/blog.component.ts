@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 interface BlogPost {
   id: string;
@@ -16,7 +17,7 @@ interface BlogPost {
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterModule]
 })
 export class BlogComponent {
   posts: BlogPost[] = [

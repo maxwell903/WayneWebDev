@@ -21,10 +21,23 @@ export class ExperienceTimelineComponent {
     {
       title: 'BSBA in Management Information Systems',
       organization: 'The Ohio State University',
-      period: '20XX - 20XX',
+      period: '2018 - 2022',
       description: 'Studied core concepts of information systems, database management, and business analytics.',
       type: 'education'
     },
-    // Add more placeholder timeline events
+    {
+      title: 'Web Developer Intern',
+      organization: 'Tech Solutions Inc.',
+      period: '2021 - 2022',
+      description: 'Assisted in developing and maintaining company websites and web applications.',
+      type: 'work'
+    },
+    {
+      title: 'Full-Stack Developer',
+      organization: 'Digital Innovations LLC',
+      period: '2022 - Present',
+      description: 'Leading development of web applications using modern JavaScript frameworks.',
+      type: 'work'
+    }
   ];
 }

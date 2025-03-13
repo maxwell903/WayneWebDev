@@ -2,6 +2,11 @@
     max-width: 900px;
     margin: 0 auto;
   }
+
+  .skill-years {
+    color: var(--gray);
+    font-size: 0.8rem;
+  }
   
   .skills-filters {
     display: flex;
@@ -26,6 +31,13 @@
   .filter-btn.active {
     background-color: var(--primary);
     color: white;
+  }
+
+  .skill-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-top: 5px;
   }
   
   .skills-grid {
