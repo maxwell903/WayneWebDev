@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "dist/waynes-web-dev/browser"
+  publish = "dist/waynes-web-dev"
 
 [functions]
   directory = ".netlify/functions/"
