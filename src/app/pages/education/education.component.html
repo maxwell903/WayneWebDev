@@ -1,0 +1,67 @@
+<!-- src/app/pages/education/education.component.html -->
+
+<section class="education-section">
+    <div class="container">
+      <div class="education-header">
+        <h1 class="section-title">Education</h1>
+        <div class="education-summary">
+          <h2>The Ohio State University</h2>
+          <p class="degree-info">Bachelor of Science in Business Administration</p>
+          <p class="major-info">Major: Management Information Systems</p>
+          <p class="education-description">My education blended technical expertise with business acumen, providing a strong foundation for bridging the gap between business requirements and technical implementation. The coursework focused on developing both hard technical skills in programming and database management, as well as soft skills in business analysis and project management.</p>
+        </div>
+      </div>
+      
+      <div class="filter-container">
+        <div class="filter-group">
+          <h3>Filter by Department</h3>
+          <div class="filter-buttons">
+            <button 
+              *ngFor="let department of departments"
+              class="filter-btn"
+              [class.active]="selectedDepartment === department"
+              (click)="filterByDepartment(department)">
+              {{department}}
+            </button>
+          </div>
+        </div>
+        
+        <div class="filter-group">
+          <h3>Filter by Skill</h3>
+          <div class="filter-buttons">
+            <button 
+              *ngFor="let skill of skillFilters"
+              class="filter-btn"
+              [class.active]="selectedSkill === skill"
+              (click)="filterBySkill(skill)">
+              {{skill}}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="courses-grid">
+        <div class="course-card" *ngFor="let course of filteredCourses">
+          <div class="course-header">
+            <span class="course-code">{{course.code}}</span>
+            <span class="course-department badge">{{course.department}}</span>
+          </div>
+          
+          <h3 class="course-title">{{course.title}}</h3>
+          <p class="course-description">{{course.description}}</p>
+          
+          <div class="skills-section">
+            <h4>Applicable Skills</h4>
+            <div class="skills-grid">
+              <div class="skill-item" *ngFor="let skill of course.skills">
+                <div class="skill-name">{{skill.name}}</div>
+                <div class="skill-roles">
+                  <span class="role-tag" *ngFor="let role of skill.roles">{{role}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

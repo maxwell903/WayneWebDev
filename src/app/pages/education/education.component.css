@@ -1,0 +1,196 @@
+/* src/app/pages/education/education.component.css */
+
+.education-section {
+    padding: 80px 0;
+    background-color: var(--light);
+  }
+  
+  .education-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .education-summary {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .degree-info {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 5px;
+  }
+  
+  .major-info {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    margin-bottom: 20px;
+  }
+  
+  .education-description {
+    color: var(--gray);
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+  
+  .filter-container {
+    margin-bottom: 40px;
+  }
+  
+  .filter-group {
+    margin-bottom: 20px;
+  }
+  
+  .filter-group h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--secondary);
+    text-align: center;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-btn {
+    padding: 8px 16px;
+    background: none;
+    border: 1px solid var(--light-gray);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    color: var(--gray);
+  }
+  
+  .filter-btn:hover,
+  .filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+  }
+  
+  .course-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .course-code {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.1rem;
+  }
+  
+  .badge {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--primary);
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 15px;
+  }
+  
+  .course-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: var(--secondary);
+    line-height: 1.3;
+  }
+  
+  .course-description {
+    color: var(--gray);
+    margin-bottom: 20px;
+    flex-grow: 1;
+    line-height: 1.6;
+  }
+  
+  .skills-section h4 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--secondary);
+    position: relative;
+  }
+  
+  .skills-section h4::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+  }
+  
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+  }
+  
+  .skill-item {
+    margin-bottom: 10px;
+  }
+  
+  .skill-name {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 5px;
+  }
+  
+  .skill-roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .role-tag {
+    font-size: 0.7rem;
+    background-color: rgba(44, 62, 80, 0.1);
+    color: var(--secondary);
+    padding: 3px 8px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  
+  @media (max-width: 768px) {
+    .courses-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .skill-name {
+      font-size: 0.9rem;
+    }
+    
+    .role-tag {
+      font-size: 0.65rem;
+    }
+  }
