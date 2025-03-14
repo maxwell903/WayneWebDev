@@ -1,0 +1,97 @@
+<div class="skill-filter-container">
+    <div class="search-container">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchInput()"
+          placeholder="Search by skill..."
+          class="skill-search-input"
+        />
+        <button class="clear-btn" *ngIf="searchTerm" (click)="clearSearch()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <button class="view-all-btn" (click)="togglePopup()">
+        <span>View All Skills</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 10l5 5 5-5"></path>
+        </svg>
+      </button>
+    </div>
+  
+    <!-- Search Results -->
+    <div class="search-results" *ngIf="searchTerm && filteredSkills.length > 0">
+      <div
+        *ngFor="let skill of filteredSkills"
+        class="skill-suggestion"
+        (click)="selectSkill(skill)"
+      >
+        {{ skill }}
+      </div>
+    </div>
+  
+    <!-- Active Filters Display -->
+    <div class="active-filters" *ngIf="selectedSkills.length > 0">
+      <div class="filter-tag" *ngFor="let skill of selectedSkills">
+        {{ skill }}
+        <button class="remove-tag" (click)="removeSkill(skill)">×</button>
+      </div>
+    </div>
+  
+    <!-- Skill Popup -->
+    <div class="popup-overlay" *ngIf="isPopupOpen" (click)="closePopup($event)">
+      <div class="skill-popup" [@popupAnimation]="isPopupOpen ? 'open' : 'closed'">
+        <div class="popup-header">
+          <h3>Filter by Skills</h3>
+          <button class="close-btn" (click)="forceClosePopup(); $event.stopPropagation()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="popup-content">
+          <div class="skills-counter">
+            <span>{{ getTotalMatchingCourses() }} matching courses</span>
+          </div>
+          
+          <div class="categories-container">
+            <div class="skill-category" *ngFor="let category of skillCategories">
+              <h4 class="category-title">{{ category.title }}</h4>
+              <p class="category-description">{{ category.description }}</p>
+              <div class="category-skills">
+                <div 
+                  *ngFor="let skill of category.skills" 
+                  class="skill-checkbox-item"
+                >
+                  <label class="custom-checkbox">
+                    <input 
+                      type="checkbox" 
+                      [checked]="isSkillSelected(skill)"
+                      (change)="toggleSkill(skill)"
+                    />
+                    <span class="checkmark"></span>
+                    <span class="skill-label">{{ skill }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="popup-footer">
+          <button class="select-all-btn" (click)="selectAllSkills()">Select All</button>
+          <button class="clear-all-btn" (click)="clearAllSkills()">Clear All</button>
+          <button class="apply-btn" (click)="applyFilters()">
+            <span class="btn-text">Apply Filters</span>
+            <div class="loader" *ngIf="isLoading"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
