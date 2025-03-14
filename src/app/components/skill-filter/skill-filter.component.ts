@@ -19,18 +19,18 @@ interface SkillCategory {
   styleUrls: ['./skill-filter.component.css'],
   animations: [
     trigger('popupAnimation', [
-      state('closed', style({
+      state('void', style({
         opacity: 0,
-        transform: 'scale(0.8)',
+        transform: 'scale(0.8)'
       })),
-      state('open', style({
+      state('*', style({
         opacity: 1,
-        transform: 'scale(1)',
+        transform: 'scale(1)'
       })),
-      transition('closed => open', [
+      transition(':enter', [
         animate('0.3s cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
-      transition('open => closed', [
+      transition(':leave', [
         animate('0.2s cubic-bezier(0.4, 0.0, 0.2, 1)')
       ])
     ])
@@ -181,6 +181,11 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
         this.skillCategories[categoryIndex].skills.push(skill);
       }
     });
+    
+    // Sort skills alphabetically within each category
+    this.skillCategories.forEach(category => {
+      category.skills.sort((a, b) => a.localeCompare(b));
+    });
   }
   
   // Determine category for unmapped skills based on keywords
@@ -295,6 +300,7 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
   }
   
   closePopup(event: MouseEvent) {
+    // Make sure we're clicking on the overlay itself and not child elements
     if (event.target === event.currentTarget) {
       this.isPopupOpen = false;
       
@@ -349,12 +355,7 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.skillsSelected.emit(this.selectedSkills);
       this.isLoading = false;
-      this.isPopupOpen = false;
-      
-      // Only manipulate the DOM in browser environments
-      if (this.isBrowser) {
-        document.body.classList.remove('modal-open');
-      }
+      this.forceClosePopup();
     }, 800);
   }
 }
