@@ -3,121 +3,129 @@ import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
 
 interface WorkExperience {
-    id: string;
-    company: string;
-    role: string;
-    startDate: Date;
-    endDate: Date | null;
-    relevanceScore: number;
-    category: 'tech' | 'customer-service' | 'other';
-    description: string;
-    responsibilities: string[];
-    skills: Skill[];
-    locations?: string[];
-    certifications?: string[];
-    queues?: string[];
-    isExpanded: boolean;
-    isDetailOpen: boolean;
-  }
-  
-  interface Skill {
-    name: string;
-    relevance: 'high' | 'medium' | 'low';
-    category: 'technical' | 'business' | 'soft';
-    description: string;
-  }
-  
-  interface Category {
-    id: string;
-    label: string;
-  }
-  
-  interface SkillType {
-    id: string;
-    label: string;
-    colorClass: string;
-  }
+  id: string;
+  company: string;
+  role: string;
+  startDate: Date;
+  endDate: Date | null;
+  relevanceScore: number;
+  category: 'tech' | 'customer-service' | 'other';
+  description: string;
+  responsibilities: string[];
+  skills: Skill[];
+  locations?: string[];
+  certifications?: string[];
+  queues?: string[];
+  isExpanded: boolean;
+  isDetailOpen: boolean;
+  isOverlap?: boolean;
+  topOffset?: number;
+  timelinePosition?: number; // Position on the timeline (percentage)
+}
+
+interface Skill {
+  name: string;
+  relevance: 'high' | 'medium' | 'low';
+  category: 'technical' | 'business' | 'soft';
+  description: string;
+}
+
+interface Category {
+  id: string;
+  label: string;
+}
+
+interface SkillType {
+  id: string;
+  label: string;
+  colorClass: string;
+}
+
+interface YearMarker {
+  year: number;
+  position: number; // Position on the timeline (percentage)
+}
 
 @Component({
-    selector: 'app-work-history',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './work-history.component.html',
-    styleUrls: ['./work-history.component.css'],
-    animations: [
-      // Animation for expanding/collapsing content
-      trigger('expandCollapse', [
-        state('collapsed', style({
-          height: '0',
-          overflow: 'hidden',
-          opacity: 0,
-          padding: '0 20px'
-        })),
-        state('expanded', style({
-          height: '*',
-          opacity: 1,
-          padding: '20px'
-        })),
-        transition('collapsed <=> expanded', [
-          animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-        ])
-      ]),
-      
-      // Animation for fading in skills with a staggered effect
-      trigger('skillsAnimation', [
-        transition('* => *', [
-          query(':enter', [
-            style({ opacity: 0, transform: 'translateY(20px)' }),
-            stagger('80ms', [
-              animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-            ])
-          ], { optional: true })
-        ])
-      ]),
-      
-      // Animation for section elements fading in from bottom
-      trigger('fadeInUp', [
-        transition(':enter', [
-          style({ opacity: 0, transform: 'translateY(30px)' }),
-          animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-        ])
-      ]),
-      
-      // Animation for staggered appearance of timeline cards
-      trigger('staggerFadeIn', [
-        transition('* => *', [
-          query(':enter', [
-            style({ opacity: 0, transform: 'translateY(30px)' }),
-            stagger('150ms', [
-              animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-            ])
-          ], { optional: true })
-        ])
-      ]),
-      
-      // Animation for rotating the expand/collapse icon
-      trigger('rotateIcon', [
-        state('collapsed', style({ transform: 'rotate(0)' })),
-        state('expanded', style({ transform: 'rotate(180deg)' })),
-        transition('collapsed <=> expanded', [
-          animate('300ms ease-out')
-        ])
-      ]),
-      
-      // Animation for the current job indicator
-      trigger('pulseAnimation', [
-        transition(':enter', [
-          style({ opacity: 0, transform: 'scale(0.8)' }),
-          animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
-        ])
+  selector: 'app-work-history',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './work-history.component.html',
+  styleUrls: ['./work-history.component.css'],
+  animations: [
+    // Animation for expanding/collapsing content
+    trigger('expandCollapse', [
+      state('collapsed', style({
+        height: '0',
+        overflow: 'hidden',
+        opacity: 0,
+        padding: '0 20px'
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        padding: '20px'
+      })),
+      transition('collapsed <=> expanded', [
+        animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ])
-    ]
-  })
-
+    ]),
+    
+    // Animation for fading in skills with a staggered effect
+    trigger('skillsAnimation', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger('80ms', [
+            animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    
+    // Animation for section elements fading in from bottom
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(30px)' }),
+        animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    
+    // Animation for staggered appearance of timeline cards
+    trigger('staggerFadeIn', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(30px)' }),
+          stagger('150ms', [
+            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    
+    // Animation for rotating the expand/collapse icon
+    trigger('rotateIcon', [
+      state('collapsed', style({ transform: 'rotate(0)' })),
+      state('expanded', style({ transform: 'rotate(180deg)' })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease-out')
+      ])
+    ]),
+    
+    // Animation for the current job indicator
+    trigger('pulseAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.8)' }),
+        animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ])
+  ]
+})
 export class WorkHistoryComponent implements OnInit {
   workExperiences: WorkExperience[] = [];
   selectedCategory: string = 'all';
   selectedSkillType: string = 'technical'; // Default to technical skills
+  timelineYears: YearMarker[] = [];
   
   categories: Category[] = [
     { id: 'all', label: 'All Experience' },
@@ -135,10 +143,17 @@ export class WorkHistoryComponent implements OnInit {
   
   currentJobDuration: { years: number, months: number } = { years: 0, months: 0 };
   animationReady = false;
+  earliestDate: Date | null = null;
+  latestDate: Date | null = null;
   
   ngOnInit(): void {
     this.initializeWorkExperiences();
     this.calculateCurrentJobDuration();
+    this.orderByEndDate();
+    this.findDateRanges();
+    this.calculateTimelinePositions();
+    this.generateYearMarkers();
+    this.detectOverlappingExperiences();
     
     // Delay animation start slightly to ensure DOM is ready
     setTimeout(() => {
@@ -161,6 +176,107 @@ export class WorkHistoryComponent implements OnInit {
       const months = totalMonths % 12;
       
       this.currentJobDuration = { years, months };
+    }
+  }
+  
+  // Order the timeline entries by end date (latest first)
+  orderByEndDate(): void {
+    this.workExperiences.sort((a, b) => {
+      // Current job (null end date) should always be first
+      if (a.endDate === null) return -1;
+      if (b.endDate === null) return 1;
+      
+      // Otherwise sort by most recent end date
+      return b.endDate.getTime() - a.endDate.getTime();
+    });
+  }
+  
+  // Find the earliest and latest dates in the timeline
+  findDateRanges(): void {
+    if (this.workExperiences.length === 0) return;
+    
+    // Find earliest start date
+    this.earliestDate = this.workExperiences.reduce((earliest, job) => {
+      if (!earliest || job.startDate < earliest) {
+        return job.startDate;
+      }
+      return earliest;
+    }, null as Date | null);
+    
+    // Find latest end date (using current date for ongoing jobs)
+    const currentDate = new Date();
+    this.latestDate = this.workExperiences.reduce((latest, job) => {
+      const endDate = job.endDate || currentDate;
+      if (!latest || endDate > latest) {
+        return endDate;
+      }
+      return latest;
+    }, null as Date | null);
+  }
+  
+  // Calculate position on the timeline for each experience (as percentage)
+  calculateTimelinePositions(): void {
+    if (!this.earliestDate || !this.latestDate) return;
+    
+    const timelineStart = this.earliestDate.getTime();
+    const timelineEnd = this.latestDate.getTime();
+    const timelineRange = timelineEnd - timelineStart;
+    
+    this.workExperiences.forEach(job => {
+      const startPosition = ((job.startDate.getTime() - timelineStart) / timelineRange) * 100;
+      const endPosition = (((job.endDate || new Date()).getTime() - timelineStart) / timelineRange) * 100;
+      
+      // Store the middle position for placing the experience on the timeline
+      job.timelinePosition = (startPosition + endPosition) / 2;
+    });
+  }
+  
+  // Generate year markers for the timeline
+  generateYearMarkers(): void {
+    if (!this.earliestDate || !this.latestDate) return;
+    
+    const startYear = this.earliestDate.getFullYear();
+    const endYear = this.latestDate.getFullYear();
+    const timelineStart = this.earliestDate.getTime();
+    const timelineEnd = this.latestDate.getTime();
+    const timelineRange = timelineEnd - timelineStart;
+    
+    // Create a marker for each year
+    for (let year = startYear; year <= endYear; year++) {
+      const yearDate = new Date(year, 0, 1); // January 1st of the year
+      const position = ((yearDate.getTime() - timelineStart) / timelineRange) * 100;
+      
+      // Only add if position is between 0 and 100
+      if (position >= 0 && position <= 100) {
+        this.timelineYears.push({ year, position });
+      }
+    }
+  }
+  
+  // Detect and handle overlapping job periods
+  detectOverlappingExperiences(): void {
+    const sortedJobs = [...this.workExperiences].sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    
+    for (let i = 0; i < sortedJobs.length - 1; i++) {
+      const jobA = sortedJobs[i];
+      
+      for (let j = i + 1; j < sortedJobs.length; j++) {
+        const jobB = sortedJobs[j];
+        
+        // Calculate if jobs overlap
+        const jobAEnd = jobA.endDate || new Date();
+        const jobBStart = jobB.startDate;
+        
+        if (jobBStart < jobAEnd) {
+          // Jobs overlap
+          jobB.isOverlap = true;
+          
+          // Apply a vertical offset to the second job
+          // This is a simple approach - for more complex layouts, you might need
+          // a more sophisticated algorithm to handle multiple overlaps
+          jobB.topOffset = 20 * j;
+        }
+      }
     }
   }
   
@@ -231,6 +347,47 @@ export class WorkHistoryComponent implements OnInit {
           'General Support',
           'Receivables & Payables'
         ],
+        isExpanded: false,
+        isDetailOpen: false
+      },
+      {
+        id: 'osu-golf',
+        company: 'The Ohio State University Golf Course',
+        role: 'Grounds Keeper',
+        startDate: new Date('2023-05-01'),
+        endDate: new Date('2023-09-30'),
+        relevanceScore: 55,
+        category: 'other',
+        description: 'Maintained championship-caliber golf course conditions through comprehensive turf management, landscape maintenance, and tournament preparation, ensuring exceptional playing conditions for OSU Golf Club members and guests.',
+        responsibilities: [
+          'Performed daily course setup including pin placement, tee marker positioning, and course marking according to USGA standards',
+          'Operated specialized turf maintenance equipment including mowers, aerators, sprayers, and utility vehicles',
+          'Conducted irrigation system maintenance and monitoring to ensure optimal turf health during summer months',
+          'Implemented pest management protocols to identify and address disease, insect, and weed issues',
+          'Assisted in tournament preparation and special event setup for collegiate and member competitions',
+          'Executed detailed bunker maintenance including edging, raking, and sand conditioning',
+          'Collaborated with the grounds team to complete projects efficiently during early morning hours'
+        ],
+        skills: [
+          // Technical Skills
+          { name: 'Turf Management Systems', relevance: 'medium', category: 'technical', description: 'Operating computerized irrigation systems and monitoring software to maintain optimal soil moisture levels' },
+          { name: 'Equipment Operation', relevance: 'high', category: 'technical', description: 'Safely operating specialized groundskeeping machinery including precision mowers, aerators, and utility vehicles' },
+          { name: 'Landscape Maintenance', relevance: 'high', category: 'technical', description: 'Applying horticultural techniques for turf, trees, and ornamental plantings in a high-standards environment' },
+          { name: 'Environmental Monitoring', relevance: 'medium', category: 'technical', description: 'Using digital tools to track soil conditions, weather impacts, and turf health metrics' },
+          
+          // Business Skills
+          { name: 'Resource Management', relevance: 'medium', category: 'business', description: 'Efficiently utilizing water, fertilizer, and other resources to maintain course conditions while controlling costs' },
+          { name: 'Quality Control', relevance: 'high', category: 'business', description: 'Ensuring playing surfaces meet exacting standards for a championship-level golf facility' },
+          { name: 'Tournament Operations', relevance: 'medium', category: 'business', description: 'Preparing and maintaining course conditions for competitive events according to specific requirements' },
+          { name: 'Process Adherence', relevance: 'high', category: 'business', description: 'Following detailed maintenance protocols and schedules to achieve consistent course conditions' },
+          
+          // Soft Skills
+          { name: 'Team Coordination', relevance: 'high', category: 'soft', description: 'Collaborating with grounds crew members to complete daily tasks within tight morning timeframes' },
+          { name: 'Attention to Detail', relevance: 'high', category: 'soft', description: 'Maintaining precise standards for course aesthetics and playability through careful work execution' },
+          { name: 'Adaptability', relevance: 'medium', category: 'soft', description: 'Adjusting work priorities and techniques based on weather conditions and course usage requirements' },
+          { name: 'Time Management', relevance: 'high', category: 'soft', description: 'Completing essential maintenance tasks before golfers begin play, often working in pre-dawn hours' }
+        ],
+        locations: ['Columbus, OH'],
         isExpanded: false,
         isDetailOpen: false
       },
@@ -385,6 +542,12 @@ export class WorkHistoryComponent implements OnInit {
   formatDate(date: Date | null): string {
     if (!date) return 'Present';
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+  
+  // Format just month and year for timeline brackets
+  formatMonthYear(date: Date | null): string {
+    if (!date) return 'Present';
+    return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
   }
   
   calculateDuration(startDate: Date, endDate: Date | null): string {

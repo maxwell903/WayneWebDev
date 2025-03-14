@@ -23,6 +23,17 @@
     <!-- Work experience timeline -->
     <div class="work-timeline" *ngIf="animationReady">
       <div class="timeline-container" [@staggerFadeIn]="filteredExperiences.length">
+        <!-- Year markers on the timeline -->
+        <div class="timeline-years">
+          <div 
+            *ngFor="let year of timelineYears" 
+            class="year-marker"
+            [style.top.%]="year.position">
+            <div class="year-tick"></div>
+            <div class="year-label">{{year.year}}</div>
+          </div>
+        </div>
+        
         <!-- Current job highlighted section with centered design -->
         <div class="current-job-container" *ngIf="filteredExperiences.length > 0 && filteredExperiences[0].endDate === null">
           <div class="current-job-indicator" @pulseAnimation>
@@ -166,7 +177,18 @@
           [class.timeline-customer]="experience.category === 'customer-service'"
           [class.timeline-other]="experience.category === 'other'"
           [class.expanded]="experience.isExpanded"
+          [class.timeline-card-overlap]="experience.isOverlap"
+          [style.top.px]="experience.topOffset || 0"
           (click)="toggleExpand(experience)">
+          
+          <!-- Connect to the timeline with start and end date brackets -->
+          <div class="timeline-connector"></div>
+          
+          <!-- Date brackets that show job duration -->
+          <div class="date-bracket">
+            <span class="date-label start-date-label">{{formatMonthYear(experience.startDate)}}</span>
+            <span class="date-label end-date-label">{{formatMonthYear(experience.endDate)}}</span>
+          </div>
           
           <div class="timeline-card-header">
             <div class="job-details">
