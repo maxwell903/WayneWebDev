@@ -1,6 +1,6 @@
 <section class="work-history-section">
   <div class="container">
-    <div class="section-header" @fadeInUp>
+    <div class="work-history-header">
       <h1 class="section-title">
         <i class="icon hardhat-icon"></i>
         Work History
@@ -9,7 +9,7 @@
     </div>
     
     <!-- Category filters -->
-    <div class="category-filters" @fadeInUp>
+    <div class="category-filters">
       <button 
         class="filter-btn"
         [class.active]="selectedCategory === 'all'"
@@ -39,21 +39,20 @@
     <!-- Work history content -->
     <div class="work-history-content">
       <!-- Current job section -->
-      <div class="current-job-section" *ngIf="currentJob" @fadeIn>
+      <div class="current-job-section" *ngIf="currentJob">
         <div class="year-label current-year">
           <span>{{ getYearLabel(currentJob.endDate) }}</span>
         </div>
         
-        <!-- Current job indicator with animation directly on the labels -->
+        <!-- Current job indicator -->
         <div class="current-job-indicator">
-          <span class="current-job-label" @currentJobAnimation>Current Position</span>
-          <span class="duration-badge" @currentJobAnimation>{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
+          <span class="current-job-label">Current Position</span>
+          <span class="duration-badge">{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
         </div>
         
         <div 
           class="current-job-card"
-          [class.expanded]="currentJob.isExpanded"
-          @cardAnimation>
+          [class.expanded]="currentJob.isExpanded">
           
           <div class="current-job-header">
             <div class="job-titles">
@@ -70,7 +69,7 @@
           </div>
           
           <!-- Queue specializations -->
-          <div class="queue-specializations" *ngIf="currentJob.queues && currentJob.queues.length" @fadeIn>
+          <div class="queue-specializations" *ngIf="currentJob.queues && currentJob.queues.length">
             <h4 class="section-label">Support Queue Specializations:</h4>
             <div class="queue-badges">
               <span class="queue-badge" *ngFor="let queue of currentJob.queues">{{queue}}</span>
@@ -78,7 +77,7 @@
           </div>
           
           <!-- Certifications -->
-          <div class="certifications-section" *ngIf="currentJob.certifications && currentJob.certifications.length" @fadeIn>
+          <div class="certifications-section" *ngIf="currentJob.certifications && currentJob.certifications.length">
             <h4 class="section-label">Certifications:</h4>
             <div class="cert-badges">
               <span class="cert-badge" *ngFor="let cert of currentJob.certifications">{{cert}}</span>
@@ -173,11 +172,11 @@
       </div>
       
       <!-- Past experience heading -->
-      <h3 class="past-experience-heading" *ngIf="pastExperiences.length > 0" @fadeInUp>Past Experience</h3>
+      <h3 class="past-experience-heading" *ngIf="pastExperiences.length > 0">Past Experience</h3>
       
       <!-- Past experiences in pairs -->
       <div class="experience-pairs">
-        <div class="experience-pair" *ngFor="let pair of pairedPastExperiences; let pairIndex = index" @fadeInUp>
+        <div class="experience-pair" *ngFor="let pair of pairedPastExperiences; let pairIndex = index">
           <!-- Year label for this pair (using the end date of the first experience in pair) -->
           <div class="year-label" *ngIf="pairIndex === 0 || getYearLabel(pair[0].endDate) !== getYearLabel(pairedPastExperiences[pairIndex-1][0].endDate)">
             <span>{{ getYearLabel(pair[0].endDate) }}</span>
@@ -193,8 +192,7 @@
                   'card-tech': pair[0].category === 'tech',
                   'card-customer': pair[0].category === 'customer-service',
                   'card-other': pair[0].category === 'other'
-                }"
-                @cardAnimation>
+                }">
                 
                 <div class="date-badge">
                   {{formatDate(pair[0].startDate)}} - {{formatDate(pair[0].endDate)}}
@@ -220,7 +218,6 @@
                   <p>{{pair[0].description}}</p>
                 </div>
                 
-                <!-- Replaced small expand button with large button similar to current job -->
                 <button class="expand-toggle large" (click)="toggleExpand(pair[0]); $event.stopPropagation()">
                   <span>{{pair[0].isExpanded ? 'Show Less' : 'Show More'}}</span>
                   <svg 
@@ -313,8 +310,7 @@
                   'card-tech': pair[1].category === 'tech',
                   'card-customer': pair[1].category === 'customer-service',
                   'card-other': pair[1].category === 'other'
-                }"
-                @cardAnimation>
+                }">
                 
                 <div class="date-badge">
                   {{formatDate(pair[1].startDate)}} - {{formatDate(pair[1].endDate)}}
@@ -340,7 +336,6 @@
                   <p>{{pair[1].description}}</p>
                 </div>
                 
-                <!-- Replaced small expand button with large button similar to current job -->
                 <button class="expand-toggle large" (click)="toggleExpand(pair[1]); $event.stopPropagation()">
                   <span>{{pair[1].isExpanded ? 'Show Less' : 'Show More'}}</span>
                   <svg 
@@ -431,7 +426,7 @@
       </div>
       
       <!-- Empty state when no experiences match the filter -->
-      <div class="empty-state" *ngIf="filteredExperiences.length === 0" @fadeInUp>
+      <div class="empty-state" *ngIf="filteredExperiences.length === 0">
         <div class="empty-icon">
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>

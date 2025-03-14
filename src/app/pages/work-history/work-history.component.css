@@ -5,29 +5,35 @@
   background-color: var(--light);
   position: relative;
   overflow: hidden;
+  z-index: 1; /* Match education component's z-index */
 }
 
-.section-header {
+.work-history-header {
   text-align: center;
   margin-bottom: 60px;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .section-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  font-size: 2rem;
+  margin-bottom: 40px;
   text-align: center;
-  margin: 0 auto 15px;
+  position: relative;
+  display: inline-block; /* This helps with centering */
 }
 
-.hardhat-icon {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233498db"><path d="M12 0c-3.865 0-7 3.135-7 7v1h-1c-2.209 0-4 1.791-4 4v9h24v-9c0-2.209-1.791-4-4-4h-1v-1c0-3.865-3.135-7-7-7zm0 2c2.76 0 5 2.24 5 5v1h-10v-1c0-2.76 2.24-5 5-5zm-6 8h12c1.105 0 2 .895 2 2v7h-16v-7c0-1.105.895-2 2-2zm5.345 2c-.63 0-1.141.5-1.141 1.117v.766c0 .617.511 1.117 1.141 1.117h3.31c.63 0 1.141-.5 1.141-1.117v-.766c0-.617-.511-1.117-1.141-1.117h-3.31z"/></svg>');
-  background-repeat: no-repeat;
-  background-size: contain;
+.section-title::after {
+  content: '';
+  display: block;
+  width: 70px;
+  height: 3px;
+  background-color: var(--primary);
+  margin: 15px auto 0;
 }
 
 .section-subtitle {
@@ -37,6 +43,23 @@
   font-size: 1.1rem;
 }
 
+.hardhat-icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233498db"><path d="M12 0c-3.865 0-7 3.135-7 7v1h-1c-2.209 0-4 1.791-4 4v9h24v-9c0-2.209-1.791-4-4-4h-1v-1c0-3.865-3.135-7-7-7zm0 2c2.76 0 5 2.24 5 5v1h-10v-1c0-2.76 2.24-5 5-5zm-6 8h12c1.105 0 2 .895 2 2v7h-16v-7c0-1.105.895-2 2-2zm5.345 2c-.63 0-1.141.5-1.141 1.117v.766c0 .617.511 1.117 1.141 1.117h3.31c.63 0 1.141-.5 1.141-1.117v-.766c0-.617-.511-1.117-1.141-1.117h-3.31z"/></svg>');
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 10px;
+  vertical-align: middle;
+  animation: bounce 3s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 /* Category filters */
 .category-filters {
   display: flex;
@@ -44,6 +67,14 @@
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 30px;
+  animation: slideUp 0.8s ease 0.2s both;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .filter-btn {
@@ -77,6 +108,8 @@
   margin: 0 auto;
   position: relative;
   padding-bottom: 50px;
+  animation: fadeIn 0.8s ease 0.4s both;
+  z-index: 1;
 }
 
 /* Year labels */
@@ -133,7 +166,6 @@
   margin-bottom: 30px;
 }
 
-/* Current job label with animation directly on it */
 .current-job-label {
   background-color: var(--accent);
   color: white;
@@ -182,7 +214,10 @@
   cursor: pointer;
   max-width: 900px;
   margin: 0 auto;
-  position: relative; /* Important for positioning the category badge */
+  position: relative;
+  animation: cardAppear 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .current-job-card:hover {
@@ -245,7 +280,7 @@
   font-weight: 500;
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* Ensure proper positioning */
+  position: relative;
 }
 
 /* Queue specializations section */
@@ -374,12 +409,6 @@
   margin-top: 25px;
   border-top: 1px solid var(--light-gray);
   padding-top: 25px;
-  animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* Past experience heading */
@@ -390,6 +419,7 @@
   font-size: 1.8rem;
   position: relative;
   z-index: 2;
+  animation: fadeIn 1s ease;
 }
 
 .past-experience-heading::before {
@@ -423,6 +453,7 @@
 
 .experience-pair {
   margin-bottom: 30px;
+  animation: slideUp 0.8s ease 0.2s both;
 }
 
 .experience-cards {
@@ -454,6 +485,16 @@
   min-height: 200px;
   border-top: 5px solid var(--primary);
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardAppear 0.5s ease forwards;
+}
+
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .experience-card:hover {
@@ -835,6 +876,7 @@
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   margin-top: 20px;
+  animation: fadeIn 0.8s ease 0.4s both;
 }
 
 .empty-icon {
@@ -842,40 +884,17 @@
   color: var(--light-gray);
 }
 
-/* Additional animation classes */
-.animate-fade-in {
-  animation: fadeIn 1s ease-out;
-}
-
-.animate-slide-left {
-  animation: slideInFromLeft 0.5s ease-out;
-}
-
-.animate-slide-right {
-  animation: slideInFromRight 0.5s ease-out;
-}
-
-@keyframes slideInFromLeft {
-  0% {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromRight {
-  0% {
-    transform: translateX(50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
+/* Stagger the animation delay based on position */
+.experience-card:nth-child(1) { animation-delay: 0.2s; }
+.experience-card:nth-child(2) { animation-delay: 0.3s; }
+.experience-card:nth-child(3) { animation-delay: 0.4s; }
+.experience-card:nth-child(4) { animation-delay: 0.5s; }
+.experience-card:nth-child(5) { animation-delay: 0.6s; }
+.experience-card:nth-child(6) { animation-delay: 0.7s; }
+.experience-card:nth-child(7) { animation-delay: 0.8s; }
+.experience-card:nth-child(8) { animation-delay: 0.9s; }
+.experience-card:nth-child(9) { animation-delay: 1.0s; }
+.experience-card:nth-child(n+10) { animation-delay: 1.1s; }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
@@ -935,5 +954,10 @@
   
   .skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filter-btn {
+    width: 100%;
+    max-width: 300px;
   }
 }
