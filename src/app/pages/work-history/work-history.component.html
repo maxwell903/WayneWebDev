@@ -44,7 +44,7 @@
           <span>{{ getYearLabel(currentJob.endDate) }}</span>
         </div>
         
-        <!-- Current job indicator - remove pulse dot, animate the badge instead -->
+        <!-- Current job indicator with animation directly on the labels -->
         <div class="current-job-indicator">
           <span class="current-job-label" @currentJobAnimation>Current Position</span>
           <span class="duration-badge" @currentJobAnimation>{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
@@ -220,7 +220,9 @@
                   <p>{{pair[0].description}}</p>
                 </div>
                 
-                <button class="expand-toggle" (click)="toggleExpand(pair[0]); $event.stopPropagation()">
+                <!-- Replaced small expand button with large button similar to current job -->
+                <button class="expand-toggle large" (click)="toggleExpand(pair[0]); $event.stopPropagation()">
+                  <span>{{pair[0].isExpanded ? 'Show Less' : 'Show More'}}</span>
                   <svg 
                     [@rotateIcon]="pair[0].isExpanded ? 'expanded' : 'collapsed'"
                     class="expand-icon" 
@@ -338,7 +340,9 @@
                   <p>{{pair[1].description}}</p>
                 </div>
                 
-                <button class="expand-toggle" (click)="toggleExpand(pair[1]); $event.stopPropagation()">
+                <!-- Replaced small expand button with large button similar to current job -->
+                <button class="expand-toggle large" (click)="toggleExpand(pair[1]); $event.stopPropagation()">
+                  <span>{{pair[1].isExpanded ? 'Show Less' : 'Show More'}}</span>
                   <svg 
                     [@rotateIcon]="pair[1].isExpanded ? 'expanded' : 'collapsed'"
                     class="expand-icon" 

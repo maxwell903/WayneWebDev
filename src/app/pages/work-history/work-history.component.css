@@ -17,6 +17,8 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-align: center;
+  margin: 0 auto 15px;
 }
 
 .hardhat-icon {
@@ -129,11 +131,6 @@
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-}
-
-/* Remove the pulse dot - no longer needed */
-.pulse-dot {
-  display: none;
 }
 
 /* Current job label with animation directly on it */

@@ -83,11 +83,11 @@ interface SkillType {
       ])
     ]),
     
-    // Animation for current job indicator
+    // Animation for current job indicator (now with no delay, animating immediately)
     trigger('currentJobAnimation', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-10px)' }),
-        animate('800ms 300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
     
@@ -115,11 +115,11 @@ interface SkillType {
       ])
     ]),
     
-    // Card animation for appearance and hover
+    // Card animation for appearance and hover (no delay to make it animate immediately)
     trigger('cardAnimation', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(30px)' }),
-        animate('600ms 150ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
