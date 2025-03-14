@@ -53,7 +53,6 @@
         <div 
           class="current-job-card"
           [class.expanded]="currentJob.isExpanded"
-          (click)="toggleExpand(currentJob)"
           @cardAnimation>
           
           <div class="current-job-header">
@@ -106,12 +105,12 @@
           </button>
           
           <div 
-            class="timeline-card-content expanded-content"
+            class="expanded-content"
             [@expandCollapse]="currentJob.isExpanded ? 'expanded' : 'collapsed'">
             
             <div class="responsibilities-section">
               <h4>Key Responsibilities</h4>
-              <ul class="responsibilities-list" @responsibilitiesAnimation>
+              <ul class="responsibilities-list">
                 <li *ngFor="let responsibility of currentJob.responsibilities">
                   {{responsibility}}
                 </li>
@@ -137,8 +136,8 @@
                 </button>
               </div>
               
-              <!-- Skills grid with animation for the entire grid -->
-              <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(currentJob).length">
+              <!-- Skills grid -->
+              <div class="skills-grid">
                 <div 
                   *ngFor="let skill of getFilteredSkills(currentJob)" 
                   class="skill-card">
@@ -195,7 +194,6 @@
                   'card-customer': pair[0].category === 'customer-service',
                   'card-other': pair[0].category === 'other'
                 }"
-                (click)="toggleExpand(pair[0])"
                 @cardAnimation>
                 
                 <div class="date-badge">
@@ -237,12 +235,12 @@
                 </button>
                 
                 <div 
-                  class="card-content-expanded"
+                  class="expanded-content"
                   [@expandCollapse]="pair[0].isExpanded ? 'expanded' : 'collapsed'">
                   
                   <div class="responsibilities-section">
                     <h4>Key Responsibilities</h4>
-                    <ul class="responsibilities-list" @responsibilitiesAnimation>
+                    <ul class="responsibilities-list">
                       <li *ngFor="let responsibility of pair[0].responsibilities">
                         {{responsibility}}
                       </li>
@@ -268,8 +266,8 @@
                       </button>
                     </div>
                     
-                    <!-- Skills grid with animation for the entire grid -->
-                    <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(pair[0]).length">
+                    <!-- Skills grid -->
+                    <div class="skills-grid">
                       <div 
                         *ngFor="let skill of getFilteredSkills(pair[0])" 
                         class="skill-card">
@@ -314,7 +312,6 @@
                   'card-customer': pair[1].category === 'customer-service',
                   'card-other': pair[1].category === 'other'
                 }"
-                (click)="toggleExpand(pair[1])"
                 @cardAnimation>
                 
                 <div class="date-badge">
@@ -356,12 +353,12 @@
                 </button>
                 
                 <div 
-                  class="card-content-expanded"
+                  class="expanded-content"
                   [@expandCollapse]="pair[1].isExpanded ? 'expanded' : 'collapsed'">
                   
                   <div class="responsibilities-section">
                     <h4>Key Responsibilities</h4>
-                    <ul class="responsibilities-list" @responsibilitiesAnimation>
+                    <ul class="responsibilities-list">
                       <li *ngFor="let responsibility of pair[1].responsibilities">
                         {{responsibility}}
                       </li>
@@ -387,8 +384,8 @@
                       </button>
                     </div>
                     
-                    <!-- Skills grid with animation for the entire grid -->
-                    <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(pair[1]).length">
+                    <!-- Skills grid -->
+                    <div class="skills-grid">
                       <div 
                         *ngFor="let skill of getFilteredSkills(pair[1])" 
                         class="skill-card">
