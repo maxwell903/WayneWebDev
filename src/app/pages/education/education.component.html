@@ -3,7 +3,10 @@
 <section class="education-section">
     <div class="container">
       <div class="education-header">
-        <h1 class="section-title">Education</h1>
+        <h1 class="section-title">
+          <i class="icon education-icon"></i>
+          Education
+        </h1>
         <div class="education-summary">
           <h2>The Ohio State University</h2>
           <p class="degree-info">Bachelor of Science in Business Administration</p>
@@ -14,7 +17,7 @@
       
       <div class="filter-container">
         <div class="filter-group">
-          <h3>Filter by Department</h3>
+          <h3><i class="icon filter-icon"></i> Filter by Department</h3>
           <div class="filter-buttons">
             <button 
               *ngFor="let department of departments"
@@ -27,7 +30,7 @@
         </div>
         
         <div class="skills-filter-group">
-          <h3>Filter by Career-Ready Skills</h3>
+          <h3><i class="icon skills-icon"></i> Filter by Career-Ready Skills</h3>
           <app-skill-filter 
             [allSkills]="allSkills"
             [courseCount]="courses.length"
@@ -39,7 +42,7 @@
       <!-- Course Results Section -->
       <div class="results-section">
         <div class="results-counter">
-          <h3>Found <span class="counter-highlight">{{ filteredCourses.length }}</span> 
+          <h3><i class="icon search-icon"></i> Found <span class="counter-highlight">{{ filteredCourses.length }}</span> 
             {{ filteredCourses.length === 1 ? 'course' : 'courses' }}</h3>
         </div>
         
@@ -54,7 +57,7 @@
             <p class="course-description">{{course.description}}</p>
             
             <div class="skills-section">
-              <h4>Career-Ready Skills</h4>
+              <h4><i class="icon career-icon"></i> Career-Ready Skills</h4>
               <div class="skills-grid">
                 <div class="skill-item" *ngFor="let skill of course.skills">
                   <div class="skill-name" [class.highlighted]="selectedSkills.includes(skill.name)">
@@ -80,7 +83,7 @@
           <h3>No matching courses found</h3>
           <p>Try adjusting your filters to see more results</p>
           <button class="reset-filters-btn" (click)="selectedDepartment = 'All'; selectedSkills = []; applyFilters()">
-            Reset Filters
+            <i class="icon reset-icon"></i> Reset Filters
           </button>
         </div>
       </div>
