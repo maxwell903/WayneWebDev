@@ -1,14 +1,17 @@
 <section class="projects-section">
   <div class="container">
     <div class="projects-header">
-      <h1 class="section-title">My Projects</h1>
-      <p>Here you'll find a selection of my recent work. Each project represents different challenges and solutions.</p>
+      <h1 class="section-title">
+        <i class="icon project-icon"></i>
+        My Projects
+      </h1>
+      <p class="section-subtitle">Here you'll find a selection of my recent work. Each project represents different challenges and solutions.</p>
     </div>
     
     <div class="projects-filters">
       <button 
         *ngFor="let filter of filters"
-        class="project-filter-btn"
+        class="filter-btn"
         [class.active]="activeFilter === filter"
         (click)="filterProjects(filter)">
         {{filter}}
@@ -17,6 +20,19 @@
     
     <div class="projects-list">
       <app-project-card *ngFor="let project of filteredProjects" [project]="project"></app-project-card>
+    </div>
+
+    <!-- Empty state when no projects match the filter -->
+    <div class="empty-state" *ngIf="filteredProjects.length === 0">
+      <div class="empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M12 10v6m0-6h.01"></path>
+        </svg>
+      </div>
+      <h3>No projects found for this technology</h3>
+      <p>Try selecting a different technology filter to see more projects</p>
+      <button class="btn btn-primary" (click)="filterProjects('All')">View All Projects</button>
     </div>
   </div>
 </section>

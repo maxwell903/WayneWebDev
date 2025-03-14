@@ -14,4 +14,9 @@ export class HeaderComponent {
   toggleNav() {
     this.isNavOpen = !this.isNavOpen;
   }
+
+  // Add this new method to close the nav
+  closeNav() {
+    this.isNavOpen = false;
+  }
 }

@@ -9,16 +9,17 @@
       <span class="icon-bar"></span>
     </button>
     
-    <nav class="main-nav" [class.open]="isNavOpen">
-      <ul class="nav-list">
-        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li><a routerLink="/projects" routerLinkActive="active">Projects</a></li>
-        <li><a routerLink="/work-history" routerLinkActive="active">Work History</a></li>
-        <li><a routerLink="/education" routerLinkActive="active">Education</a></li>
-        <li><a routerLink="/about" routerLinkActive="active">About</a></li>
-        <li><a routerLink="/blog" routerLinkActive="active">Blog</a></li>
-        <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
-      </ul>
-    </nav>
+    <!-- Replace your nav-list section with this one -->
+<nav class="main-nav" [class.open]="isNavOpen">
+  <ul class="nav-list">
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeNav()">Home</a></li>
+    <li><a routerLink="/projects" routerLinkActive="active" (click)="closeNav()">Projects</a></li>
+    <li><a routerLink="/work-history" routerLinkActive="active" (click)="closeNav()">Work History</a></li>
+    <li><a routerLink="/education" routerLinkActive="active" (click)="closeNav()">Education</a></li>
+    <li><a routerLink="/about" routerLinkActive="active" (click)="closeNav()">About</a></li>
+    <li><a routerLink="/blog" routerLinkActive="active" (click)="closeNav()">Blog</a></li>
+    <li><a routerLink="/contact" routerLinkActive="active" (click)="closeNav()">Contact</a></li>
+  </ul>
+</nav>
   </div>
 </header>
