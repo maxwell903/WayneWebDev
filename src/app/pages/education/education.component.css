@@ -42,6 +42,7 @@
   }
   
   .filter-container {
+    position: relative;
     margin-bottom: 40px;
     animation: slideUp 0.8s ease 0.2s both;
   }
@@ -118,6 +119,7 @@
   /* Results Section Styling */
   .results-section {
     animation: fadeIn 0.8s ease 0.4s both;
+    position: relative;
   }
   
   .results-counter {
@@ -159,6 +161,7 @@
     flex-direction: column;
     border-top: 4px solid transparent;
     position: relative;
+    z-index: 1;
     overflow: hidden;
   }
   
