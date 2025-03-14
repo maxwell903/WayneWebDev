@@ -1,4 +1,3 @@
-<!-- src/app/pages/work-history/work-history.component.html -->
 <section class="work-history-section">
   <div class="container">
     <div class="section-header" @fadeInUp>
@@ -12,250 +11,116 @@
     <!-- Category filters -->
     <div class="category-filters" @fadeInUp>
       <button 
-        *ngFor="let category of categories"
         class="filter-btn"
-        [class.active]="selectedCategory === category.id"
-        (click)="filterByCategory(category.id)">
-        {{category.label}}
+        [class.active]="selectedCategory === 'all'"
+        (click)="filterByCategory('all')">
+        All Experience
+      </button>
+      <button 
+        class="filter-btn"
+        [class.active]="selectedCategory === 'tech'"
+        (click)="filterByCategory('tech')">
+        Technology
+      </button>
+      <button 
+        class="filter-btn"
+        [class.active]="selectedCategory === 'customer-service'"
+        (click)="filterByCategory('customer-service')">
+        Customer Service
+      </button>
+      <button 
+        class="filter-btn"
+        [class.active]="selectedCategory === 'other'"
+        (click)="filterByCategory('other')">
+        Other Experience
       </button>
     </div>
     
-    <!-- Work experience timeline -->
-    <div class="work-timeline" *ngIf="animationReady">
-      <div class="timeline-container" [@staggerFadeIn]="filteredExperiences.length">
-        <!-- Year markers on the timeline -->
-        <div class="timeline-years">
-          <div 
-            *ngFor="let year of timelineYears" 
-            class="year-marker"
-            [style.top.%]="year.position">
-            <div class="year-tick"></div>
-            <div class="year-label">{{year.year}}</div>
-          </div>
+    <!-- Work history content -->
+    <div class="work-history-content">
+      <!-- Current job section -->
+      <div class="current-job-section" *ngIf="currentJob">
+        <div class="year-label current-year">
+          <span>{{ getYearLabel(currentJob.endDate) }}</span>
         </div>
         
-        <!-- Current job highlighted section with centered design -->
-        <div class="current-job-container" *ngIf="filteredExperiences.length > 0 && filteredExperiences[0].endDate === null">
-          <div class="current-job-indicator" @pulseAnimation>
-            <div class="pulse-dot"></div>
-            <span class="current-job-label">Current Position</span>
-            <span class="duration-badge">{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
-          </div>
-          
-          <!-- Featured current job card -->
-          <div 
-            class="current-job-card"
-            [class.expanded]="filteredExperiences[0].isExpanded"
-            (click)="toggleExpand(filteredExperiences[0])">
-            
-            <div class="current-job-header">
-              <div class="job-titles">
-                <h3 class="job-title">{{filteredExperiences[0].role}}</h3>
-                <h4 class="company-name">{{filteredExperiences[0].company}}</h4>
-                <div class="job-dates">{{formatDate(filteredExperiences[0].startDate)}} - {{formatDate(filteredExperiences[0].endDate)}}</div>
-              </div>
-              
-              <div class="job-meta">
-                <div class="category-badge tech">
-                  Technology
-                </div>
-              </div>
-            </div>
-            
-            <!-- Queue specializations -->
-            <div class="queue-specializations">
-              <h4 class="section-label">Support Queue Specializations:</h4>
-              <div class="queue-badges">
-                <span class="queue-badge" *ngFor="let queue of filteredExperiences[0].queues">{{queue}}</span>
-              </div>
-            </div>
-            
-            <!-- Certifications -->
-            <div class="certifications-section">
-              <h4 class="section-label">Certifications:</h4>
-              <div class="cert-badges">
-                <span class="cert-badge" *ngFor="let cert of filteredExperiences[0].certifications">{{cert}}</span>
-              </div>
-            </div>
-            
-            <div class="job-description">
-              <p>{{filteredExperiences[0].description}}</p>
-            </div>
-            
-            <button class="expand-toggle large" (click)="toggleExpand(filteredExperiences[0]); $event.stopPropagation()">
-              <span>{{filteredExperiences[0].isExpanded ? 'Show Less' : 'Show More'}}</span>
-              <svg 
-                [@rotateIcon]="filteredExperiences[0].isExpanded ? 'expanded' : 'collapsed'"
-                class="expand-icon" 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
-            
-            <div 
-              class="timeline-card-content expanded-content"
-              [@expandCollapse]="filteredExperiences[0].isExpanded ? 'expanded' : 'collapsed'">
-              
-              <div class="responsibilities-section">
-                <h4>Key Responsibilities</h4>
-                <ul class="responsibilities-list">
-                  <li *ngFor="let responsibility of filteredExperiences[0].responsibilities">
-                    {{responsibility}}
-                  </li>
-                </ul>
-              </div>
-              
-              <!-- Locations section if available -->
-              <div class="locations-section" *ngIf="filteredExperiences[0].locations && filteredExperiences[0].locations.length">
-                <h4>Location</h4>
-                <div class="locations-list">
-                  <span class="location-badge" *ngFor="let location of filteredExperiences[0].locations">{{location}}</span>
-                </div>
-              </div>
-              
-              <!-- Skills section with loading animation -->
-              <div class="skills-section">
-                <div class="skills-header">
-                  <h4>Technical, Business & Professional Skills</h4>
-                  <div class="skill-filter-tags">
-                    <button 
-                      *ngFor="let skillType of skillTypes"
-                      class="skill-filter-tag"
-                      [class.active]="selectedSkillType === skillType.id"
-                      [ngClass]="'filter-tag-' + skillType.id"
-                      (click)="filterBySkillType(skillType.id); $event.stopPropagation()">
-                      {{skillType.label.replace(' Skills', '')}}
-                    </button>
-                  </div>
-                  <button class="details-toggle" (click)="toggleDetails(filteredExperiences[0], $event)">
-                    {{filteredExperiences[0].isDetailOpen ? 'Hide Details' : 'Show Details'}}
-                  </button>
-                </div>
-                
-                <!-- Skills grid with single animation for the entire grid -->
-                <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(filteredExperiences[0]).length">
-                  <div 
-                    *ngFor="let skill of getFilteredSkills(filteredExperiences[0])" 
-                    class="skill-card">
-                    
-                    <div class="skill-header">
-                      <h5 class="skill-name">{{skill.name}}</h5>
-                      <div class="skill-badges">
-                        <span class="skill-level-badge" [ngClass]="getSkillLevelClass(skill.relevance)">
-                          {{skill.relevance.charAt(0).toUpperCase() + skill.relevance.slice(1)}}
-                        </span>
-                        <span class="skill-type-badge" [ngClass]="getSkillCategoryClass(skill.category)">
-                          {{skill.category.charAt(0).toUpperCase() + skill.category.slice(1)}}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div class="skill-description" *ngIf="filteredExperiences[0].isDetailOpen">
-                      {{skill.description}}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="current-job-indicator" @pulseAnimation>
+          <div class="pulse-dot"></div>
+          <span class="current-job-label">Current Position</span>
+          <span class="duration-badge">{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
         </div>
-        
-        <!-- Past jobs in timeline format -->
-        <h3 class="past-experience-heading" *ngIf="filteredExperiences.length > 1">Past Experience</h3>
         
         <div 
-          *ngFor="let experience of filteredExperiences.slice(1); let i = index" 
-          class="timeline-card"
-          [class.timeline-card-even]="i % 2 === 1"
-          [class.timeline-card-odd]="i % 2 === 0"
-          [class.timeline-tech]="experience.category === 'tech'"
-          [class.timeline-customer]="experience.category === 'customer-service'"
-          [class.timeline-other]="experience.category === 'other'"
-          [class.expanded]="experience.isExpanded"
-          [class.timeline-card-overlap]="experience.isOverlap"
-          [style.top.px]="experience.topOffset || 0"
-          (click)="toggleExpand(experience)">
+          class="current-job-card"
+          [class.expanded]="currentJob.isExpanded"
+          (click)="toggleExpand(currentJob)">
           
-          <!-- Connect to the timeline with start and end date brackets -->
-          <div class="timeline-connector"></div>
-          
-          <!-- Date brackets that show job duration -->
-          <div class="date-bracket">
-            <span class="date-label start-date-label">{{formatMonthYear(experience.startDate)}}</span>
-            <span class="date-label end-date-label">{{formatMonthYear(experience.endDate)}}</span>
-          </div>
-          
-          <div class="timeline-card-header">
-            <div class="job-details">
-              <h3 class="job-title">{{experience.role}}</h3>
-              <h4 class="company-name">{{experience.company}}</h4>
-              <div class="job-duration">
-                <span class="dates">{{formatDate(experience.startDate)}} - {{formatDate(experience.endDate)}}</span>
-                <span class="duration-label">{{calculateDuration(experience.startDate, experience.endDate)}}</span>
+          <div class="current-job-header">
+            <div class="job-titles">
+              <h3 class="job-title">{{currentJob.role}}</h3>
+              <h4 class="company-name">{{currentJob.company}}</h4>
+              <div class="job-dates">{{formatDate(currentJob.startDate)}} - {{formatDate(currentJob.endDate)}}</div>
+            </div>
+            
+            <div class="job-meta">
+              <div class="category-badge tech">
+                Technology
               </div>
             </div>
-            
-            <div class="relevance-indicator">
-              <div class="relevance-meter">
-                <div class="relevance-fill" [style.width.%]="experience.relevanceScore"></div>
-              </div>
-              <span class="relevance-label">Relevance: {{experience.relevanceScore}}%</span>
-            </div>
-            
-            <div class="category-badge" [ngClass]="experience.category">
-              {{experience.category === 'tech' ? 'Technology' : 
-                experience.category === 'customer-service' ? 'Customer Service' : 'Other'}}
-            </div>
-            
-            <button class="expand-toggle" (click)="toggleExpand(experience); $event.stopPropagation()">
-              <svg 
-                [@rotateIcon]="experience.isExpanded ? 'expanded' : 'collapsed'"
-                class="expand-icon" 
-                width="24" 
-                height="24" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </button>
           </div>
+          
+          <!-- Queue specializations -->
+          <div class="queue-specializations" *ngIf="currentJob.queues && currentJob.queues.length">
+            <h4 class="section-label">Support Queue Specializations:</h4>
+            <div class="queue-badges">
+              <span class="queue-badge" *ngFor="let queue of currentJob.queues">{{queue}}</span>
+            </div>
+          </div>
+          
+          <!-- Certifications -->
+          <div class="certifications-section" *ngIf="currentJob.certifications && currentJob.certifications.length">
+            <h4 class="section-label">Certifications:</h4>
+            <div class="cert-badges">
+              <span class="cert-badge" *ngFor="let cert of currentJob.certifications">{{cert}}</span>
+            </div>
+          </div>
+          
+          <div class="job-description">
+            <p>{{currentJob.description}}</p>
+          </div>
+          
+          <button class="expand-toggle large" (click)="toggleExpand(currentJob); $event.stopPropagation()">
+            <span>{{currentJob.isExpanded ? 'Show Less' : 'Show More'}}</span>
+            <svg 
+              [@rotateIcon]="currentJob.isExpanded ? 'expanded' : 'collapsed'"
+              class="expand-icon" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
           
           <div 
-            class="timeline-card-content"
-            [@expandCollapse]="experience.isExpanded ? 'expanded' : 'collapsed'">
-            
-            <div class="job-description">
-              <p>{{experience.description}}</p>
-            </div>
+            class="timeline-card-content expanded-content"
+            [@expandCollapse]="currentJob.isExpanded ? 'expanded' : 'collapsed'">
             
             <div class="responsibilities-section">
               <h4>Key Responsibilities</h4>
               <ul class="responsibilities-list">
-                <li *ngFor="let responsibility of experience.responsibilities">
+                <li *ngFor="let responsibility of currentJob.responsibilities">
                   {{responsibility}}
                 </li>
               </ul>
             </div>
             
-            <!-- Locations section if available -->
-            <div class="locations-section" *ngIf="experience.locations && experience.locations.length">
-              <h4>Locations</h4>
-              <div class="locations-list">
-                <span class="location-badge" *ngFor="let location of experience.locations">{{location}}</span>
-              </div>
-            </div>
-            
-            <!-- Skills section with loading animation -->
+            <!-- Skills section with filter tabs -->
             <div class="skills-section">
               <div class="skills-header">
-                <h4>Skills Developed</h4>
+                <h4>Technical, Business & Professional Skills</h4>
                 <div class="skill-filter-tags">
                   <button 
                     *ngFor="let skillType of skillTypes"
@@ -266,16 +131,17 @@
                     {{skillType.label.replace(' Skills', '')}}
                   </button>
                 </div>
-                <button class="details-toggle" (click)="toggleDetails(experience, $event)">
-                  {{experience.isDetailOpen ? 'Hide Details' : 'Show Details'}}
+                <button class="details-toggle" (click)="toggleDetails(currentJob, $event)">
+                  {{currentJob.isDetailOpen ? 'Hide Details' : 'Show Details'}}
                 </button>
               </div>
               
-              <!-- Skills grid with single animation for the entire grid -->
-              <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(experience).length">
+              <!-- Skills grid with animation for the entire grid -->
+              <div class="skills-grid">
                 <div 
-                  *ngFor="let skill of getFilteredSkills(experience)" 
-                  class="skill-card">
+                  *ngFor="let skill of getFilteredSkills(currentJob)" 
+                  class="skill-card"
+                  @skillsAnimation>
                   
                   <div class="skill-header">
                     <h5 class="skill-name">{{skill.name}}</h5>
@@ -289,28 +155,292 @@
                     </div>
                   </div>
                   
-                  <div class="skill-description" *ngIf="experience.isDetailOpen">
+                  <div class="skill-description" *ngIf="currentJob.isDetailOpen">
                     {{skill.description}}
                   </div>
                 </div>
               </div>
             </div>
+            
+            <!-- Locations section if available -->
+            <div class="locations-section" *ngIf="currentJob.locations && currentJob.locations.length">
+              <h4>Location</h4>
+              <div class="locations-list">
+                <span class="location-badge" *ngFor="let location of currentJob.locations">{{location}}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Empty state when no experiences match the filter -->
-    <div class="empty-state" *ngIf="filteredExperiences.length === 0" @fadeInUp>
-      <div class="empty-icon">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
+      
+      <!-- Past experience heading -->
+      <h3 class="past-experience-heading" *ngIf="pastExperiences.length > 0">Past Experience</h3>
+      
+      <!-- Past experiences in pairs -->
+      <div class="experience-pairs">
+        <div class="experience-pair" *ngFor="let pair of pairedPastExperiences; let pairIndex = index">
+          <!-- Year label for this pair (using the end date of the first experience in pair) -->
+          <div class="year-label" *ngIf="pairIndex === 0 || getYearLabel(pair[0].endDate) !== getYearLabel(pairedPastExperiences[pairIndex-1][0].endDate)">
+            <span>{{ getYearLabel(pair[0].endDate) }}</span>
+          </div>
+          
+          <div class="experience-cards">
+            <!-- First card in pair -->
+            <div class="experience-card-container">
+              <div 
+                class="experience-card"
+                [class.expanded]="pair[0].isExpanded"
+                [ngClass]="{
+                  'card-tech': pair[0].category === 'tech',
+                  'card-customer': pair[0].category === 'customer-service',
+                  'card-other': pair[0].category === 'other'
+                }"
+                (click)="toggleExpand(pair[0])">
+                
+                <div class="date-badge">
+                  {{formatDate(pair[0].startDate)}} - {{formatDate(pair[0].endDate)}}
+                </div>
+                
+                <div class="card-header">
+                  <h3 class="job-title">{{pair[0].role}}</h3>
+                  <h4 class="company-name">{{pair[0].company}}</h4>
+                  <div class="duration-badge">{{calculateDuration(pair[0].startDate, pair[0].endDate)}}</div>
+                </div>
+                
+                <div class="relevance-meter">
+                  <div class="relevance-fill" [style.width.%]="pair[0].relevanceScore"></div>
+                </div>
+                <span class="relevance-label">Relevance: {{pair[0].relevanceScore}}%</span>
+                
+                <div class="category-badge" [ngClass]="pair[0].category">
+                  {{pair[0].category === 'tech' ? 'Technology' : 
+                    pair[0].category === 'customer-service' ? 'Customer Service' : 'Other'}}
+                </div>
+                
+                <div class="card-description">
+                  <p>{{pair[0].description}}</p>
+                </div>
+                
+                <button class="expand-toggle" (click)="toggleExpand(pair[0]); $event.stopPropagation()">
+                  <svg 
+                    [@rotateIcon]="pair[0].isExpanded ? 'expanded' : 'collapsed'"
+                    class="expand-icon" 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                
+                <div 
+                  class="card-content-expanded"
+                  [@expandCollapse]="pair[0].isExpanded ? 'expanded' : 'collapsed'">
+                  
+                  <div class="responsibilities-section">
+                    <h4>Key Responsibilities</h4>
+                    <ul class="responsibilities-list">
+                      <li *ngFor="let responsibility of pair[0].responsibilities">
+                        {{responsibility}}
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <!-- Skills section with filter tabs -->
+                  <div class="skills-section">
+                    <div class="skills-header">
+                      <h4>Skills Developed</h4>
+                      <div class="skill-filter-tags">
+                        <button 
+                          *ngFor="let skillType of skillTypes"
+                          class="skill-filter-tag"
+                          [class.active]="selectedSkillType === skillType.id"
+                          [ngClass]="'filter-tag-' + skillType.id"
+                          (click)="filterBySkillType(skillType.id); $event.stopPropagation()">
+                          {{skillType.label.replace(' Skills', '')}}
+                        </button>
+                      </div>
+                      <button class="details-toggle" (click)="toggleDetails(pair[0], $event)">
+                        {{pair[0].isDetailOpen ? 'Hide Details' : 'Show Details'}}
+                      </button>
+                    </div>
+                    
+                    <!-- Skills grid with animation for the entire grid -->
+                    <div class="skills-grid">
+                      <div 
+                        *ngFor="let skill of getFilteredSkills(pair[0])" 
+                        class="skill-card"
+                        @skillsAnimation>
+                        
+                        <div class="skill-header">
+                          <h5 class="skill-name">{{skill.name}}</h5>
+                          <div class="skill-badges">
+                            <span class="skill-level-badge" [ngClass]="getSkillLevelClass(skill.relevance)">
+                              {{skill.relevance.charAt(0).toUpperCase() + skill.relevance.slice(1)}}
+                            </span>
+                            <span class="skill-type-badge" [ngClass]="getSkillCategoryClass(skill.category)">
+                              {{skill.category.charAt(0).toUpperCase() + skill.category.slice(1)}}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div class="skill-description" *ngIf="pair[0].isDetailOpen">
+                          {{skill.description}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Locations section if available -->
+                  <div class="locations-section" *ngIf="pair[0].locations && pair[0].locations.length">
+                    <h4>Location</h4>
+                    <div class="locations-list">
+                      <span class="location-badge" *ngFor="let location of pair[0].locations">{{location}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Second card in pair (if exists) -->
+            <div class="experience-card-container" *ngIf="pair[1]">
+              <div 
+                class="experience-card"
+                [class.expanded]="pair[1].isExpanded"
+                [ngClass]="{
+                  'card-tech': pair[1].category === 'tech',
+                  'card-customer': pair[1].category === 'customer-service',
+                  'card-other': pair[1].category === 'other'
+                }"
+                (click)="toggleExpand(pair[1])">
+                
+                <div class="date-badge">
+                  {{formatDate(pair[1].startDate)}} - {{formatDate(pair[1].endDate)}}
+                </div>
+                
+                <div class="card-header">
+                  <h3 class="job-title">{{pair[1].role}}</h3>
+                  <h4 class="company-name">{{pair[1].company}}</h4>
+                  <div class="duration-badge">{{calculateDuration(pair[1].startDate, pair[1].endDate)}}</div>
+                </div>
+                
+                <div class="relevance-meter">
+                  <div class="relevance-fill" [style.width.%]="pair[1].relevanceScore"></div>
+                </div>
+                <span class="relevance-label">Relevance: {{pair[1].relevanceScore}}%</span>
+                
+                <div class="category-badge" [ngClass]="pair[1].category">
+                  {{pair[1].category === 'tech' ? 'Technology' : 
+                    pair[1].category === 'customer-service' ? 'Customer Service' : 'Other'}}
+                </div>
+                
+                <div class="card-description">
+                  <p>{{pair[1].description}}</p>
+                </div>
+                
+                <button class="expand-toggle" (click)="toggleExpand(pair[1]); $event.stopPropagation()">
+                  <svg 
+                    [@rotateIcon]="pair[1].isExpanded ? 'expanded' : 'collapsed'"
+                    class="expand-icon" 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                
+                <div 
+                  class="card-content-expanded"
+                  [@expandCollapse]="pair[1].isExpanded ? 'expanded' : 'collapsed'">
+                  
+                  <div class="responsibilities-section">
+                    <h4>Key Responsibilities</h4>
+                    <ul class="responsibilities-list">
+                      <li *ngFor="let responsibility of pair[1].responsibilities">
+                        {{responsibility}}
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <!-- Skills section with filter tabs -->
+                  <div class="skills-section">
+                    <div class="skills-header">
+                      <h4>Skills Developed</h4>
+                      <div class="skill-filter-tags">
+                        <button 
+                          *ngFor="let skillType of skillTypes"
+                          class="skill-filter-tag"
+                          [class.active]="selectedSkillType === skillType.id"
+                          [ngClass]="'filter-tag-' + skillType.id"
+                          (click)="filterBySkillType(skillType.id); $event.stopPropagation()">
+                          {{skillType.label.replace(' Skills', '')}}
+                        </button>
+                      </div>
+                      <button class="details-toggle" (click)="toggleDetails(pair[1], $event)">
+                        {{pair[1].isDetailOpen ? 'Hide Details' : 'Show Details'}}
+                      </button>
+                    </div>
+                    
+                    <!-- Skills grid with animation for the entire grid -->
+                    <div class="skills-grid">
+                      <div 
+                        *ngFor="let skill of getFilteredSkills(pair[1])" 
+                        class="skill-card"
+                        @skillsAnimation>
+                        
+                        <div class="skill-header">
+                          <h5 class="skill-name">{{skill.name}}</h5>
+                          <div class="skill-badges">
+                            <span class="skill-level-badge" [ngClass]="getSkillLevelClass(skill.relevance)">
+                              {{skill.relevance.charAt(0).toUpperCase() + skill.relevance.slice(1)}}
+                            </span>
+                            <span class="skill-type-badge" [ngClass]="getSkillCategoryClass(skill.category)">
+                              {{skill.category.charAt(0).toUpperCase() + skill.category.slice(1)}}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div class="skill-description" *ngIf="pair[1].isDetailOpen">
+                          {{skill.description}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Locations section if available -->
+                  <div class="locations-section" *ngIf="pair[1].locations && pair[1].locations.length">
+                    <h4>Location</h4>
+                    <div class="locations-list">
+                      <span class="location-badge" *ngFor="let location of pair[1].locations">{{location}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Empty placeholder for odd number of experiences -->
+            <div class="experience-card-container empty" *ngIf="!pair[1]"></div>
+          </div>
+        </div>
       </div>
-      <h3>No work experiences in this category</h3>
-      <p>Try selecting a different category to view more of my work history</p>
-      <button class="btn btn-primary" (click)="filterByCategory('all')">View All Experience</button>
+      
+      <!-- Empty state when no experiences match the filter -->
+      <div class="empty-state" *ngIf="filteredExperiences.length === 0" @fadeInUp>
+        <div class="empty-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <h3>No work experiences in this category</h3>
+        <p>Try selecting a different category to view more of my work history</p>
+        <button class="btn btn-primary" (click)="filterByCategory('all')">View All Experience</button>
+      </div>
     </div>
   </div>
 </section>

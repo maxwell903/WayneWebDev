@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
 
 interface WorkExperience {
   id: string;
@@ -18,9 +18,6 @@ interface WorkExperience {
   queues?: string[];
   isExpanded: boolean;
   isDetailOpen: boolean;
-  isOverlap?: boolean;
-  topOffset?: number;
-  timelinePosition?: number; // Position on the timeline (percentage)
 }
 
 interface Skill {
@@ -30,20 +27,10 @@ interface Skill {
   description: string;
 }
 
-interface Category {
-  id: string;
-  label: string;
-}
-
 interface SkillType {
   id: string;
   label: string;
   colorClass: string;
-}
-
-interface YearMarker {
-  year: number;
-  position: number; // Position on the timeline (percentage)
 }
 
 @Component({
@@ -53,7 +40,6 @@ interface YearMarker {
   templateUrl: './work-history.component.html',
   styleUrls: ['./work-history.component.css'],
   animations: [
-    // Animation for expanding/collapsing content
     trigger('expandCollapse', [
       state('collapsed', style({
         height: '0',
@@ -71,19 +57,6 @@ interface YearMarker {
       ])
     ]),
     
-    // Animation for fading in skills with a staggered effect
-    trigger('skillsAnimation', [
-      transition('* => *', [
-        query(':enter', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger('80ms', [
-            animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    
-    // Animation for section elements fading in from bottom
     trigger('fadeInUp', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(30px)' }),
@@ -91,19 +64,6 @@ interface YearMarker {
       ])
     ]),
     
-    // Animation for staggered appearance of timeline cards
-    trigger('staggerFadeIn', [
-      transition('* => *', [
-        query(':enter', [
-          style({ opacity: 0, transform: 'translateY(30px)' }),
-          stagger('150ms', [
-            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ]),
-    
-    // Animation for rotating the expand/collapse icon
     trigger('rotateIcon', [
       state('collapsed', style({ transform: 'rotate(0)' })),
       state('expanded', style({ transform: 'rotate(180deg)' })),
@@ -112,11 +72,17 @@ interface YearMarker {
       ])
     ]),
     
-    // Animation for the current job indicator
     trigger('pulseAnimation', [
       transition(':enter', [
         style({ opacity: 0, transform: 'scale(0.8)' }),
         animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ])
+    ]),
+    
+    trigger('skillsAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
@@ -124,15 +90,8 @@ interface YearMarker {
 export class WorkHistoryComponent implements OnInit {
   workExperiences: WorkExperience[] = [];
   selectedCategory: string = 'all';
-  selectedSkillType: string = 'technical'; // Default to technical skills
-  timelineYears: YearMarker[] = [];
-  
-  categories: Category[] = [
-    { id: 'all', label: 'All Experience' },
-    { id: 'tech', label: 'Technology' },
-    { id: 'customer-service', label: 'Customer Service' },
-    { id: 'other', label: 'Other Experience' }
-  ];
+  selectedSkillType: string = 'all';
+  currentJobDuration: { years: number, months: number } = { years: 0, months: 0 };
   
   skillTypes: SkillType[] = [
     { id: 'technical', label: 'Technical Skills', colorClass: 'filter-technical' },
@@ -141,24 +100,10 @@ export class WorkHistoryComponent implements OnInit {
     { id: 'all', label: 'All Skills', colorClass: 'filter-all' }
   ];
   
-  currentJobDuration: { years: number, months: number } = { years: 0, months: 0 };
-  animationReady = false;
-  earliestDate: Date | null = null;
-  latestDate: Date | null = null;
-  
   ngOnInit(): void {
     this.initializeWorkExperiences();
     this.calculateCurrentJobDuration();
-    this.orderByEndDate();
-    this.findDateRanges();
-    this.calculateTimelinePositions();
-    this.generateYearMarkers();
-    this.detectOverlappingExperiences();
-    
-    // Delay animation start slightly to ensure DOM is ready
-    setTimeout(() => {
-      this.animationReady = true;
-    }, 100);
+    this.sortExperiencesByDate();
   }
   
   calculateCurrentJobDuration(): void {
@@ -169,7 +114,7 @@ export class WorkHistoryComponent implements OnInit {
       
       // Calculate total months between dates
       const totalMonths = (currentDate.getFullYear() - startDate.getFullYear()) * 12 + 
-                         (currentDate.getMonth() - startDate.getMonth());
+                          (currentDate.getMonth() - startDate.getMonth());
       
       // Convert to years and months
       const years = Math.floor(totalMonths / 12);
@@ -179,8 +124,8 @@ export class WorkHistoryComponent implements OnInit {
     }
   }
   
-  // Order the timeline entries by end date (latest first)
-  orderByEndDate(): void {
+  sortExperiencesByDate(): void {
+    // Order by end date (latest first), with null end dates (current job) at the top
     this.workExperiences.sort((a, b) => {
       // Current job (null end date) should always be first
       if (a.endDate === null) return -1;
@@ -189,95 +134,6 @@ export class WorkHistoryComponent implements OnInit {
       // Otherwise sort by most recent end date
       return b.endDate.getTime() - a.endDate.getTime();
     });
-  }
-  
-  // Find the earliest and latest dates in the timeline
-  findDateRanges(): void {
-    if (this.workExperiences.length === 0) return;
-    
-    // Find earliest start date
-    this.earliestDate = this.workExperiences.reduce((earliest, job) => {
-      if (!earliest || job.startDate < earliest) {
-        return job.startDate;
-      }
-      return earliest;
-    }, null as Date | null);
-    
-    // Find latest end date (using current date for ongoing jobs)
-    const currentDate = new Date();
-    this.latestDate = this.workExperiences.reduce((latest, job) => {
-      const endDate = job.endDate || currentDate;
-      if (!latest || endDate > latest) {
-        return endDate;
-      }
-      return latest;
-    }, null as Date | null);
-  }
-  
-  // Calculate position on the timeline for each experience (as percentage)
-  calculateTimelinePositions(): void {
-    if (!this.earliestDate || !this.latestDate) return;
-    
-    const timelineStart = this.earliestDate.getTime();
-    const timelineEnd = this.latestDate.getTime();
-    const timelineRange = timelineEnd - timelineStart;
-    
-    this.workExperiences.forEach(job => {
-      const startPosition = ((job.startDate.getTime() - timelineStart) / timelineRange) * 100;
-      const endPosition = (((job.endDate || new Date()).getTime() - timelineStart) / timelineRange) * 100;
-      
-      // Store the middle position for placing the experience on the timeline
-      job.timelinePosition = (startPosition + endPosition) / 2;
-    });
-  }
-  
-  // Generate year markers for the timeline
-  generateYearMarkers(): void {
-    if (!this.earliestDate || !this.latestDate) return;
-    
-    const startYear = this.earliestDate.getFullYear();
-    const endYear = this.latestDate.getFullYear();
-    const timelineStart = this.earliestDate.getTime();
-    const timelineEnd = this.latestDate.getTime();
-    const timelineRange = timelineEnd - timelineStart;
-    
-    // Create a marker for each year
-    for (let year = startYear; year <= endYear; year++) {
-      const yearDate = new Date(year, 0, 1); // January 1st of the year
-      const position = ((yearDate.getTime() - timelineStart) / timelineRange) * 100;
-      
-      // Only add if position is between 0 and 100
-      if (position >= 0 && position <= 100) {
-        this.timelineYears.push({ year, position });
-      }
-    }
-  }
-  
-  // Detect and handle overlapping job periods
-  detectOverlappingExperiences(): void {
-    const sortedJobs = [...this.workExperiences].sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-    
-    for (let i = 0; i < sortedJobs.length - 1; i++) {
-      const jobA = sortedJobs[i];
-      
-      for (let j = i + 1; j < sortedJobs.length; j++) {
-        const jobB = sortedJobs[j];
-        
-        // Calculate if jobs overlap
-        const jobAEnd = jobA.endDate || new Date();
-        const jobBStart = jobB.startDate;
-        
-        if (jobBStart < jobAEnd) {
-          // Jobs overlap
-          jobB.isOverlap = true;
-          
-          // Apply a vertical offset to the second job
-          // This is a simple approach - for more complex layouts, you might need
-          // a more sophisticated algorithm to handle multiple overlaps
-          jobB.topOffset = 20 * j;
-        }
-      }
-    }
   }
   
   initializeWorkExperiences(): void {
@@ -290,18 +146,13 @@ export class WorkHistoryComponent implements OnInit {
         endDate: null, // Current job
         relevanceScore: 95,
         category: 'tech',
-        description: 'Providing comprehensive technical support for Rent Manager Property Management Software across multiple specialized queues, including Mobile, Integrations, Technical, General, and Receivables & Payables, while troubleshooting complex software issues and ensuring optimal customer experience.',
+        description: 'Providing comprehensive technical support for Rent Manager Property Management Software across specialized queues, including Mobile, Integrations, Technical, General, and Receivables & Payables.',
         responsibilities: [
           'Serve as a specialized expert in the Mobile queue, assisting property managers with mobile apps, web portals, and API integration issues',
           'Lead troubleshooting for the Integrations queue, resolving complex data transfer problems between Rent Manager and third-party software systems',
           'Diagnose and fix technical issues across multiple support queues, including database structure problems, user permissions, and electronic funds transfer systems',
           'Support accountants and financial professionals in analyzing, interpreting, and troubleshooting complex financial reports and accounting workflows',
-          'Guide clients on accounting best practices specific to property management, including accounts receivable/payable processes and financial reconciliation',
-          'Set up and customize Rent Manager web-based portals, leveraging web development knowledge to optimize functionality',
-          'Collaborate with internal development teams to identify and resolve software bugs and unexpected behaviors',
-          'Configure and optimize automated workflow processes to streamline property management operations',
-          'Provide guidance on regulatory compliance and industry-standard accounting practices for property management',
-          'Document detailed solution steps in ticketing software to build the knowledge base and improve resolution efficiency'
+          'Guide clients on accounting best practices specific to property management, including accounts receivable/payable processes and financial reconciliation'
         ],
         skills: [
           // Technical Skills
@@ -315,7 +166,15 @@ export class WorkHistoryComponent implements OnInit {
           { name: 'Mobile Application Support', relevance: 'high', category: 'technical', description: 'Resolving platform-specific issues across iOS and Android mobile applications' },
           { name: 'Technical Documentation', relevance: 'high', category: 'technical', description: 'Creating comprehensive solution documentation for complex technical issues' },
           { name: 'Software Integration', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving integration issues between multiple software systems' },
-          
+          { name: 'REST API Troubleshooting', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving issues with RESTful API endpoints, request formatting, and response handling' },
+{ name: 'SQL Query Optimization', relevance: 'medium', category: 'technical', description: 'Improving database query performance through proper indexing, query restructuring, and execution plan analysis' },
+{ name: 'Client Training', relevance: 'high', category: 'soft', description: 'Developing and delivering effective training sessions to help clients maximize software utilization' },
+{ name: 'Knowledge Base Development', relevance: 'medium', category: 'technical', description: 'Creating comprehensive documentation of common issues and solutions for internal and client reference' },
+{ name: 'Web Authentication Systems', relevance: 'medium', category: 'technical', description: 'Troubleshooting and configuring single sign-on, OAuth, and other authentication mechanisms' },
+{ name: 'Root Cause Analysis', relevance: 'high', category: 'technical', description: 'Systematically identifying the underlying causes of technical issues to prevent recurrence' },
+{ name: 'Data Migration Support', relevance: 'medium', category: 'technical', description: 'Assisting clients with transferring data between systems while maintaining integrity and relationships' },
+{ name: 'System Integration Testing', relevance: 'medium', category: 'technical', description: 'Verifying proper functionality of interconnected software components across multiple platforms' },
+
           // Business Skills
           { name: 'Financial Report Analysis', relevance: 'high', category: 'business', description: 'Interpreting and troubleshooting financial reports including balance sheets, income statements, and cash flow reports specific to property management' },
           { name: 'Accounts Receivable/Payable', relevance: 'high', category: 'business', description: 'Supporting clients with billing cycles, payment application, vendor management, and invoice processing workflows' },
@@ -325,15 +184,16 @@ export class WorkHistoryComponent implements OnInit {
           { name: 'Financial Reconciliation', relevance: 'high', category: 'business', description: 'Assisting with bank reconciliation processes, ledger balancing, and resolving discrepancies in financial records' },
           { name: 'Regulatory Compliance', relevance: 'medium', category: 'business', description: 'Advising on software configuration to help meet industry regulations and financial reporting requirements' },
           { name: 'Budget Management', relevance: 'medium', category: 'business', description: 'Supporting property management companies with budget creation, tracking, and variance analysis' },
+          { name: 'Service Level Management', relevance: 'medium', category: 'business', description: 'Ensuring support activities meet defined response and resolution time agreements' },
+          { name: 'Incident Management', relevance: 'high', category: 'business', description: 'Handling service disruptions and technical issues according to defined severity levels and response protocols' },
           
           // Soft Skills
           { name: 'Problem Solving', relevance: 'high', category: 'soft', description: 'Applying critical thinking and systematic approaches to resolve complex technical challenges' },
           { name: 'Customer Communication', relevance: 'high', category: 'soft', description: 'Translating technical concepts into clear explanations for users with varying technical backgrounds' },
           { name: 'Technical Empathy', relevance: 'high', category: 'soft', description: 'Understanding client pain points and frustrations with technology to provide supportive and effective assistance' },
           { name: 'Process Analysis', relevance: 'high', category: 'soft', description: 'Identifying inefficiencies in workflows and recommending improvements to business processes' },
-          { name: 'Training & Knowledge Transfer', relevance: 'medium', category: 'soft', description: 'Effectively teaching clients how to use complex software features and troubleshoot common issues' }
+          { name: 'Training & Knowledge Transfer', relevance: 'medium', category: 'soft', description: 'Effectively teaching clients how to use complex software features and troubleshoot common issues' },
         ],
-        locations: ['Cincinnati, OH (Hybrid - 50% Remote)'],
         certifications: [
           'Rent Manager Mobile Queue Certification',
           'Rent Manager General Queue Certification',
@@ -347,47 +207,7 @@ export class WorkHistoryComponent implements OnInit {
           'General Support',
           'Receivables & Payables'
         ],
-        isExpanded: false,
-        isDetailOpen: false
-      },
-      {
-        id: 'osu-golf',
-        company: 'The Ohio State University Golf Course',
-        role: 'Grounds Keeper',
-        startDate: new Date('2023-05-01'),
-        endDate: new Date('2023-09-30'),
-        relevanceScore: 55,
-        category: 'other',
-        description: 'Maintained championship-caliber golf course conditions through comprehensive turf management, landscape maintenance, and tournament preparation, ensuring exceptional playing conditions for OSU Golf Club members and guests.',
-        responsibilities: [
-          'Performed daily course setup including pin placement, tee marker positioning, and course marking according to USGA standards',
-          'Operated specialized turf maintenance equipment including mowers, aerators, sprayers, and utility vehicles',
-          'Conducted irrigation system maintenance and monitoring to ensure optimal turf health during summer months',
-          'Implemented pest management protocols to identify and address disease, insect, and weed issues',
-          'Assisted in tournament preparation and special event setup for collegiate and member competitions',
-          'Executed detailed bunker maintenance including edging, raking, and sand conditioning',
-          'Collaborated with the grounds team to complete projects efficiently during early morning hours'
-        ],
-        skills: [
-          // Technical Skills
-          { name: 'Turf Management Systems', relevance: 'medium', category: 'technical', description: 'Operating computerized irrigation systems and monitoring software to maintain optimal soil moisture levels' },
-          { name: 'Equipment Operation', relevance: 'high', category: 'technical', description: 'Safely operating specialized groundskeeping machinery including precision mowers, aerators, and utility vehicles' },
-          { name: 'Landscape Maintenance', relevance: 'high', category: 'technical', description: 'Applying horticultural techniques for turf, trees, and ornamental plantings in a high-standards environment' },
-          { name: 'Environmental Monitoring', relevance: 'medium', category: 'technical', description: 'Using digital tools to track soil conditions, weather impacts, and turf health metrics' },
-          
-          // Business Skills
-          { name: 'Resource Management', relevance: 'medium', category: 'business', description: 'Efficiently utilizing water, fertilizer, and other resources to maintain course conditions while controlling costs' },
-          { name: 'Quality Control', relevance: 'high', category: 'business', description: 'Ensuring playing surfaces meet exacting standards for a championship-level golf facility' },
-          { name: 'Tournament Operations', relevance: 'medium', category: 'business', description: 'Preparing and maintaining course conditions for competitive events according to specific requirements' },
-          { name: 'Process Adherence', relevance: 'high', category: 'business', description: 'Following detailed maintenance protocols and schedules to achieve consistent course conditions' },
-          
-          // Soft Skills
-          { name: 'Team Coordination', relevance: 'high', category: 'soft', description: 'Collaborating with grounds crew members to complete daily tasks within tight morning timeframes' },
-          { name: 'Attention to Detail', relevance: 'high', category: 'soft', description: 'Maintaining precise standards for course aesthetics and playability through careful work execution' },
-          { name: 'Adaptability', relevance: 'medium', category: 'soft', description: 'Adjusting work priorities and techniques based on weather conditions and course usage requirements' },
-          { name: 'Time Management', relevance: 'high', category: 'soft', description: 'Completing essential maintenance tasks before golfers begin play, often working in pre-dawn hours' }
-        ],
-        locations: ['Columbus, OH'],
+        locations: ['Cincinnati, OH (Hybrid - 50% Remote)'],
         isExpanded: false,
         isDetailOpen: false
       },
@@ -417,38 +237,55 @@ export class WorkHistoryComponent implements OnInit {
           // Business Skills
           { name: 'Inventory Management', relevance: 'medium', category: 'business', description: 'Tracking stock levels, identifying usage patterns, and ensuring adequate supplies' },
           { name: 'Cash Handling', relevance: 'medium', category: 'business', description: 'Processing transactions accurately and maintaining balanced accounts' },
-          
-          // Technical Skills
-          { name: 'POS System Operation', relevance: 'medium', category: 'technical', description: 'Efficiently using point-of-sale software for order processing and payment handling' }
+          { name: 'Product Knowledge', relevance: 'high', category: 'business', description: 'Maintaining comprehensive understanding of beverage offerings, ingredients, and preparation methods' },
+{ name: 'Sales Optimization', relevance: 'medium', category: 'business', description: 'Implementing upselling techniques to increase average transaction value while ensuring customer satisfaction' },
+{ name: 'Workplace Safety', relevance: 'medium', category: 'business', description: 'Maintaining awareness of and adherence to safety protocols in a fast-paced environment' },
+{ name: 'Regulatory Compliance', relevance: 'medium', category: 'business', description: 'Ensuring adherence to alcohol service laws, health codes, and establishment policies' },
+
+{ name: 'Quality Control', relevance: 'high', category: 'business', description: 'Maintaining consistent product standards through proper measurement, preparation, and presentation' },          
+// Technical Skills
+     
+{ name: 'POS System Operation', relevance: 'medium', category: 'technical', description: 'Efficiently using point-of-sale software for order processing and payment handling' }
         ],
+        locations: ['Cincinnati, OH'],
         isExpanded: false,
         isDetailOpen: false
       },
       {
-        id: 'muirfield',
-        company: 'Muirfield Golf Club',
-        role: 'Server',
-        startDate: new Date('2021-04-01'),
-        endDate: new Date('2021-08-31'),
-        relevanceScore: 65,
-        category: 'customer-service',
-        description: 'Provided exceptional service to an exclusive clientele at a prestigious golf club, focusing on personalized experiences and maintaining high standards.',
+        id: 'osu-golf',
+        company: 'The Ohio State University Golf Course',
+        role: 'Grounds Keeper',
+        startDate: new Date('2023-05-01'),
+        endDate: new Date('2023-09-30'),
+        relevanceScore: 55,
+        category: 'other',
+        description: 'Maintained championship-caliber golf course conditions through comprehensive turf management, landscape maintenance, and tournament preparation.',
         responsibilities: [
-          'Provided exceptional service to discerning clientele ensuring a luxury experience',
-          'Fostered positive relationships with members and guests, remembering preferences for personalized service',
-          'Resolved guest issues and complaints effectively while upholding club standards'
+          'Performed daily course setup including pin placement, tee marker positioning, and course marking according to USGA standards',
+          'Operated specialized turf maintenance equipment including mowers, aerators, sprayers, and utility vehicles',
+          'Conducted irrigation system maintenance and monitoring to ensure optimal turf health during summer months',
+          'Implemented pest management protocols to identify and address disease, insect, and weed issues'
         ],
         skills: [
-          // Soft Skills
-          { name: 'Client Relationship Management', relevance: 'high', category: 'soft', description: 'Building and maintaining relationships with high-value customers' },
-          { name: 'Conflict Resolution', relevance: 'medium', category: 'soft', description: 'Diplomatically addressing and resolving customer complaints' },
-          { name: 'Attention to Detail', relevance: 'medium', category: 'soft', description: 'Remembering specific customer preferences to enhance personalized service' },
-          { name: 'Professional Communication', relevance: 'high', category: 'soft', description: 'Maintaining appropriate, professional interactions with exclusive clientele' },
+          // Technical Skills
+          { name: 'Turf Management Systems', relevance: 'medium', category: 'technical', description: 'Operating computerized irrigation systems and monitoring software to maintain optimal soil moisture levels' },
+          { name: 'Equipment Operation', relevance: 'high', category: 'technical', description: 'Safely operating specialized groundskeeping machinery including precision mowers, aerators, and utility vehicles' },
+          { name: 'Landscape Maintenance', relevance: 'high', category: 'technical', description: 'Applying horticultural techniques for turf, trees, and ornamental plantings in a high-standards environment' },
+          { name: 'Environmental Monitoring', relevance: 'medium', category: 'technical', description: 'Using digital tools to track soil conditions, weather impacts, and turf health metrics' },
           
           // Business Skills
-          { name: 'High-End Service Standards', relevance: 'high', category: 'business', description: 'Adhering to premium service protocols expected at exclusive establishments' },
-          { name: 'Club Operations', relevance: 'medium', category: 'business', description: 'Understanding the business operations of a membership-based organization' }
+          { name: 'Resource Management', relevance: 'medium', category: 'business', description: 'Efficiently utilizing water, fertilizer, and other resources to maintain course conditions while controlling costs' },
+          { name: 'Quality Control', relevance: 'high', category: 'business', description: 'Ensuring playing surfaces meet exacting standards for a championship-level golf facility' },
+          { name: 'Tournament Operations', relevance: 'medium', category: 'business', description: 'Preparing and maintaining course conditions for competitive events according to specific requirements' },
+          { name: 'Process Adherence', relevance: 'high', category: 'business', description: 'Following detailed maintenance protocols and schedules to achieve consistent course conditions' },
+          
+          // Soft Skills
+          { name: 'Team Coordination', relevance: 'high', category: 'soft', description: 'Collaborating with grounds crew members to complete daily tasks within tight morning timeframes' },
+          { name: 'Attention to Detail', relevance: 'high', category: 'soft', description: 'Maintaining precise standards for course aesthetics and playability through careful work execution' },
+          { name: 'Adaptability', relevance: 'medium', category: 'soft', description: 'Adjusting work priorities and techniques based on weather conditions and course usage requirements' },
+          { name: 'Time Management', relevance: 'high', category: 'soft', description: 'Completing essential maintenance tasks before golfers begin play, often working in pre-dawn hours' }
         ],
+        locations: ['Columbus, OH'],
         isExpanded: false,
         isDetailOpen: false
       },
@@ -481,13 +318,40 @@ export class WorkHistoryComponent implements OnInit {
           // Technical Skills
           { name: 'Site Assessment', relevance: 'medium', category: 'technical', description: 'Evaluating locations and determining optimal approaches to projects' }
         ],
+        locations: ['Cincinnati, OH'],
+        isExpanded: false,
+        isDetailOpen: false
+      },
+      {
+        id: 'muirfield',
+        company: 'Muirfield Golf Club',
+        role: 'Server',
+        startDate: new Date('2021-04-01'),
+        endDate: new Date('2021-08-31'),
+        relevanceScore: 65,
+        category: 'customer-service',
+        description: 'Provided exceptional service to an exclusive clientele at a prestigious golf club, focusing on personalized experiences and maintaining high standards.',
+        responsibilities: [
+          'Provided exceptional service to discerning clientele ensuring a luxury experience of an exclusive golf club',
+          'Fostered positive relationships with members and guests and remembering preferences to deliver personalized service',
+          'Resolved guest issues and complaints effectively, maintaining a professional demeanor and upholding club standards'
+        ],
+        skills: [
+          // Soft Skills
+          { name: 'Client Relationship Management', relevance: 'high', category: 'soft', description: 'Building and maintaining relationships with high-value customers' },
+          { name: 'Conflict Resolution', relevance: 'medium', category: 'soft', description: 'Diplomatically addressing and resolving customer complaints' },
+          { name: 'Attention to Detail', relevance: 'medium', category: 'soft', description: 'Remembering specific customer preferences to enhance personalized service' },
+          { name: 'Professional Communication', relevance: 'high', category: 'soft', description: 'Maintaining appropriate, professional interactions with exclusive clientele' },
+          
+          // Business Skills
+          { name: 'High-End Service Standards', relevance: 'high', category: 'business', description: 'Adhering to premium service protocols expected at exclusive establishments' },
+          { name: 'Club Operations', relevance: 'medium', category: 'business', description: 'Understanding the business operations of a membership-based organization' }
+        ],
+        locations: ['Dublin, OH'],
         isExpanded: false,
         isDetailOpen: false
       }
     ];
-    
-    // Sort experiences by relevance score (highest first)
-    this.workExperiences.sort((a, b) => b.relevanceScore - a.relevanceScore);
   }
   
   toggleExpand(experience: WorkExperience): void {
@@ -507,13 +371,6 @@ export class WorkHistoryComponent implements OnInit {
     this.selectedSkillType = skillType;
   }
   
-  get filteredExperiences(): WorkExperience[] {
-    return this.selectedCategory === 'all' 
-      ? this.workExperiences 
-      : this.workExperiences.filter(exp => exp.category === this.selectedCategory);
-  }
-  
-  // Filter skills based on selected skill type
   getFilteredSkills(experience: WorkExperience): Skill[] {
     if (this.selectedSkillType === 'all') {
       return experience.skills;
@@ -539,15 +396,41 @@ export class WorkHistoryComponent implements OnInit {
     }
   }
   
+  get filteredExperiences(): WorkExperience[] {
+    return this.selectedCategory === 'all' 
+      ? this.workExperiences 
+      : this.workExperiences.filter(exp => exp.category === this.selectedCategory);
+  }
+  
+  // Get past experiences (excluding current job)
+  get pastExperiences(): WorkExperience[] {
+    return this.filteredExperiences.filter(exp => exp.endDate !== null);
+  }
+  
+  // Get current job (if it exists and matches the filter)
+  get currentJob(): WorkExperience | null {
+    return this.filteredExperiences.find(exp => exp.endDate === null) || null;
+  }
+  
+  // Split past experiences into pairs for the two-column layout
+  get pairedPastExperiences(): Array<[WorkExperience, WorkExperience | null]> {
+    const pairs: Array<[WorkExperience, WorkExperience | null]> = [];
+    const pastExps = [...this.pastExperiences];
+    
+    for (let i = 0; i < pastExps.length; i += 2) {
+      const pair: [WorkExperience, WorkExperience | null] = [
+        pastExps[i],
+        i + 1 < pastExps.length ? pastExps[i + 1] : null
+      ];
+      pairs.push(pair);
+    }
+    
+    return pairs;
+  }
+  
   formatDate(date: Date | null): string {
     if (!date) return 'Present';
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-  }
-  
-  // Format just month and year for timeline brackets
-  formatMonthYear(date: Date | null): string {
-    if (!date) return 'Present';
-    return date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
   }
   
   calculateDuration(startDate: Date, endDate: Date | null): string {
@@ -568,5 +451,10 @@ export class WorkHistoryComponent implements OnInit {
     } else {
       return `${months} month${months !== 1 ? 's' : ''}`;
     }
+  }
+  
+  getYearLabel(date: Date | null): string {
+    if (!date) return '2025';
+    return date.getFullYear().toString();
   }
 }
