@@ -1,8 +1,7 @@
 // src/app/pages/work-history/work-history.component.ts
-// This component should be placed in src/app/pages/work-history/work-history.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { trigger, transition, style, animate, state } from '@angular/animations';
+import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
 
 interface WorkExperience {
   id: string;
@@ -16,6 +15,8 @@ interface WorkExperience {
   responsibilities: string[];
   skills: Skill[];
   locations?: string[];
+  certifications?: string[];
+  queues?: string[];
   isExpanded: boolean;
   isDetailOpen: boolean;
 }
@@ -56,12 +57,33 @@ interface Skill {
         animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
-    // Removed fadeSlideIn animation that was causing cards to disappear
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(30px)' }),
+        animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    trigger('staggerFadeIn', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(30px)' }),
+          stagger('150ms', [
+            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
     trigger('rotateIcon', [
       state('collapsed', style({ transform: 'rotate(0)' })),
       state('expanded', style({ transform: 'rotate(180deg)' })),
       transition('collapsed <=> expanded', [
         animate('300ms ease-out')
+      ])
+    ]),
+    trigger('pulseAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.8)' }),
+        animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
       ])
     ])
   ]
@@ -76,10 +98,16 @@ export class WorkHistoryComponent implements OnInit {
     { id: 'other', label: 'Other Experience' }
   ];
   currentJobDuration: { years: number, months: number } = { years: 0, months: 0 };
+  animationReady = false;
   
   ngOnInit(): void {
     this.initializeWorkExperiences();
     this.calculateCurrentJobDuration();
+    
+    // Delay animation start slightly to ensure DOM is ready
+    setTimeout(() => {
+      this.animationReady = true;
+    }, 100);
   }
   
   calculateCurrentJobDuration(): void {
@@ -105,29 +133,50 @@ export class WorkHistoryComponent implements OnInit {
       {
         id: 'lcs',
         company: 'London Computer Systems (LCS)',
-        role: 'Technical Support Specialist',
+        role: 'Product Support Specialist II',
         startDate: new Date('2024-09-16'),
         endDate: null, // Current job
         relevanceScore: 95,
         category: 'tech',
-        description: 'Providing expert technical support for Rent Manager Property Management Software, resolving customer issues, and ensuring optimal software performance in a hybrid work environment.',
+        description: 'Providing comprehensive technical support for Rent Manager Property Management Software across multiple specialized queues, including Mobile, Integrations, Technical, General, and Receivables & Payables, while troubleshooting complex software issues and ensuring optimal customer experience.',
         responsibilities: [
-          'Provide guidance and best practices to users utilizing Rent Manager property management software',
-          'Deliver superior customer service over phone and email',
-          'Assist customers with software issues including printing problems, installation, and general troubleshooting',
-          'Conduct remote sessions with customers to resolve software issues',
-          'Document and track all issues in ticketing software',
-          'Collaborate with internal departments to improve processes and customer satisfaction'
+          'Serve as a specialized expert in the Mobile queue, assisting property managers with mobile apps, web portals, and API integration issues',
+          'Lead troubleshooting for the Integrations queue, resolving complex data transfer problems between Rent Manager and third-party software systems',
+          'Diagnose and fix technical issues across multiple support queues, including database structure problems, user permissions, and electronic funds transfer systems',
+          'Set up and customize Rent Manager web-based portals, leveraging web development knowledge to optimize functionality',
+          'Collaborate with internal development teams to identify and resolve software bugs and unexpected behaviors',
+          'Guide users on best practices for utilizing Rent Manager property management software and its peripheral applications',
+          'Conduct in-depth remote troubleshooting sessions with customers to resolve complex technical issues',
+          'Document detailed solution steps in ticketing software to build the knowledge base and improve resolution efficiency'
         ],
         skills: [
-          { name: 'Technical Troubleshooting', relevance: 'high', category: 'technical', description: 'Identifying and resolving complex software issues through systematic analysis' },
-          { name: 'Remote Support Tools', relevance: 'high', category: 'technical', description: 'Using remote desktop software to diagnose and fix client problems' },
-          { name: 'Customer Communication', relevance: 'high', category: 'soft', description: 'Explaining technical concepts clearly to non-technical users' },
-          { name: 'Software Documentation', relevance: 'high', category: 'technical', description: 'Creating detailed records of issues and solutions in ticketing systems' },
-          { name: 'Network Fundamentals', relevance: 'medium', category: 'technical', description: 'Understanding WAN/LAN concepts to troubleshoot connectivity issues' },
-          { name: 'Problem Solving', relevance: 'high', category: 'soft', description: 'Applying critical thinking to resolve complex technical challenges' }
+          { name: 'Technical Troubleshooting', relevance: 'high', category: 'technical', description: 'Advanced systematic identification and resolution of complex multi-layered software issues' },
+          { name: 'Web Portal Configuration', relevance: 'high', category: 'technical', description: 'Setting up, customizing, and optimizing web-based portals using front-end development knowledge' },
+          { name: 'API Integration', relevance: 'high', category: 'technical', description: 'Diagnosing issues with data transfer between Rent Manager and third-party services via APIs' },
+          { name: 'Database Structure', relevance: 'high', category: 'technical', description: 'Understanding and resolving issues related to complex database architectures and data relationships' },
+          { name: 'Remote Support Tools', relevance: 'high', category: 'technical', description: 'Expert use of remote desktop and diagnostic software to troubleshoot client-side issues efficiently' },
+          { name: 'Electronic Funds Transfer', relevance: 'high', category: 'technical', description: 'Troubleshooting and optimizing payment processing and financial data transfers' },
+          { name: 'User Permissions Systems', relevance: 'high', category: 'technical', description: 'Configuring and troubleshooting complex role-based access control systems' },
+          { name: 'Mobile Application Support', relevance: 'high', category: 'technical', description: 'Resolving platform-specific issues across iOS and Android mobile applications' },
+          { name: 'Technical Documentation', relevance: 'high', category: 'technical', description: 'Creating comprehensive solution documentation for complex technical issues' },
+          { name: 'Software Integration', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving integration issues between multiple software systems' },
+          { name: 'Problem Solving', relevance: 'high', category: 'soft', description: 'Applying critical thinking and systematic approaches to resolve complex technical challenges' },
+          { name: 'Customer Communication', relevance: 'high', category: 'soft', description: 'Translating technical concepts into clear explanations for users with varying technical backgrounds' }
         ],
-        locations: ['Cincinnati, OH'],
+        locations: ['Cincinnati, OH (Hybrid - 50% Remote)'],
+        certifications: [
+          'Rent Manager Mobile Queue Certification',
+          'Rent Manager General Queue Certification',
+          'Rent Manager Receivables & Payables Certification',
+          'Rent Manager Technical Queue Certification'
+        ],
+        queues: [
+          'Mobile Apps & Web Portals',
+          'Integrations & Third-Party Software',
+          'Technical Support',
+          'General Support',
+          'Receivables & Payables'
+        ],
         isExpanded: false,
         isDetailOpen: false
       },

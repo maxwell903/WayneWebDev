@@ -1,13 +1,13 @@
 <!-- src/app/pages/work-history/work-history.component.html -->
 <section class="work-history-section">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" @fadeInUp>
       <h1 class="section-title">Work History</h1>
       <p class="section-subtitle">My professional journey and skills acquired along the way</p>
     </div>
     
     <!-- Category filters -->
-    <div class="category-filters">
+    <div class="category-filters" @fadeInUp>
       <button 
         *ngFor="let category of categories"
         class="filter-btn"
@@ -18,15 +18,140 @@
     </div>
     
     <!-- Work experience timeline -->
-    <div class="work-timeline">
-      <div class="timeline-container">
-        <div class="current-job-indicator" *ngIf="filteredExperiences.length > 0 && filteredExperiences[0].endDate === null">
-          <div class="pulse-dot"></div>
-          <span class="current-job-label">Current Role - {{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
+    <div class="work-timeline" *ngIf="animationReady">
+      <div class="timeline-container" [@staggerFadeIn]="filteredExperiences.length">
+        <!-- Current job highlighted section with centered design -->
+        <div class="current-job-container" *ngIf="filteredExperiences.length > 0 && filteredExperiences[0].endDate === null">
+          <div class="current-job-indicator" @pulseAnimation>
+            <div class="pulse-dot"></div>
+            <span class="current-job-label">Current Position</span>
+            <span class="duration-badge">{{currentJobDuration.years}} year{{currentJobDuration.years !== 1 ? 's' : ''}} {{currentJobDuration.months}} month{{currentJobDuration.months !== 1 ? 's' : ''}}</span>
+          </div>
+          
+          <!-- Featured current job card -->
+          <div 
+            class="current-job-card"
+            [class.expanded]="filteredExperiences[0].isExpanded"
+            (click)="toggleExpand(filteredExperiences[0])">
+            
+            <div class="current-job-header">
+              <div class="job-titles">
+                <h3 class="job-title">{{filteredExperiences[0].role}}</h3>
+                <h4 class="company-name">{{filteredExperiences[0].company}}</h4>
+              </div>
+              
+              <div class="job-meta">
+                <div class="job-duration">
+                  <span class="dates">{{formatDate(filteredExperiences[0].startDate)}} - {{formatDate(filteredExperiences[0].endDate)}}</span>
+                </div>
+                
+                <div class="category-badge tech">
+                  Technology
+                </div>
+              </div>
+            </div>
+            
+            <!-- Queue specializations -->
+            <div class="queue-specializations">
+              <h4 class="section-label">Support Queue Specializations:</h4>
+              <div class="queue-badges">
+                <span class="queue-badge" *ngFor="let queue of filteredExperiences[0].queues">{{queue}}</span>
+              </div>
+            </div>
+            
+            <!-- Certifications -->
+            <div class="certifications-section">
+              <h4 class="section-label">Certifications:</h4>
+              <div class="cert-badges">
+                <span class="cert-badge" *ngFor="let cert of filteredExperiences[0].certifications">{{cert}}</span>
+              </div>
+            </div>
+            
+            <div class="job-description">
+              <p>{{filteredExperiences[0].description}}</p>
+            </div>
+            
+            <button class="expand-toggle large" (click)="toggleExpand(filteredExperiences[0]); $event.stopPropagation()">
+              <span>{{filteredExperiences[0].isExpanded ? 'Show Less' : 'Show More'}}</span>
+              <svg 
+                [@rotateIcon]="filteredExperiences[0].isExpanded ? 'expanded' : 'collapsed'"
+                class="expand-icon" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            
+            <div 
+              class="timeline-card-content expanded-content"
+              [@expandCollapse]="filteredExperiences[0].isExpanded ? 'expanded' : 'collapsed'">
+              
+              <div class="responsibilities-section">
+                <h4>Key Responsibilities</h4>
+                <ul class="responsibilities-list">
+                  <li *ngFor="let responsibility of filteredExperiences[0].responsibilities; let i = index" 
+                      [@skillAnimation]
+                      [style.animation-delay]="(i * 100) + 'ms'">
+                    {{responsibility}}
+                  </li>
+                </ul>
+              </div>
+              
+              <!-- Locations section if available -->
+              <div class="locations-section" *ngIf="filteredExperiences[0].locations && filteredExperiences[0].locations.length">
+                <h4>Location</h4>
+                <div class="locations-list">
+                  <span class="location-badge" *ngFor="let location of filteredExperiences[0].locations">{{location}}</span>
+                </div>
+              </div>
+              
+              <!-- Skills section -->
+              <div class="skills-section">
+                <div class="skills-header">
+                  <h4>Technical & Professional Skills</h4>
+                  <button class="details-toggle" (click)="toggleDetails(filteredExperiences[0], $event)">
+                    {{filteredExperiences[0].isDetailOpen ? 'Hide Details' : 'Show Details'}}
+                  </button>
+                </div>
+                
+                <div class="skills-grid">
+                  <div 
+                    *ngFor="let skill of filteredExperiences[0].skills; let i = index" 
+                    class="skill-card"
+                    [@skillAnimation]
+                    [style.animation-delay]="(i * 100 + 200) + 'ms'">
+                    
+                    <div class="skill-header">
+                      <h5 class="skill-name">{{skill.name}}</h5>
+                      <div class="skill-badges">
+                        <span class="skill-level-badge" [ngClass]="getSkillLevelClass(skill.relevance)">
+                          {{skill.relevance.charAt(0).toUpperCase() + skill.relevance.slice(1)}}
+                        </span>
+                        <span class="skill-type-badge" [ngClass]="getSkillCategoryClass(skill.category)">
+                          {{skill.category.charAt(0).toUpperCase() + skill.category.slice(1)}}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div class="skill-description" *ngIf="filteredExperiences[0].isDetailOpen">
+                      {{skill.description}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         
+        <!-- Past jobs in timeline format -->
+        <h3 class="past-experience-heading" *ngIf="filteredExperiences.length > 1">Past Experience</h3>
+        
         <div 
-          *ngFor="let experience of filteredExperiences; let i = index" 
+          *ngFor="let experience of filteredExperiences.slice(1); let i = index" 
           class="timeline-card"
           [class.timeline-card-even]="i % 2 === 1"
           [class.timeline-card-odd]="i % 2 === 0"
@@ -140,7 +265,7 @@
     </div>
     
     <!-- Empty state when no experiences match the filter -->
-    <div class="empty-state" *ngIf="filteredExperiences.length === 0">
+    <div class="empty-state" *ngIf="filteredExperiences.length === 0" @fadeInUp>
       <div class="empty-icon">
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
           <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>

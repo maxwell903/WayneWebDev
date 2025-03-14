@@ -4,17 +4,12 @@
     padding: 80px 0;
     background-color: var(--light);
     position: relative;
+    overflow: hidden;
   }
   
   .section-header {
     text-align: center;
     margin-bottom: 60px;
-    animation: fadeIn 1s ease;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
   }
   
   .section-subtitle {
@@ -31,7 +26,6 @@
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 40px;
-    animation: fadeIn 1s ease 0.2s both;
   }
   
   .filter-btn {
@@ -83,27 +77,65 @@
     z-index: 1;
   }
   
-  /* Current job indicator */
-  .current-job-indicator {
+  /* Past experience heading */
+  .past-experience-heading {
+    text-align: center;
+    margin: 60px 0 40px;
+    color: var(--secondary);
+    font-size: 1.8rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .past-experience-heading::before {
+    content: '';
     position: absolute;
-    top: -10px;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--light-gray);
+    z-index: -1;
+  }
+  
+  .past-experience-heading::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    background-color: var(--light);
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
+    z-index: -1;
+  }
+  
+  /* Current job container - centered special highlight */
+  .current-job-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 80px;
     z-index: 2;
+  }
+  
+  .current-job-indicator {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: fadeIn 1s ease 0.5s both;
+    margin-bottom: 30px;
   }
   
   .pulse-dot {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background-color: var(--accent);
     border-radius: 50%;
     position: relative;
     box-shadow: 0 0 0 rgba(231, 76, 60, 0.4);
     animation: pulse 2s infinite;
+    z-index: 3;
+    margin-bottom: 10px;
   }
   
   @keyframes pulse {
@@ -119,18 +151,196 @@
   }
   
   .current-job-label {
-    margin-top: 10px;
     background-color: var(--accent);
     color: white;
-    padding: 5px 15px;
+    padding: 6px 16px;
     border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+  
+  .duration-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
     font-size: 0.9rem;
-    font-weight: 500;
     white-space: nowrap;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
-  /* Timeline cards */
+  /* Current job card styling */
+  .current-job-card {
+    position: relative;
+    width: 85%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    overflow: hidden;
+    border-top: 5px solid var(--primary);
+    z-index: 5;
+    padding: 30px;
+  }
+  
+  .current-job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .current-job-card.expanded {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  }
+  
+  .current-job-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+  }
+  
+  .job-titles .job-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--secondary);
+    line-height: 1.2;
+  }
+  
+  .job-titles .company-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 10px;
+  }
+  
+  .job-meta {
+    text-align: right;
+  }
+  
+  .job-meta .job-duration {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin-bottom: 10px;
+  }
+  
+  .job-meta .category-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Queue specializations section */
+  .queue-specializations, .certifications-section {
+    margin-bottom: 25px;
+  }
+  
+  .section-label {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .queue-badges, .cert-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .queue-badge {
+    background-color: rgba(52, 152, 219, 0.1);
+    color: var(--primary);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .queue-badge:hover {
+    background-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+  }
+  
+  .cert-badge {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #27ae60;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .cert-badge:hover {
+    background-color: #27ae60;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+  }
+  
+  .cert-badge::before {
+    content: '🏆';
+    margin-right: 8px;
+  }
+  
+  .current-job-card .job-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--gray);
+    margin-bottom: 25px;
+  }
+  
+  /* Expand toggle for current job */
+  .expand-toggle.large {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(52, 152, 219, 0.05);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .expand-toggle.large:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+  }
+  
+  .expand-toggle.large span {
+    margin-right: 10px;
+  }
+  
+  .expanded-content {
+    margin-top: 25px;
+    border-top: 1px solid var(--light-gray);
+    padding-top: 25px;
+  }
+  
+  /* Timeline cards for past experiences */
   .timeline-card {
     position: relative;
     width: 45%;
@@ -141,7 +351,6 @@
     transition: all 0.3s ease;
     cursor: pointer;
     overflow: hidden;
-    /* Remove the initial opacity: 0 that was causing cards to disappear */
     opacity: 1;
     transform: translateY(0);
   }
@@ -560,7 +769,6 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     max-width: 500px;
     margin: 40px auto;
-    animation: fadeIn 1s ease;
   }
   
   .empty-icon {
@@ -601,13 +809,17 @@
       left: -14px !important;
     }
     
-    .current-job-indicator {
-      left: 30px;
-      align-items: flex-start;
+    .current-job-card {
+      width: 100%;
     }
     
-    .pulse-dot {
-      margin-left: 4px;
+    .current-job-header {
+      flex-direction: column;
+    }
+    
+    .job-meta {
+      text-align: left;
+      margin-top: 15px;
     }
   }
   
@@ -639,5 +851,19 @@
     
     .job-details {
       padding-right: 40px;
+    }
+    
+    .queue-badges, .cert-badges {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .current-job-card {
+      padding: 20px;
+    }
+    
+    .section-label {
+      margin-bottom: 10px;
     }
   }
