@@ -192,6 +192,66 @@
   animation: bounce 3s infinite;
 }
 
+.hardhat-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%233498db"><path d="M12 0c-3.865 0-7 3.135-7 7v1h-1c-2.209 0-4 1.791-4 4v9h24v-9c0-2.209-1.791-4-4-4h-1v-1c0-3.865-3.135-7-7-7zm0 2c2.76 0 5 2.24 5 5v1h-10v-1c0-2.76 2.24-5 5-5zm-6 8h12c1.105 0 2 .895 2 2v7h-16v-7c0-1.105.895-2 2-2zm5.345 2c-.63 0-1.141.5-1.141 1.117v.766c0 .617.511 1.117 1.141 1.117h3.31c.63 0 1.141-.5 1.141-1.117v-.766c0-.617-.511-1.117-1.141-1.117h-3.31z"/></svg>');
+  width: 36px;
+  height: 36px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+/* Skill Filter Button Colors */
+.filter-technical {
+  background-color: #3498db;
+}
+
+.filter-technical:hover, .filter-technical.active {
+  background-color: #2980b9;
+}
+
+.filter-business {
+  background-color: #f39c12;
+}
+
+.filter-business:hover, .filter-business.active {
+  background-color: #e67e22;
+}
+
+.filter-soft {
+  background-color: #9b59b6;
+}
+
+.filter-soft:hover, .filter-soft.active {
+  background-color: #8e44ad;
+}
+
+.filter-all {
+  background-color: #2c3e50;
+}
+
+.filter-all:hover, .filter-all.active {
+  background-color: #1a2530;
+}
+
+/* Updated skill category badges */
+.skill-technical {
+  background-color: rgba(52, 152, 219, 0.2);
+  color: #2980b9;
+}
+
+.skill-business {
+  background-color: rgba(243, 156, 18, 0.2);
+  color: #e67e22;
+}
+
+.skill-soft {
+  background-color: rgba(155, 89, 182, 0.2);
+  color: #8e44ad;
+}
+
 .reset-filters-btn .icon {
   animation: spin 1.5s infinite linear;
   animation-play-state: paused; /* Only play on hover */

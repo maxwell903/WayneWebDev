@@ -2,7 +2,10 @@
 <section class="work-history-section">
   <div class="container">
     <div class="section-header" @fadeInUp>
-      <h1 class="section-title">Work History</h1>
+      <h1 class="section-title">
+        <i class="icon hardhat-icon"></i>
+        Work History
+      </h1>
       <p class="section-subtitle">My professional journey and skills acquired along the way</p>
     </div>
     
@@ -38,13 +41,10 @@
               <div class="job-titles">
                 <h3 class="job-title">{{filteredExperiences[0].role}}</h3>
                 <h4 class="company-name">{{filteredExperiences[0].company}}</h4>
+                <div class="job-dates">{{formatDate(filteredExperiences[0].startDate)}} - {{formatDate(filteredExperiences[0].endDate)}}</div>
               </div>
               
               <div class="job-meta">
-                <div class="job-duration">
-                  <span class="dates">{{formatDate(filteredExperiences[0].startDate)}} - {{formatDate(filteredExperiences[0].endDate)}}</span>
-                </div>
-                
                 <div class="category-badge tech">
                   Technology
                 </div>
@@ -93,9 +93,7 @@
               <div class="responsibilities-section">
                 <h4>Key Responsibilities</h4>
                 <ul class="responsibilities-list">
-                  <li *ngFor="let responsibility of filteredExperiences[0].responsibilities; let i = index" 
-                      [@skillAnimation]
-                      [style.animation-delay]="(i * 100) + 'ms'">
+                  <li *ngFor="let responsibility of filteredExperiences[0].responsibilities">
                     {{responsibility}}
                   </li>
                 </ul>
@@ -109,21 +107,30 @@
                 </div>
               </div>
               
-              <!-- Skills section -->
+              <!-- Skills section with loading animation -->
               <div class="skills-section">
                 <div class="skills-header">
-                  <h4>Technical & Professional Skills</h4>
+                  <h4>Technical, Business & Professional Skills</h4>
+                  <div class="skill-filter-tags">
+                    <button 
+                      *ngFor="let skillType of skillTypes"
+                      class="skill-filter-tag"
+                      [class.active]="selectedSkillType === skillType.id"
+                      [ngClass]="'filter-tag-' + skillType.id"
+                      (click)="filterBySkillType(skillType.id); $event.stopPropagation()">
+                      {{skillType.label.replace(' Skills', '')}}
+                    </button>
+                  </div>
                   <button class="details-toggle" (click)="toggleDetails(filteredExperiences[0], $event)">
                     {{filteredExperiences[0].isDetailOpen ? 'Hide Details' : 'Show Details'}}
                   </button>
                 </div>
                 
-                <div class="skills-grid">
+                <!-- Skills grid with single animation for the entire grid -->
+                <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(filteredExperiences[0]).length">
                   <div 
-                    *ngFor="let skill of filteredExperiences[0].skills; let i = index" 
-                    class="skill-card"
-                    [@skillAnimation]
-                    [style.animation-delay]="(i * 100 + 200) + 'ms'">
+                    *ngFor="let skill of getFilteredSkills(filteredExperiences[0])" 
+                    class="skill-card">
                     
                     <div class="skill-header">
                       <h5 class="skill-name">{{skill.name}}</h5>
@@ -209,9 +216,7 @@
             <div class="responsibilities-section">
               <h4>Key Responsibilities</h4>
               <ul class="responsibilities-list">
-                <li *ngFor="let responsibility of experience.responsibilities; let i = index" 
-                    [@skillAnimation]
-                    [style.animation-delay]="(i * 100) + 'ms'">
+                <li *ngFor="let responsibility of experience.responsibilities">
                   {{responsibility}}
                 </li>
               </ul>
@@ -225,21 +230,30 @@
               </div>
             </div>
             
-            <!-- Skills section -->
+            <!-- Skills section with loading animation -->
             <div class="skills-section">
               <div class="skills-header">
                 <h4>Skills Developed</h4>
+                <div class="skill-filter-tags">
+                  <button 
+                    *ngFor="let skillType of skillTypes"
+                    class="skill-filter-tag"
+                    [class.active]="selectedSkillType === skillType.id"
+                    [ngClass]="'filter-tag-' + skillType.id"
+                    (click)="filterBySkillType(skillType.id); $event.stopPropagation()">
+                    {{skillType.label.replace(' Skills', '')}}
+                  </button>
+                </div>
                 <button class="details-toggle" (click)="toggleDetails(experience, $event)">
                   {{experience.isDetailOpen ? 'Hide Details' : 'Show Details'}}
                 </button>
               </div>
               
-              <div class="skills-grid">
+              <!-- Skills grid with single animation for the entire grid -->
+              <div class="skills-grid" [@skillsAnimation]="getFilteredSkills(experience).length">
                 <div 
-                  *ngFor="let skill of experience.skills; let i = index" 
-                  class="skill-card"
-                  [@skillAnimation]
-                  [style.animation-delay]="(i * 100 + 200) + 'ms'">
+                  *ngFor="let skill of getFilteredSkills(experience)" 
+                  class="skill-card">
                   
                   <div class="skill-header">
                     <h5 class="skill-name">{{skill.name}}</h5>

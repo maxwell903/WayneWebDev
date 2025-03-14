@@ -1,102 +1,138 @@
-// src/app/pages/work-history/work-history.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
 
 interface WorkExperience {
-  id: string;
-  company: string;
-  role: string;
-  startDate: Date;
-  endDate: Date | null;
-  relevanceScore: number;
-  category: 'tech' | 'customer-service' | 'other';
-  description: string;
-  responsibilities: string[];
-  skills: Skill[];
-  locations?: string[];
-  certifications?: string[];
-  queues?: string[];
-  isExpanded: boolean;
-  isDetailOpen: boolean;
-}
-
-interface Skill {
-  name: string;
-  relevance: 'high' | 'medium' | 'low';
-  category: 'technical' | 'soft' | 'domain';
-  description: string;
-}
+    id: string;
+    company: string;
+    role: string;
+    startDate: Date;
+    endDate: Date | null;
+    relevanceScore: number;
+    category: 'tech' | 'customer-service' | 'other';
+    description: string;
+    responsibilities: string[];
+    skills: Skill[];
+    locations?: string[];
+    certifications?: string[];
+    queues?: string[];
+    isExpanded: boolean;
+    isDetailOpen: boolean;
+  }
+  
+  interface Skill {
+    name: string;
+    relevance: 'high' | 'medium' | 'low';
+    category: 'technical' | 'business' | 'soft';
+    description: string;
+  }
+  
+  interface Category {
+    id: string;
+    label: string;
+  }
+  
+  interface SkillType {
+    id: string;
+    label: string;
+    colorClass: string;
+  }
 
 @Component({
-  selector: 'app-work-history',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './work-history.component.html',
-  styleUrls: ['./work-history.component.css'],
-  animations: [
-    trigger('expandCollapse', [
-      state('collapsed', style({
-        height: '0',
-        overflow: 'hidden',
-        opacity: 0,
-        padding: '0 20px'
-      })),
-      state('expanded', style({
-        height: '*',
-        opacity: 1,
-        padding: '20px'
-      })),
-      transition('collapsed <=> expanded', [
-        animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ])
-    ]),
-    trigger('skillAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ]),
-    trigger('fadeInUp', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(30px)' }),
-        animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ]),
-    trigger('staggerFadeIn', [
-      transition('* => *', [
-        query(':enter', [
+    selector: 'app-work-history',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './work-history.component.html',
+    styleUrls: ['./work-history.component.css'],
+    animations: [
+      // Animation for expanding/collapsing content
+      trigger('expandCollapse', [
+        state('collapsed', style({
+          height: '0',
+          overflow: 'hidden',
+          opacity: 0,
+          padding: '0 20px'
+        })),
+        state('expanded', style({
+          height: '*',
+          opacity: 1,
+          padding: '20px'
+        })),
+        transition('collapsed <=> expanded', [
+          animate('400ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+        ])
+      ]),
+      
+      // Animation for fading in skills with a staggered effect
+      trigger('skillsAnimation', [
+        transition('* => *', [
+          query(':enter', [
+            style({ opacity: 0, transform: 'translateY(20px)' }),
+            stagger('80ms', [
+              animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+            ])
+          ], { optional: true })
+        ])
+      ]),
+      
+      // Animation for section elements fading in from bottom
+      trigger('fadeInUp', [
+        transition(':enter', [
           style({ opacity: 0, transform: 'translateY(30px)' }),
-          stagger('150ms', [
-            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
+          animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        ])
+      ]),
+      
+      // Animation for staggered appearance of timeline cards
+      trigger('staggerFadeIn', [
+        transition('* => *', [
+          query(':enter', [
+            style({ opacity: 0, transform: 'translateY(30px)' }),
+            stagger('150ms', [
+              animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+            ])
+          ], { optional: true })
+        ])
+      ]),
+      
+      // Animation for rotating the expand/collapse icon
+      trigger('rotateIcon', [
+        state('collapsed', style({ transform: 'rotate(0)' })),
+        state('expanded', style({ transform: 'rotate(180deg)' })),
+        transition('collapsed <=> expanded', [
+          animate('300ms ease-out')
+        ])
+      ]),
+      
+      // Animation for the current job indicator
+      trigger('pulseAnimation', [
+        transition(':enter', [
+          style({ opacity: 0, transform: 'scale(0.8)' }),
+          animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+        ])
       ])
-    ]),
-    trigger('rotateIcon', [
-      state('collapsed', style({ transform: 'rotate(0)' })),
-      state('expanded', style({ transform: 'rotate(180deg)' })),
-      transition('collapsed <=> expanded', [
-        animate('300ms ease-out')
-      ])
-    ]),
-    trigger('pulseAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.8)' }),
-        animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
-      ])
-    ])
-  ]
-})
+    ]
+  })
+
 export class WorkHistoryComponent implements OnInit {
   workExperiences: WorkExperience[] = [];
   selectedCategory: string = 'all';
-  categories = [
+  selectedSkillType: string = 'technical'; // Default to technical skills
+  
+  categories: Category[] = [
     { id: 'all', label: 'All Experience' },
     { id: 'tech', label: 'Technology' },
     { id: 'customer-service', label: 'Customer Service' },
     { id: 'other', label: 'Other Experience' }
   ];
+  
+  skillTypes: SkillType[] = [
+    { id: 'technical', label: 'Technical Skills', colorClass: 'filter-technical' },
+    { id: 'business', label: 'Business Skills', colorClass: 'filter-business' },
+    { id: 'soft', label: 'Soft Skills', colorClass: 'filter-soft' },
+    { id: 'all', label: 'All Skills', colorClass: 'filter-all' }
+  ];
+  
   currentJobDuration: { years: number, months: number } = { years: 0, months: 0 };
   animationReady = false;
   
@@ -143,13 +179,16 @@ export class WorkHistoryComponent implements OnInit {
           'Serve as a specialized expert in the Mobile queue, assisting property managers with mobile apps, web portals, and API integration issues',
           'Lead troubleshooting for the Integrations queue, resolving complex data transfer problems between Rent Manager and third-party software systems',
           'Diagnose and fix technical issues across multiple support queues, including database structure problems, user permissions, and electronic funds transfer systems',
+          'Support accountants and financial professionals in analyzing, interpreting, and troubleshooting complex financial reports and accounting workflows',
+          'Guide clients on accounting best practices specific to property management, including accounts receivable/payable processes and financial reconciliation',
           'Set up and customize Rent Manager web-based portals, leveraging web development knowledge to optimize functionality',
           'Collaborate with internal development teams to identify and resolve software bugs and unexpected behaviors',
-          'Guide users on best practices for utilizing Rent Manager property management software and its peripheral applications',
-          'Conduct in-depth remote troubleshooting sessions with customers to resolve complex technical issues',
+          'Configure and optimize automated workflow processes to streamline property management operations',
+          'Provide guidance on regulatory compliance and industry-standard accounting practices for property management',
           'Document detailed solution steps in ticketing software to build the knowledge base and improve resolution efficiency'
         ],
         skills: [
+          // Technical Skills
           { name: 'Technical Troubleshooting', relevance: 'high', category: 'technical', description: 'Advanced systematic identification and resolution of complex multi-layered software issues' },
           { name: 'Web Portal Configuration', relevance: 'high', category: 'technical', description: 'Setting up, customizing, and optimizing web-based portals using front-end development knowledge' },
           { name: 'API Integration', relevance: 'high', category: 'technical', description: 'Diagnosing issues with data transfer between Rent Manager and third-party services via APIs' },
@@ -160,8 +199,23 @@ export class WorkHistoryComponent implements OnInit {
           { name: 'Mobile Application Support', relevance: 'high', category: 'technical', description: 'Resolving platform-specific issues across iOS and Android mobile applications' },
           { name: 'Technical Documentation', relevance: 'high', category: 'technical', description: 'Creating comprehensive solution documentation for complex technical issues' },
           { name: 'Software Integration', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving integration issues between multiple software systems' },
+          
+          // Business Skills
+          { name: 'Financial Report Analysis', relevance: 'high', category: 'business', description: 'Interpreting and troubleshooting financial reports including balance sheets, income statements, and cash flow reports specific to property management' },
+          { name: 'Accounts Receivable/Payable', relevance: 'high', category: 'business', description: 'Supporting clients with billing cycles, payment application, vendor management, and invoice processing workflows' },
+          { name: 'Property Management Operations', relevance: 'high', category: 'business', description: 'Understanding the core business processes of property management companies and optimizing software to support these operations' },
+          { name: 'Workflow Optimization', relevance: 'high', category: 'business', description: 'Configuring and troubleshooting automated business processes to improve operational efficiency' },
+          { name: 'Accounting Principles', relevance: 'high', category: 'business', description: 'Applying accounting best practices to property management scenarios and helping clients maintain accurate financial records' },
+          { name: 'Financial Reconciliation', relevance: 'high', category: 'business', description: 'Assisting with bank reconciliation processes, ledger balancing, and resolving discrepancies in financial records' },
+          { name: 'Regulatory Compliance', relevance: 'medium', category: 'business', description: 'Advising on software configuration to help meet industry regulations and financial reporting requirements' },
+          { name: 'Budget Management', relevance: 'medium', category: 'business', description: 'Supporting property management companies with budget creation, tracking, and variance analysis' },
+          
+          // Soft Skills
           { name: 'Problem Solving', relevance: 'high', category: 'soft', description: 'Applying critical thinking and systematic approaches to resolve complex technical challenges' },
-          { name: 'Customer Communication', relevance: 'high', category: 'soft', description: 'Translating technical concepts into clear explanations for users with varying technical backgrounds' }
+          { name: 'Customer Communication', relevance: 'high', category: 'soft', description: 'Translating technical concepts into clear explanations for users with varying technical backgrounds' },
+          { name: 'Technical Empathy', relevance: 'high', category: 'soft', description: 'Understanding client pain points and frustrations with technology to provide supportive and effective assistance' },
+          { name: 'Process Analysis', relevance: 'high', category: 'soft', description: 'Identifying inefficiencies in workflows and recommending improvements to business processes' },
+          { name: 'Training & Knowledge Transfer', relevance: 'medium', category: 'soft', description: 'Effectively teaching clients how to use complex software features and troubleshoot common issues' }
         ],
         locations: ['Cincinnati, OH (Hybrid - 50% Remote)'],
         certifications: [
@@ -196,11 +250,19 @@ export class WorkHistoryComponent implements OnInit {
           'Multitasked managing multiple drink orders, customer interactions, and bar upkeep simultaneously'
         ],
         skills: [
+          // Soft Skills
           { name: 'Customer Service', relevance: 'high', category: 'soft', description: 'Managing customer expectations and providing exceptional service under pressure' },
           { name: 'Problem Resolution', relevance: 'high', category: 'soft', description: 'Quickly addressing customer concerns with effective solutions' },
           { name: 'Team Training', relevance: 'medium', category: 'soft', description: 'Onboarding and mentoring new team members on processes and procedures' },
           { name: 'Time Management', relevance: 'high', category: 'soft', description: 'Prioritizing tasks effectively in a fast-paced environment with competing demands' },
-          { name: 'Attention to Detail', relevance: 'medium', category: 'soft', description: 'Maintaining accuracy while working under pressure' }
+          { name: 'Attention to Detail', relevance: 'medium', category: 'soft', description: 'Maintaining accuracy while working under pressure' },
+          
+          // Business Skills
+          { name: 'Inventory Management', relevance: 'medium', category: 'business', description: 'Tracking stock levels, identifying usage patterns, and ensuring adequate supplies' },
+          { name: 'Cash Handling', relevance: 'medium', category: 'business', description: 'Processing transactions accurately and maintaining balanced accounts' },
+          
+          // Technical Skills
+          { name: 'POS System Operation', relevance: 'medium', category: 'technical', description: 'Efficiently using point-of-sale software for order processing and payment handling' }
         ],
         isExpanded: false,
         isDetailOpen: false
@@ -220,10 +282,15 @@ export class WorkHistoryComponent implements OnInit {
           'Resolved guest issues and complaints effectively while upholding club standards'
         ],
         skills: [
+          // Soft Skills
           { name: 'Client Relationship Management', relevance: 'high', category: 'soft', description: 'Building and maintaining relationships with high-value customers' },
           { name: 'Conflict Resolution', relevance: 'medium', category: 'soft', description: 'Diplomatically addressing and resolving customer complaints' },
           { name: 'Attention to Detail', relevance: 'medium', category: 'soft', description: 'Remembering specific customer preferences to enhance personalized service' },
-          { name: 'Professional Communication', relevance: 'high', category: 'soft', description: 'Maintaining appropriate, professional interactions with exclusive clientele' }
+          { name: 'Professional Communication', relevance: 'high', category: 'soft', description: 'Maintaining appropriate, professional interactions with exclusive clientele' },
+          
+          // Business Skills
+          { name: 'High-End Service Standards', relevance: 'high', category: 'business', description: 'Adhering to premium service protocols expected at exclusive establishments' },
+          { name: 'Club Operations', relevance: 'medium', category: 'business', description: 'Understanding the business operations of a membership-based organization' }
         ],
         isExpanded: false,
         isDetailOpen: false
@@ -244,11 +311,18 @@ export class WorkHistoryComponent implements OnInit {
           'Liaised with clients to understand needs, performed site inspections, and ensured high service standards'
         ],
         skills: [
+          // Soft Skills
           { name: 'Team Leadership', relevance: 'high', category: 'soft', description: 'Directing and motivating teams to achieve project goals' },
           { name: 'Cross-cultural Communication', relevance: 'medium', category: 'soft', description: 'Overcoming language barriers through alternative communication methods' },
-          { name: 'Project Management', relevance: 'high', category: 'domain', description: 'Planning and executing projects within timeline and quality constraints' },
-          { name: 'Client Management', relevance: 'high', category: 'soft', description: 'Understanding client requirements and ensuring satisfaction' },
-          { name: 'Resource Planning', relevance: 'medium', category: 'domain', description: 'Managing inventory and planning resource allocation' }
+          
+          // Business Skills
+          { name: 'Project Management', relevance: 'high', category: 'business', description: 'Planning and executing projects within timeline and quality constraints' },
+          { name: 'Client Management', relevance: 'high', category: 'business', description: 'Understanding client requirements and ensuring satisfaction' },
+          { name: 'Resource Planning', relevance: 'medium', category: 'business', description: 'Managing inventory and planning resource allocation' },
+          { name: 'Service Quality Control', relevance: 'medium', category: 'business', description: 'Implementing and maintaining high standards for service delivery' },
+          
+          // Technical Skills
+          { name: 'Site Assessment', relevance: 'medium', category: 'technical', description: 'Evaluating locations and determining optimal approaches to projects' }
         ],
         isExpanded: false,
         isDetailOpen: false
@@ -272,10 +346,22 @@ export class WorkHistoryComponent implements OnInit {
     this.selectedCategory = category;
   }
   
+  filterBySkillType(skillType: string): void {
+    this.selectedSkillType = skillType;
+  }
+  
   get filteredExperiences(): WorkExperience[] {
     return this.selectedCategory === 'all' 
       ? this.workExperiences 
       : this.workExperiences.filter(exp => exp.category === this.selectedCategory);
+  }
+  
+  // Filter skills based on selected skill type
+  getFilteredSkills(experience: WorkExperience): Skill[] {
+    if (this.selectedSkillType === 'all') {
+      return experience.skills;
+    }
+    return experience.skills.filter(skill => skill.category === this.selectedSkillType);
   }
   
   getSkillLevelClass(relevance: string): string {
@@ -290,8 +376,8 @@ export class WorkHistoryComponent implements OnInit {
   getSkillCategoryClass(category: string): string {
     switch(category) {
       case 'technical': return 'skill-technical';
+      case 'business': return 'skill-business';
       case 'soft': return 'skill-soft';
-      case 'domain': return 'skill-domain';
       default: return '';
     }
   }
