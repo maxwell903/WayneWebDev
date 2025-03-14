@@ -1,26 +1,26 @@
-
-
+// src/app/pages/education/education.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EducationService } from '../../services/education.service';
 import { Course } from '../../models/course.model';
+import { SkillFilterComponent } from '../../components/skill-filter/skill-filter.component';
 
 @Component({
   selector: 'app-education',
   templateUrl: './education.component.html',
   styleUrls: ['./education.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, SkillFilterComponent]
 })
 export class EducationComponent implements OnInit {
   courses: Course[] = [];
   filteredCourses: Course[] = [];
   departments: string[] = [];
   selectedDepartment: string = 'All';
-  skillFilters: string[] = [];
-  selectedSkill: string = 'All';
   
-  allSkills: Set<string> = new Set();
+  // For the skill filter
+  allSkills: string[] = [];
+  selectedSkills: string[] = [];
   
   constructor(private educationService: EducationService) {}
   
@@ -34,13 +34,20 @@ export class EducationComponent implements OnInit {
     this.courses.forEach(course => deptSet.add(course.department));
     this.departments = ['All', ...Array.from(deptSet)];
     
-    // Extract all skills for filter
+    // Extract all unique skills for the filter
+    this.extractAllSkills();
+  }
+  
+  extractAllSkills(): void {
+    const skillsSet = new Set<string>();
+    
     this.courses.forEach(course => {
       course.skills.forEach(skill => {
-        this.allSkills.add(skill.name);
+        skillsSet.add(skill.name);
       });
     });
-    this.skillFilters = ['All', ...Array.from(this.allSkills)];
+    
+    this.allSkills = Array.from(skillsSet).sort();
   }
   
   filterByDepartment(department: string): void {
@@ -48,28 +55,24 @@ export class EducationComponent implements OnInit {
     this.applyFilters();
   }
   
-  filterBySkill(skill: string): void {
-    this.selectedSkill = skill;
+  onSkillsSelected(skills: string[]): void {
+    this.selectedSkills = skills;
     this.applyFilters();
   }
   
   applyFilters(): void {
     this.filteredCourses = this.courses.filter(course => {
-      // If both filters are "All", return all courses
-      if (this.selectedDepartment === 'All' && this.selectedSkill === 'All') {
-        return true;
-      }
-      
-      // If department filter is active
+      // Department filter
       const matchesDepartment = this.selectedDepartment === 'All' || 
-                                course.department === this.selectedDepartment;
+                               course.department === this.selectedDepartment;
       
-      // If skill filter is active
-      const matchesSkill = this.selectedSkill === 'All' || 
-                          course.skills.some(skill => skill.name === this.selectedSkill);
+      // Skills filter
+      const matchesSkills = this.selectedSkills.length === 0 || 
+                           this.selectedSkills.some(selectedSkill => 
+                             course.skills.some(skill => skill.name === selectedSkill)
+                           );
       
-      // Both filters must match if both are active
-      return matchesDepartment && matchesSkill;
+      return matchesDepartment && matchesSkills;
     });
   }
 }

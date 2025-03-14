@@ -26,41 +26,62 @@
           </div>
         </div>
         
-        <div class="filter-group">
-          <h3>Filter by Skill</h3>
-          <div class="filter-buttons">
-            <button 
-              *ngFor="let skill of skillFilters"
-              class="filter-btn"
-              [class.active]="selectedSkill === skill"
-              (click)="filterBySkill(skill)">
-              {{skill}}
-            </button>
-          </div>
+        <div class="skills-filter-group">
+          <h3>Filter by Career-Ready Skills</h3>
+          <app-skill-filter 
+            [allSkills]="allSkills"
+            [courseCount]="courses.length"
+            (skillsSelected)="onSkillsSelected($event)">
+          </app-skill-filter>
         </div>
       </div>
       
-      <div class="courses-grid">
-        <div class="course-card" *ngFor="let course of filteredCourses">
-          <div class="course-header">
-            <span class="course-code">{{course.code}}</span>
-            <span class="course-department badge">{{course.department}}</span>
-          </div>
-          
-          <h3 class="course-title">{{course.title}}</h3>
-          <p class="course-description">{{course.description}}</p>
-          
-          <div class="skills-section">
-            <h4>Applicable Skills</h4>
-            <div class="skills-grid">
-              <div class="skill-item" *ngFor="let skill of course.skills">
-                <div class="skill-name">{{skill.name}}</div>
-                <div class="skill-roles">
-                  <span class="role-tag" *ngFor="let role of skill.roles">{{role}}</span>
+      <!-- Course Results Section -->
+      <div class="results-section">
+        <div class="results-counter">
+          <h3>Found <span class="counter-highlight">{{ filteredCourses.length }}</span> 
+            {{ filteredCourses.length === 1 ? 'course' : 'courses' }}</h3>
+        </div>
+        
+        <div class="courses-grid">
+          <div class="course-card" *ngFor="let course of filteredCourses">
+            <div class="course-header">
+              <span class="course-code">{{course.code}}</span>
+              <span class="course-department badge">{{course.department}}</span>
+            </div>
+            
+            <h3 class="course-title">{{course.title}}</h3>
+            <p class="course-description">{{course.description}}</p>
+            
+            <div class="skills-section">
+              <h4>Career-Ready Skills</h4>
+              <div class="skills-grid">
+                <div class="skill-item" *ngFor="let skill of course.skills">
+                  <div class="skill-name" [class.highlighted]="selectedSkills.includes(skill.name)">
+                    {{skill.name}}
+                  </div>
+                  <div class="skill-roles">
+                    <span class="role-tag" *ngFor="let role of skill.roles.slice(0, 2)">{{role}}</span>
+                    <span class="more-roles" *ngIf="skill.roles.length > 2">+{{skill.roles.length - 2}} more</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        
+        <!-- Empty state when no courses match -->
+        <div class="empty-state" *ngIf="filteredCourses.length === 0">
+          <div class="empty-image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
+            </svg>
+          </div>
+          <h3>No matching courses found</h3>
+          <p>Try adjusting your filters to see more results</p>
+          <button class="reset-filters-btn" (click)="selectedDepartment = 'All'; selectedSkills = []; applyFilters()">
+            Reset Filters
+          </button>
         </div>
       </div>
     </div>
