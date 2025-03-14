@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -145,7 +145,10 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private isBrowser: boolean;
   
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private renderer: Renderer2
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
   
@@ -157,7 +160,8 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Clean up body class only in browser environments
     if (this.isBrowser && this.isPopupOpen) {
-      document.body.classList.remove('modal-open');
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.renderer.removeStyle(document.body, 'position');
     }
     
     // Clean up subscriptions
@@ -292,9 +296,12 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
       if (this.isPopupOpen) {
         // Force the categories to distribute again when opening
         this.distributeSkillsToCategories();
-        document.body.classList.add('modal-open');
+        this.renderer.addClass(document.body, 'modal-open');
+        // Ensure modal container is appended to body for proper stacking
+        this.renderer.setStyle(document.body, 'position', 'relative');
       } else {
-        document.body.classList.remove('modal-open');
+        this.renderer.removeClass(document.body, 'modal-open');
+        this.renderer.removeStyle(document.body, 'position');
       }
     }
   }
@@ -306,7 +313,8 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
       
       // Only manipulate the DOM in browser environments
       if (this.isBrowser) {
-        document.body.classList.remove('modal-open');
+        this.renderer.removeClass(document.body, 'modal-open');
+        this.renderer.removeStyle(document.body, 'position');
       }
     }
   }
@@ -316,7 +324,8 @@ export class SkillFilterComponent implements OnInit, OnDestroy {
     
     // Only manipulate the DOM in browser environments
     if (this.isBrowser) {
-      document.body.classList.remove('modal-open');
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.renderer.removeStyle(document.body, 'position');
     }
   }
   

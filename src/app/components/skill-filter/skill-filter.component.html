@@ -43,7 +43,7 @@
     </div>
   
     <!-- Skill Popup -->
-    <div class="popup-overlay" *ngIf="isPopupOpen" (click)="closePopup($event)">
+    <div *ngIf="isPopupOpen" class="popup-overlay" (click)="closePopup($event)">
       <div class="skill-popup" @popupAnimation>
         <div class="popup-header">
           <h3>Filter by Skills</h3>
