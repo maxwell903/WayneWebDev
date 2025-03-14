@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { trigger, transition, style, animate, state } from '@angular/animations';
+import { trigger, transition, style, animate, state, query, stagger, animateChild, group } from '@angular/animations';
 
 interface WorkExperience {
   id: string;
@@ -40,6 +40,7 @@ interface SkillType {
   templateUrl: './work-history.component.html',
   styleUrls: ['./work-history.component.css'],
   animations: [
+    // Expand/collapse animation for card content
     trigger('expandCollapse', [
       state('collapsed', style({
         height: '0',
@@ -57,6 +58,7 @@ interface SkillType {
       ])
     ]),
     
+    // Fade in and slide up animation for section elements
     trigger('fadeInUp', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(30px)' }),
@@ -64,6 +66,15 @@ interface SkillType {
       ])
     ]),
     
+    // Fade in animation for any element
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('600ms ease-out', style({ opacity: 1 }))
+      ])
+    ]),
+    
+    // Rotate animation for expand/collapse icons
     trigger('rotateIcon', [
       state('collapsed', style({ transform: 'rotate(0)' })),
       state('expanded', style({ transform: 'rotate(180deg)' })),
@@ -72,17 +83,43 @@ interface SkillType {
       ])
     ]),
     
-    trigger('pulseAnimation', [
+    // Animation for current job indicator
+    trigger('currentJobAnimation', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.8)' }),
-        animate('600ms 300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('800ms 300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ]),
     
+    // Animation for skills
     trigger('skillsAnimation', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(80, [
+            animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    
+    // Animation for responsibilities
+    trigger('responsibilitiesAnimation', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateX(-10px)' }),
+          stagger(100, [
+            animate('600ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    
+    // Card animation for appearance and hover
+    trigger('cardAnimation', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        style({ opacity: 0, transform: 'translateY(30px)' }),
+        animate('600ms 150ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
     ])
   ]
@@ -167,13 +204,13 @@ export class WorkHistoryComponent implements OnInit {
           { name: 'Technical Documentation', relevance: 'high', category: 'technical', description: 'Creating comprehensive solution documentation for complex technical issues' },
           { name: 'Software Integration', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving integration issues between multiple software systems' },
           { name: 'REST API Troubleshooting', relevance: 'high', category: 'technical', description: 'Diagnosing and resolving issues with RESTful API endpoints, request formatting, and response handling' },
-{ name: 'SQL Query Optimization', relevance: 'medium', category: 'technical', description: 'Improving database query performance through proper indexing, query restructuring, and execution plan analysis' },
-{ name: 'Client Training', relevance: 'high', category: 'soft', description: 'Developing and delivering effective training sessions to help clients maximize software utilization' },
-{ name: 'Knowledge Base Development', relevance: 'medium', category: 'technical', description: 'Creating comprehensive documentation of common issues and solutions for internal and client reference' },
-{ name: 'Web Authentication Systems', relevance: 'medium', category: 'technical', description: 'Troubleshooting and configuring single sign-on, OAuth, and other authentication mechanisms' },
-{ name: 'Root Cause Analysis', relevance: 'high', category: 'technical', description: 'Systematically identifying the underlying causes of technical issues to prevent recurrence' },
-{ name: 'Data Migration Support', relevance: 'medium', category: 'technical', description: 'Assisting clients with transferring data between systems while maintaining integrity and relationships' },
-{ name: 'System Integration Testing', relevance: 'medium', category: 'technical', description: 'Verifying proper functionality of interconnected software components across multiple platforms' },
+          { name: 'SQL Query Optimization', relevance: 'medium', category: 'technical', description: 'Improving database query performance through proper indexing, query restructuring, and execution plan analysis' },
+          { name: 'Client Training', relevance: 'high', category: 'soft', description: 'Developing and delivering effective training sessions to help clients maximize software utilization' },
+          { name: 'Knowledge Base Development', relevance: 'medium', category: 'technical', description: 'Creating comprehensive documentation of common issues and solutions for internal and client reference' },
+          { name: 'Web Authentication Systems', relevance: 'medium', category: 'technical', description: 'Troubleshooting and configuring single sign-on, OAuth, and other authentication mechanisms' },
+          { name: 'Root Cause Analysis', relevance: 'high', category: 'technical', description: 'Systematically identifying the underlying causes of technical issues to prevent recurrence' },
+          { name: 'Data Migration Support', relevance: 'medium', category: 'technical', description: 'Assisting clients with transferring data between systems while maintaining integrity and relationships' },
+          { name: 'System Integration Testing', relevance: 'medium', category: 'technical', description: 'Verifying proper functionality of interconnected software components across multiple platforms' },
 
           // Business Skills
           { name: 'Financial Report Analysis', relevance: 'high', category: 'business', description: 'Interpreting and troubleshooting financial reports including balance sheets, income statements, and cash flow reports specific to property management' },
@@ -238,14 +275,13 @@ export class WorkHistoryComponent implements OnInit {
           { name: 'Inventory Management', relevance: 'medium', category: 'business', description: 'Tracking stock levels, identifying usage patterns, and ensuring adequate supplies' },
           { name: 'Cash Handling', relevance: 'medium', category: 'business', description: 'Processing transactions accurately and maintaining balanced accounts' },
           { name: 'Product Knowledge', relevance: 'high', category: 'business', description: 'Maintaining comprehensive understanding of beverage offerings, ingredients, and preparation methods' },
-{ name: 'Sales Optimization', relevance: 'medium', category: 'business', description: 'Implementing upselling techniques to increase average transaction value while ensuring customer satisfaction' },
-{ name: 'Workplace Safety', relevance: 'medium', category: 'business', description: 'Maintaining awareness of and adherence to safety protocols in a fast-paced environment' },
-{ name: 'Regulatory Compliance', relevance: 'medium', category: 'business', description: 'Ensuring adherence to alcohol service laws, health codes, and establishment policies' },
-
-{ name: 'Quality Control', relevance: 'high', category: 'business', description: 'Maintaining consistent product standards through proper measurement, preparation, and presentation' },          
-// Technical Skills
-     
-{ name: 'POS System Operation', relevance: 'medium', category: 'technical', description: 'Efficiently using point-of-sale software for order processing and payment handling' }
+          { name: 'Sales Optimization', relevance: 'medium', category: 'business', description: 'Implementing upselling techniques to increase average transaction value while ensuring customer satisfaction' },
+          { name: 'Workplace Safety', relevance: 'medium', category: 'business', description: 'Maintaining awareness of and adherence to safety protocols in a fast-paced environment' },
+          { name: 'Regulatory Compliance', relevance: 'medium', category: 'business', description: 'Ensuring adherence to alcohol service laws, health codes, and establishment policies' },
+          { name: 'Quality Control', relevance: 'high', category: 'business', description: 'Maintaining consistent product standards through proper measurement, preparation, and presentation' },          
+          
+          // Technical Skills
+          { name: 'POS System Operation', relevance: 'medium', category: 'technical', description: 'Efficiently using point-of-sale software for order processing and payment handling' }
         ],
         locations: ['Cincinnati, OH'],
         isExpanded: false,

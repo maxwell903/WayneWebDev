@@ -121,6 +121,7 @@
 /* Current job section */
 .current-job-section {
   margin-bottom: 60px;
+  position: relative;
 }
 
 .current-job-indicator {
@@ -130,40 +131,36 @@
   margin-bottom: 30px;
 }
 
+/* Remove the pulse dot - no longer needed */
 .pulse-dot {
-  width: 22px;
-  height: 22px;
-  background-color: var(--accent);
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 0 0 rgba(231, 76, 60, 0.4);
-  animation: pulse 2s infinite;
-  z-index: 3;
-  margin-bottom: 10px;
+  display: none;
 }
 
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 15px rgba(231, 76, 60, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
-  }
-}
-
+/* Current job label with animation directly on it */
 .current-job-label {
   background-color: var(--accent);
   color: white;
-  padding: 6px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
   font-size: 1rem;
   font-weight: 600;
   white-space: nowrap;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+  position: relative;
+  animation: pulseBorder 2s infinite;
+}
+
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+  }
 }
 
 .duration-badge {
@@ -188,6 +185,7 @@
   cursor: pointer;
   max-width: 900px;
   margin: 0 auto;
+  position: relative; /* Important for positioning the category badge */
 }
 
 .current-job-card:hover {
@@ -204,6 +202,12 @@
   justify-content: space-between;
   margin-bottom: 25px;
   flex-wrap: wrap;
+  position: relative;
+}
+
+.job-titles {
+  flex: 1;
+  padding-right: 120px; /* Make space for category badge */
 }
 
 .job-titles .job-title {
@@ -228,9 +232,14 @@
 }
 
 .job-meta {
+  position: absolute;
+  top: 0;
+  right: 0;
   text-align: right;
+  z-index: 5;
 }
 
+/* Fix for the category badge on current job card */
 .job-meta .category-badge {
   display: inline-block;
   padding: 6px 16px;
@@ -239,6 +248,7 @@
   font-weight: 500;
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative; /* Ensure proper positioning */
 }
 
 /* Queue specializations section */
@@ -367,6 +377,12 @@
   margin-top: 25px;
   border-top: 1px solid var(--light-gray);
   padding-top: 25px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Past experience heading */
@@ -479,6 +495,8 @@
 /* Card header */
 .card-header {
   margin-bottom: 15px;
+  position: relative;
+  padding-right: 90px; /* Make room for category badge */
 }
 
 .card-header .job-title {
@@ -520,7 +538,7 @@
   text-align: right;
 }
 
-/* Category badge */
+/* Category badge - fixed positioning */
 .category-badge {
   position: absolute;
   top: 20px;
@@ -531,6 +549,7 @@
   font-weight: 500;
   color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure it stays above other elements */
 }
 
 .tech {
@@ -543,6 +562,12 @@
 
 .other {
   background-color: #7f8c8d; /* slate */
+}
+
+/* Ensure category badge stays in fixed position on hover */
+.experience-card:hover .category-badge,
+.current-job-card:hover .category-badge {
+  transform: none; /* Override any transform from hover state */
 }
 
 /* Responsibilities section */
@@ -760,6 +785,7 @@
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--light-gray);
+  animation: fadeIn 0.5s ease;
 }
 
 /* Responsibilities list */
@@ -772,8 +798,6 @@
   margin-bottom: 10px;
   padding-left: 25px;
   position: relative;
-  opacity: 0;
-  animation: fadeInItem 0.5s ease forwards;
 }
 
 .responsibilities-list li::before {
@@ -782,17 +806,6 @@
   left: 0;
   color: var(--primary);
   font-weight: bold;
-}
-
-@keyframes fadeInItem {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 /* Locations section */
@@ -832,6 +845,41 @@
   color: var(--light-gray);
 }
 
+/* Additional animation classes */
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInFromLeft 0.5s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInFromRight 0.5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .experience-cards {
@@ -855,6 +903,16 @@
     margin-left: 0;
     margin-top: 10px;
   }
+  
+  .job-titles {
+    padding-right: 0;
+  }
+  
+  .job-meta {
+    position: relative;
+    margin-top: 15px;
+    text-align: left;
+  }
 }
 
 @media (max-width: 768px) {
@@ -873,6 +931,9 @@
   .job-meta {
     text-align: left;
     margin-top: 10px;
+    position: relative;
+    top: auto;
+    right: auto;
   }
   
   .skills-grid {
