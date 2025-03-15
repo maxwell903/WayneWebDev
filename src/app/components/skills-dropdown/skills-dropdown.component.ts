@@ -37,7 +37,7 @@ interface SkillItem {
         </svg>
         <span *ngIf="projectId === 'groshme-beta'">Core Languages Used: JavaScript, Python, SQL, HTML, CSS, JSON</span>
         <span *ngIf="projectId === 'sophit-training'">Core Languages Used: JavaScript/TypeScript, HTML, CSS, JSON</span>
-        
+        <span *ngIf="projectId === 'portfolio-website'">Core Languages Used: TypeScript, HTML, CSS, Angular Template Syntax</span>
       </div>
       
       <div class="skills-content" *ngIf="isSkillsOpen">
