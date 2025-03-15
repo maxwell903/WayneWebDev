@@ -9,8 +9,46 @@
         <div class="description-line">
           <span class="description">{{project.description}}</span>
         </div>
+  
+        <!-- Add the Skills Dropdown Component here -->
+        <app-skills-dropdown [projectId]="project.id"></app-skills-dropdown>
+        
         <ul class="technology-list">
-          <li><a [routerLink]="['/projects']">• {{project.technologies.slice(1, 4).join(', ')}}</a></li>
+          <li *ngIf="project.id === 'sophit-training'">
+            <a [routerLink]="['/projects']">
+              • Personal training service platform featuring engaging animations and responsive design
+            </a>
+          </li>
+          <li *ngIf="project.id === 'sophit-training'">
+            <a [routerLink]="['/projects']">
+              • Intuitive UI with expandable cards, qualification showcases, and streamlined service selection
+            </a>
+          </li>
+          <li *ngIf="project.id === 'sophit-training'">
+            <a [routerLink]="['/projects']">
+              • Implements thoughtful component architecture with TypeScript for maintainability and type safety
+            </a>
+          </li>
+          <li *ngIf="project.id === 'groshme-beta'">
+            <a [routerLink]="['/projects']">
+              • Comprehensive Personal management system where users create and manage budgets, exercises, workouts recipes, menus, grocery lists, and meal plans
+            </a>
+          </li>
+          <li *ngIf="project.id === 'groshme-beta'">
+            <a [routerLink]="['/projects']">
+              • Full-stack application with sophisticated state management, complex data processing, and authentication with user specific data
+            </a>
+          </li>
+          <li *ngIf="project.id === 'groshme-beta'">
+            <a [routerLink]="['/projects']">
+              • Next.js/React frontend that handles user interfaces and interactions, a Python Flask backend that manages data processing and API endpoints
+            </a>
+          </li>
+          <li *ngIf="project.id === 'groshme-beta'">
+            <a [routerLink]="['/projects']">
+              • Designed and implemented PostgreSQL database system initially in MySQL then migrated to Supabase, with complex schemas for functions using advanced SQL features.
+            </a>
+          </li>
         </ul>
       </div>
     </div>
