@@ -1,0 +1,48 @@
+<div class="education-summary">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="icon education-icon"></i>
+        Education
+      </h2>
+      
+      <div class="edu-card">
+        <div class="edu-header">
+          <div class="university-details">
+            <h3 class="university-name">{{educationDetails.university}}</h3>
+            <p class="university-location">{{educationDetails.location}}</p>
+          </div>
+          <div class="education-period">
+            <p>{{educationDetails.period}}</p>
+          </div>
+        </div>
+        
+        <div class="degree-info">
+          <p>{{educationDetails.degree}}</p>
+        </div>
+        
+        <div class="education-entries">
+          <a *ngFor="let course of courseHighlights" routerLink="/education" class="education-entry">
+            <div class="entry-content">
+              <span class="entry-code">{{course.code}}</span>
+              <span class="entry-title">{{course.title}}</span>
+            </div>
+            <div class="entry-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </div>
+          </a>
+        </div>
+        
+        <div class="view-all-container">
+          <a routerLink="/education" class="view-all-link">
+            <span>View All Courses</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
