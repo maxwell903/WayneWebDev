@@ -26,7 +26,7 @@
   .project-entry {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--light-gray, #ecf0f1);
+    border-bottom: 1px solid var(--secondary, #2c3e50);
   }
   
   .project-entry:last-child {
@@ -43,7 +43,7 @@
   
   .project-name {
     font-weight: bold;
-    color: var(--accent, #e74c3c);
+    color: var(--secondary, #2c3e50);
   }
   
   .project-type {
@@ -82,14 +82,14 @@
   }
   
   .technology-list a {
-    color: var(--primary, #3498db);
+    color: var(--dark, #2c3e50);
     text-decoration: none;
     transition: color 0.2s ease;
     font-size: 0.9rem;
   }
   
   .technology-list a:hover {
-    color: var(--accent, #e74c3c);
+    color: var(--primary, #3498db);
   }
   
   /* Skills Section Styles */
@@ -100,26 +100,25 @@
   .skills-toggle {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: var(--primary, #3498db);
+    color: var(--secondary, #2c3e50);
     text-decoration: none;
     padding: 5px 0;
     font-size: 0.9rem;
     transition: color 0.2s ease;
-    font-weight: 500;
+    font-weight: bold;
   }
   
   .skills-toggle:hover {
-    color: var(--accent, #e74c3c);
+    color: var(--primary, #3498db);
   }
   
   .chevron-icon {
-    margin-left: 8px;
+    margin-right: 8px;
     transition: transform 0.3s ease;
   }
   
   .chevron-icon.small {
-    margin-left: 5px;
+    margin-right: 5px;
   }
   
   .skills-content {

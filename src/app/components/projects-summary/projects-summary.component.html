@@ -3,12 +3,11 @@
       <h2>PROJECTS</h2>
       <div *ngFor="let project of projects" class="project-entry">
         <div class="project-line">
-          <span class="project-name">{{project.title}}</span>
-          <span class="project-type">{{project.technologies[0]}}</span>
-        </div>
-        <div class="description-line">
-          <span class="description">{{project.description}}</span>
-        </div>
+            <span class="project-name">{{project.title}}</span>
+            <span class="project-type" *ngIf="project.id === 'groshme-beta'">October 2024 - February 2025</span>
+            <span class="project-type" *ngIf="project.id === 'sophit-training'">December 2024</span>
+          </div>
+        
   
         <!-- Add the Skills Dropdown Component here -->
         <app-skills-dropdown [projectId]="project.id"></app-skills-dropdown>

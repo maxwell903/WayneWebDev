@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface SkillCategory {
@@ -23,7 +23,6 @@ interface SkillItem {
         class="skills-trigger" 
         (click)="toggleSkillsOpen()"
         [class.active]="isSkillsOpen">
-        <span>Skills Used: JavaScript & JSX, Python, SQL</span>
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
           width="16" 
@@ -36,6 +35,7 @@ interface SkillItem {
           class="chevron-icon">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
+        <span>Core Skills Used: Java Script, Python, SQL</span>
       </div>
       
       <div class="skills-content" *ngIf="isSkillsOpen">
@@ -76,25 +76,25 @@ interface SkillItem {
     }
     
     .skills-trigger {
-      color: var(--primary);
-      font-weight: 500;
+      color: var(--gray, #95a5a6);
+      font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       padding: 6px 0;
       transition: all 0.2s ease;
     }
     
     .skills-trigger:hover {
-      color: var(--accent);
+      color: var(--primary, #3498db);
     }
     
     .skills-trigger.active {
-      color: var(--accent);
+      color: var(--primary, #3498db);
     }
     
     .chevron-icon {
+      margin-right: 8px;
       transition: transform 0.3s ease;
     }
     
@@ -194,7 +194,7 @@ interface SkillItem {
     }
   `]
 })
-export class SkillsDropdownComponent implements OnInit, OnChanges {
+export class SkillsDropdownComponent {
   @Input() projectId: string = '';
   
   isSkillsOpen: boolean = false;
@@ -228,7 +228,7 @@ export class SkillsDropdownComponent implements OnInit, OnChanges {
     }
   ];
   
-  // Groshme Beta skills organized by category - Exactly as specified
+  // Groshme Beta skills organized by category
   private groshmeBetaSkills: {[key: string]: SkillItem[]} = {
     'Core Technologies': [
       { name: 'JavaScript & JSX', description: 'Primary frontend programming languages' },
