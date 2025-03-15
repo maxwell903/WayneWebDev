@@ -35,7 +35,8 @@ interface SkillItem {
           class="chevron-icon">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
-        <span>Core Skills Used: Java Script, Python, SQL</span>
+        <span *ngIf="projectId === 'groshme-beta'">Core Languages Used: JavaScript, Python, SQL, HTML, CSS, JSON</span>
+        <span *ngIf="projectId === 'sophit-training'">Core Languages Used: JavaScript/TypeScript, HTML, CSS, JSON</span>
       </div>
       
       <div class="skills-content" *ngIf="isSkillsOpen">
