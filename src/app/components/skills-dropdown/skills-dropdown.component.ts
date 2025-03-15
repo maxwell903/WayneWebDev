@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface SkillCategory {
@@ -194,7 +194,7 @@ interface SkillItem {
     }
   `]
 })
-export class SkillsDropdownComponent {
+export class SkillsDropdownComponent implements OnInit, OnChanges {
   @Input() projectId: string = '';
   
   isSkillsOpen: boolean = false;
@@ -228,7 +228,7 @@ export class SkillsDropdownComponent {
     }
   ];
   
-  // Groshme Beta skills organized by category
+  // Groshme Beta skills organized by category - Exactly as specified
   private groshmeBetaSkills: {[key: string]: SkillItem[]} = {
     'Core Technologies': [
       { name: 'JavaScript & JSX', description: 'Primary frontend programming languages' },
