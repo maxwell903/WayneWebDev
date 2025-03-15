@@ -7,6 +7,7 @@ import { ExperienceTimelineComponent } from '../../components/experience-timelin
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { EducationSummaryComponent } from '../../components/education-summary/education-summary.component';
+import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,7 @@ import { EducationSummaryComponent } from '../../components/education-summary/ed
     CommonModule,
     RouterModule,
     EducationSummaryComponent,
+    ProjectsSummaryComponent,
     ProjectCardComponent,
     ExperienceTimelineComponent
   ]
