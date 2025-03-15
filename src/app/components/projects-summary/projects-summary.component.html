@@ -1,48 +1,17 @@
-<div class="projects-summary">
-    <div class="container">
-      <h2 class="section-title">
-        <i class="icon project-icon"></i>
-        Recent Projects
-      </h2>
-      
-      <div class="proj-card">
-        <div class="proj-header">
-          <div class="projects-details">
-            <h3 class="projects-heading">My Latest Work</h3>
-            <p class="projects-subheading">Full-stack & Web Development</p>
-          </div>
-          <div class="projects-tech">
-            <p>React • Angular • TypeScript</p>
-          </div>
+<div class="container">
+    <div class="projects-card">
+      <h2>PROJECTS</h2>
+      <div *ngFor="let project of projects" class="project-entry">
+        <div class="project-line">
+          <span class="project-name">{{project.title}}</span>
+          <span class="project-type">{{project.technologies[0]}}</span>
         </div>
-        
-        <div class="projects-info">
-          <p>Building responsive, user-friendly web applications with modern frameworks</p>
+        <div class="description-line">
+          <span class="description">{{project.description}}</span>
         </div>
-        
-        <div class="projects-entries">
-          <a *ngFor="let project of projects" [routerLink]="['/projects']" class="project-entry">
-            <div class="entry-content">
-              <span class="entry-name">{{project.title}}</span>
-              <span class="entry-techs">{{project.technologies.slice(0, 3).join(', ')}}</span>
-            </div>
-            <div class="entry-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </div>
-          </a>
-        </div>
-        
-        <div class="view-all-container">
-          <a routerLink="/projects" class="view-all-link">
-            <span>View All Projects</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
+        <ul class="technology-list">
+          <li><a [routerLink]="['/projects']">• {{project.technologies.slice(1, 4).join(', ')}}</a></li>
+        </ul>
       </div>
     </div>
   </div>

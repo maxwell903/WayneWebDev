@@ -17,11 +17,7 @@ export class ProjectsSummaryComponent implements OnInit {
   constructor(private projectService: ProjectService) {}
   
   ngOnInit(): void {
-    // Get all projects from the service
-    const allProjects = this.projectService.getAllProjects();
-    
-    // Display all projects (since there are only 2 in this case)
-    // In a real scenario with many projects, we might limit this to 3-4 recent ones
-    this.projects = allProjects;
+    // Get featured projects from the service
+    this.projects = this.projectService.getFeaturedProjects();
   }
 }
