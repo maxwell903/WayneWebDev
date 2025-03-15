@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SkillsDashboardComponent } from '../../components/skills-dashboard/skills-dashboard.component';
+
 import { ProjectCardComponent } from '../../components/project-card/project-card.component';
 import { ExperienceTimelineComponent } from '../../components/experience-timeline/experience-timeline.component';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
+import { EducationSummaryComponent } from '../../components/education-summary/education-summary.component';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ import { Project } from '../../models/project.model';
   imports: [
     CommonModule,
     RouterModule,
-    SkillsDashboardComponent,
+    EducationSummaryComponent,
     ProjectCardComponent,
     ExperienceTimelineComponent
   ]
