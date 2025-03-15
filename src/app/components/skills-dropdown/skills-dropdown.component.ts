@@ -37,6 +37,7 @@ interface SkillItem {
         </svg>
         <span *ngIf="projectId === 'groshme-beta'">Core Languages Used: JavaScript, Python, SQL, HTML, CSS, JSON</span>
         <span *ngIf="projectId === 'sophit-training'">Core Languages Used: JavaScript/TypeScript, HTML, CSS, JSON</span>
+        
       </div>
       
       <div class="skills-content" *ngIf="isSkillsOpen">
@@ -291,6 +292,36 @@ export class SkillsDropdownComponent {
       { name: 'npm', description: 'Package management' }
     ]
   };
+
+  private portfolioWebsiteSkills: {[key: string]: SkillItem[]} = {
+    'Core Technologies': [
+      { name: 'TypeScript', description: 'Primary programming language for type-safe development' },
+      { name: 'Angular 19', description: 'Latest version of the Angular framework' },
+      { name: 'RxJS', description: 'Reactive Extensions library for async operations' },
+      { name: 'Angular Router', description: 'Client-side navigation and routing' },
+      { name: 'Angular SSR', description: 'Server-side rendering for improved performance and SEO' }
+    ],
+    'UI & UX Tools': [
+      { name: 'CSS Variables', description: 'Custom design system with theme variables' },
+      { name: 'Angular Animations', description: 'Built-in animation system for enhanced UX' },
+      { name: 'Responsive Design', description: 'Mobile-first approach with adaptive layouts' },
+      { name: 'Component Architecture', description: 'Modular, reusable standalone components' },
+      { name: 'SVG Integration', description: 'Vector-based icons and graphics' }
+    ],
+    'Data Management': [
+      { name: 'Angular Services', description: 'Dependency injection for data management' },
+      { name: 'Reactive State', description: 'Observable-based state management patterns' },
+      { name: 'JSON Models', description: 'Strongly-typed data models with interfaces' },
+      { name: 'Form Controls', description: 'Reactive forms with validation patterns' }
+    ],
+    'Infrastructure': [
+      { name: 'Netlify', description: 'Deployment and hosting platform with CI/CD' },
+      { name: 'Angular CLI', description: 'Development, testing, and build tooling' },
+      { name: 'Standalone Components', description: 'Modern Angular architecture without NgModules' },
+      { name: 'Lazy Loading', description: 'On-demand code loading for optimized performance' },
+      { name: 'Prerendering', description: 'Static generation for specific routes' }
+    ]
+  };
   
   ngOnInit() {
     this.initializeSkillsForProject();
@@ -309,6 +340,8 @@ export class SkillsDropdownComponent {
       this.assignSkills(this.groshmeBetaSkills);
     } else if (this.projectId === 'sophit-training') {
       this.assignSkills(this.sophitTrainingSkills);
+    } else if (this.projectId === 'portfolio-website') { // Add this condition
+      this.assignSkills(this.portfolioWebsiteSkills);
     }
   }
   

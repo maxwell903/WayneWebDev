@@ -7,6 +7,7 @@ import { Project } from '../models/project.model';
 export class ProjectService {
   private projects: Project[] = [
     {
+      
       id: 'groshme-beta',
       title: 'GroshmeBeta - Comprehensive Meal Planning Platform',
       description: 'A full-stack application designed to simplify meal planning, grocery shopping, and recipe management. The platform allows users to create and manage recipes, plan weekly meals, generate grocery lists, track kitchen inventory, and monitor fitness with workout scheduling tools.',

@@ -1,6 +1,43 @@
 <div class="container">
     <div class="projects-card">
       <h2>PROJECTS</h2>
+      <div class="project-entry">
+        <div class="project-line">
+          <span class="project-name">Wayne's Web Dev - Personal Portfolio Website</span>
+          <span class="project-type">March 2025</span>
+        </div>
+        
+        <!-- Add the Skills Dropdown Component here -->
+        <app-skills-dropdown [projectId]="'portfolio-website'"></app-skills-dropdown>
+        
+        <ul class="technology-list">
+          <li>
+            <a [routerLink]="['/projects']">
+              • Developed a modern, responsive single-page application portfolio using Angular 19 and TypeScript to showcase projects and professional experience
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/projects']">
+              • Implemented advanced component architecture with standalone components, lazy loading, and server-side rendering for optimal performance
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/projects']">
+              • Created interactive UI elements including image carousels, expandable cards, and skill dashboards with filtering capabilities
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/projects']">
+              • Designed and built custom animations using Angular animations API to enhance user experience and engagement
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/projects']">
+              • Integrated responsive design principles with proper mobile optimization and accessibility considerations
+            </a>
+          </li>
+        </ul>
+      </div>
       <div *ngFor="let project of projects" class="project-entry">
         <div class="project-line">
             <span class="project-name">{{project.title}}</span>
