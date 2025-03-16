@@ -1,4 +1,5 @@
 <div class="class-filter-container" (click)="$event.stopPropagation()">
+    <!-- Main dropdown toggle -->
     <div class="filter-dropdown">
       <div 
         class="dropdown-toggle" 
@@ -19,7 +20,34 @@
         <span>View Course Skills & Information</span>
       </div>
       
+      <!-- Dropdown content -->
       <div class="dropdown-content" *ngIf="isDropdownOpen">
+        <!-- Search bar -->
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchInput()"
+              placeholder="Search courses or skills..."
+              class="search-input"
+            />
+            <button *ngIf="searchTerm" class="clear-btn" (click)="clearSearch($event)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <button class="search-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Category filter buttons -->
         <div class="filter-buttons">
           <button 
             *ngFor="let filter of filters" 
@@ -29,14 +57,63 @@
             {{filter.label}}
           </button>
         </div>
+  
+        <!-- Skills filter tags (if search is active) -->
+        <div class="skills-filter-tags" *ngIf="activeSkillFilters.length > 0">
+          <span *ngFor="let skill of activeSkillFilters" class="skill-filter-tag">
+            {{skill}}
+            <button class="remove-tag-btn" (click)="removeSkillFilter(skill)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </span>
+          <button *ngIf="activeSkillFilters.length > 0" class="clear-all-btn" (click)="clearAllSkillFilters()">
+            Clear All
+          </button>
+        </div>
         
+        <!-- Classes list -->
         <div class="classes-list">
+          <!-- Search suggestions when typing -->
+          <div class="search-suggestions" *ngIf="searchTerm && searchSuggestions.length > 0">
+            <div class="suggestion-group" *ngIf="getSkillSuggestions().length > 0">
+              <div class="suggestion-header">Skills</div>
+              <div 
+                *ngFor="let suggestion of getSkillSuggestions()" 
+                class="suggestion-item"
+                (click)="addSkillFilter(suggestion)">
+                <span class="suggestion-icon skill-icon">S</span>
+                <span class="suggestion-text">{{suggestion}}</span>
+              </div>
+            </div>
+            <div class="suggestion-group" *ngIf="getCourseSuggestions().length > 0">
+              <div class="suggestion-header">Courses</div>
+              <div 
+                *ngFor="let suggestion of getCourseSuggestions()" 
+                class="suggestion-item"
+                (click)="selectCourse(suggestion)">
+                <span class="suggestion-icon course-icon">C</span>
+                <span class="suggestion-text">{{suggestion.code}}: {{suggestion.title}}</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- No results message -->
+          <div class="empty-state" *ngIf="filteredClasses.length === 0 && !(searchTerm && searchSuggestions.length > 0)">
+            <p>No classes found matching your search.</p>
+            <button class="reset-btn" (click)="resetFilters()">Reset Filters</button>
+          </div>
+          
+          <!-- Classes cards -->
           <div 
             *ngFor="let class of filteredClasses" 
             class="class-card"
             [class.expanded]="class.isExpanded"
             [class.technical]="class.category === 'technical'"
             [class.business]="class.category === 'business'"
+            [class.highlighted]="isClassHighlighted(class)"
             (click)="toggleClass(class, $event)">
             
             <div class="class-header">
@@ -53,7 +130,9 @@
                 class="skill-tag"
                 [class.technical]="skill.category === 'technical'"
                 [class.business]="skill.category === 'business'"
-                [class.soft]="skill.category === 'soft'">
+                [class.soft]="skill.category === 'soft'"
+                [class.highlighted]="isSkillHighlighted(skill.name)"
+                (click)="addSkillFilter(skill.name); $event.stopPropagation()">
                 {{skill.name}}
               </div>
               <div *ngIf="class.skills.length > 3" class="skill-tag more">
@@ -67,9 +146,16 @@
               <div class="skills-details">
                 <h4>Skills Acquired:</h4>
                 <ul class="skills-list">
-                  <li *ngFor="let skill of class.skills">
+                  <li *ngFor="let skill of class.skills"
+                      [class.highlighted]="isSkillHighlighted(skill.name)">
                     <span class="skill-name">{{skill.name}}</span>
                     <span class="skill-description">{{skill.description}}</span>
+                    <button 
+                      class="add-skill-filter" 
+                      *ngIf="!isSkillInFilters(skill.name)"
+                      (click)="addSkillFilter(skill.name); $event.stopPropagation()">
+                      Filter by this skill
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -100,12 +186,6 @@
                 <polyline points="18 15 12 9 6 15"></polyline>
               </svg>
             </div>
-          </div>
-          
-          <!-- Empty state when no classes match filter -->
-          <div class="empty-state" *ngIf="filteredClasses.length === 0">
-            <p>No classes found matching the selected filter.</p>
-            <button class="reset-btn" (click)="applyFilter('all')">Show All Classes</button>
           </div>
         </div>
       </div>

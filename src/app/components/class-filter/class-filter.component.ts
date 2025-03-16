@@ -34,6 +34,11 @@ export class ClassFilterComponent implements OnInit {
     { label: 'Business', value: 'business' }
   ];
   
+  // Search functionality
+  searchTerm: string = '';
+  searchSuggestions: (string | Class)[] = [];
+  activeSkillFilters: string[] = [];
+  
   classes: Class[] = [];
   filteredClasses: Class[] = [];
   
@@ -47,7 +52,7 @@ export class ClassFilterComponent implements OnInit {
   
   ngOnInit(): void {
     this.initializeClasses();
-    this.applyFilter('all');
+    this.applyFilters();
   }
   
   toggleDropdown(event?: Event): void {
@@ -71,20 +76,173 @@ export class ClassFilterComponent implements OnInit {
     cls.isExpanded = !cls.isExpanded;
   }
   
+  // Search functionality
+  onSearchInput(): void {
+    if (this.searchTerm.trim().length > 0) {
+      this.updateSearchSuggestions();
+    } else {
+      this.searchSuggestions = [];
+    }
+    
+    // Always apply filters when search changes
+    this.applyFilters();
+  }
+  
+  updateSearchSuggestions(): void {
+    const searchTerm = this.searchTerm.toLowerCase().trim();
+    
+    // Get all unique skills
+    const allSkills = this.getAllSkills();
+    
+    // Filter skills that match the search term
+    const matchingSkills = allSkills.filter(skill => 
+      skill.toLowerCase().includes(searchTerm)
+    ).slice(0, 5); // Limit to 5 skills
+    
+    // Filter classes that match by code or title
+    const matchingClasses = this.classes.filter(cls =>
+      cls.code.toLowerCase().includes(searchTerm) ||
+      cls.title.toLowerCase().includes(searchTerm)
+    ).slice(0, 5); // Limit to 5 classes
+    
+    // Combine results
+    this.searchSuggestions = [...matchingSkills, ...matchingClasses];
+  }
+  
+  getAllSkills(): string[] {
+    // Extract all unique skills from all classes
+    const skillsSet = new Set<string>();
+    
+    this.classes.forEach(cls => {
+      cls.skills.forEach(skill => {
+        skillsSet.add(skill.name);
+      });
+    });
+    
+    return Array.from(skillsSet).sort();
+  }
+  
+  getSkillSuggestions(): string[] {
+    return this.searchSuggestions.filter(item => typeof item === 'string') as string[];
+  }
+  
+  getCourseSuggestions(): Class[] {
+    return this.searchSuggestions.filter(item => typeof item !== 'string') as Class[];
+  }
+  
+  clearSearch(event: Event): void {
+    event.stopPropagation();
+    this.searchTerm = '';
+    this.searchSuggestions = [];
+    this.applyFilters();
+  }
+  
+  addSkillFilter(skill: string): void {
+    if (!this.activeSkillFilters.includes(skill)) {
+      this.activeSkillFilters.push(skill);
+      this.searchTerm = ''; // Clear search term
+      this.searchSuggestions = []; // Clear suggestions
+      this.applyFilters();
+    }
+  }
+  
+  removeSkillFilter(skill: string): void {
+    this.activeSkillFilters = this.activeSkillFilters.filter(s => s !== skill);
+    this.applyFilters();
+  }
+  
+  clearAllSkillFilters(): void {
+    this.activeSkillFilters = [];
+    this.applyFilters();
+  }
+  
+  isSkillInFilters(skill: string): boolean {
+    return this.activeSkillFilters.includes(skill);
+  }
+  
+  isSkillHighlighted(skill: string): boolean {
+    return this.activeSkillFilters.includes(skill) || 
+           (this.searchTerm && skill.toLowerCase().includes(this.searchTerm.toLowerCase()));
+  }
+  
+  isClassHighlighted(cls: Class): boolean {
+    // Highlight if any of the class's skills match the active filters
+    if (this.activeSkillFilters.length > 0) {
+      return cls.skills.some(skill => this.activeSkillFilters.includes(skill.name));
+    }
+    return false;
+  }
+  
+  selectCourse(course: Class): void {
+    // Find and expand the selected course
+    const courseInList = this.filteredClasses.find(c => c.code === course.code);
+    if (courseInList) {
+      // Close all other courses
+      this.filteredClasses.forEach(c => {
+        c.isExpanded = c.code === course.code;
+      });
+      
+      // Clear search
+      this.searchTerm = '';
+      this.searchSuggestions = [];
+    }
+  }
+  
   applyFilter(filter: string): void {
     this.selectedFilter = filter;
+    this.applyFilters();
+  }
+  
+  applyFilters(): void {
+    // Start with all classes
+    let result = [...this.classes];
     
-    if (filter === 'all') {
-      this.filteredClasses = [...this.classes];
-    } else {
-      this.filteredClasses = this.classes.filter(cls => cls.category === filter);
+    // Filter by category (technical/business/all)
+    if (this.selectedFilter !== 'all') {
+      result = result.filter(cls => cls.category === this.selectedFilter);
+    }
+    
+    // Filter by skill filters
+    if (this.activeSkillFilters.length > 0) {
+      result = result.filter(cls => 
+        cls.skills.some(skill => this.activeSkillFilters.includes(skill.name))
+      );
+    }
+    
+    // Filter by search term if present
+    if (this.searchTerm.trim().length > 0) {
+      const searchTerm = this.searchTerm.toLowerCase().trim();
+      
+      result = result.filter(cls => 
+        // Match class code or title
+        cls.code.toLowerCase().includes(searchTerm) ||
+        cls.title.toLowerCase().includes(searchTerm) ||
+        // Match skills
+        cls.skills.some(skill => skill.name.toLowerCase().includes(searchTerm)) ||
+        // Match department
+        cls.department.toLowerCase().includes(searchTerm) ||
+        // Match description
+        cls.description.toLowerCase().includes(searchTerm)
+      );
     }
     
     // Close all expanded classes when filter changes
-    this.filteredClasses.forEach(c => c.isExpanded = false);
+    result.forEach(c => c.isExpanded = false);
+    
+    this.filteredClasses = result;
+  }
+  
+  resetFilters(): void {
+    this.selectedFilter = 'all';
+    this.searchTerm = '';
+    this.activeSkillFilters = [];
+    this.searchSuggestions = [];
+    this.applyFilters();
   }
   
   initializeClasses(): void {
+    // Initialize the classes array with our course data
+    this.filteredClasses = [...this.classes];
     this.classes = [
       {
         code: 'CSE 2111',
@@ -113,6 +271,36 @@ export class ClassFilterComponent implements OnInit {
             name: 'Data Modeling',
             category: 'business',
             description: 'Created logical and physical data models to represent business processes and information requirements.'
+          }
+        ]
+      },
+      {
+        code: 'BUSMHR 2292',
+        title: 'Business Skills & Environment',
+        department: 'BUSMHR',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course focused on developing essential professional skills for business environments, including communication, teamwork, and ethical decision-making. I practiced delivering presentations, writing business documents, and working in collaborative project teams.',
+        skills: [
+          {
+            name: 'Professional Communication',
+            category: 'soft',
+            description: 'Developed effective business writing and presentation skills for various professional audiences.'
+          },
+          {
+            name: 'Team Collaboration',
+            category: 'soft',
+            description: 'Worked effectively in diverse teams to achieve shared goals through coordinated effort.'
+          },
+          {
+            name: 'Business Ethics',
+            category: 'business',
+            description: 'Applied ethical frameworks to analyze business situations and make principled decisions.'
+          },
+          {
+            name: 'Time Management',
+            category: 'soft',
+            description: 'Prioritized tasks and managed competing deadlines to maximize productivity and project outcomes.'
           }
         ]
       },
@@ -684,38 +872,12 @@ export class ClassFilterComponent implements OnInit {
             category: 'business',
             description: 'Made valid inferences about populations based on sample data with specified confidence levels.'
           }
-        ]
-      },
-      {
-        code: 'BUSMHR 2292',
-        title: 'Business Skills & Environment',
-        department: 'BUSMHR',
-        category: 'business',
-        isExpanded: false,
-        description: 'This course focused on developing essential professional skills for business environments, including communication, teamwork, and ethical decision-making. I practiced delivering presentations, writing business documents, and working in collaborative project teams.',
-        skills: [
-          {
-            name: 'Professional Communication',
-            category: 'soft',
-            description: 'Developed effective business writing and presentation skills for various professional audiences.'
-          },
-          {
-            name: 'Team Collaboration',
-            category: 'soft',
-            description: 'Worked effectively in diverse teams to achieve shared goals through coordinated effort.'
-          },
-          {
-            name: 'Business Ethics',
-            category: 'business',
-            description: 'Applied ethical frameworks to analyze business situations and make principled decisions.'
-          },
-          {
-            name: 'Time Management',
-            category: 'soft',
-            description: 'Prioritized tasks and managed competing deadlines to maximize productivity and project outcomes.'
-          }
-        ]
-      }
-    ];
+        
+    ]
   }
+];
+
+// Initialize filteredClasses after classes array is populated
+this.filteredClasses = [...this.classes];
+}
 }
