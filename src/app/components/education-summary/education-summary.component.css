@@ -1,149 +1,153 @@
 .container {
-    width: 100%;
-    padding: 0 15px;
-  }
-  
-  .education-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-    margin-bottom: 8px;
-    border-top: 3px solid var(--primary, #3498db);
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .education-card h2 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    color: var(--secondary, #2c3e50);
-  }
-  
-  .education-entry {
-    margin-left: 0;
-  }
-  
-  .university-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  
-  .university {
-    font-weight: bold;
-    color: var(--secondary, #2c3e50);
-  }
-  
-  .location {
-    text-align: right;
-    color: var(--gray, #95a5a6);
-  }
-  
-  .degree-line {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .degree {
-    font-weight: normal;
-    color: var(--dark, #2c3e50);
-  }
-  
-  .period {
-    text-align: right;
-    color: var(--gray, #95a5a6);
-  }
-  
-  .achievement-list {
-    list-style-type: none;
-    padding-left: 5px;
-    margin-top: 10px;
-    margin-bottom: 0;
-  }
-  
-  .achievement-list li {
-    margin-bottom: 5px;
-  }
-  
-  .achievement-list a {
-    color: var(--dark, #2c3e50);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  
-  .achievement-list a:hover {
-    color: var(--primary, #3498db);
-  }
-  
-  /* Education dropdown styles */
-  .education-dropdown .dropdown-toggle,
+  width: 100%;
+  padding: 0 8px; /* Reduced from 15px */
+}
+
+.education-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 12px; /* Reduced from 25px */
+  margin-bottom: 4px; /* Reduced from 8px */
+  border-top: 3px solid var(--primary, #3498db);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.education-card h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 8px; /* Reduced from 15px */
+  text-transform: uppercase;
+  color: var(--secondary, #2c3e50);
+}
+
+.education-entry {
+  margin-left: 0;
+}
+
+.university-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px; /* Reduced from 6px */
+}
+
+.university {
+  font-weight: bold;
+  color: var(--secondary, #2c3e50);
+}
+
+.location {
+  text-align: right;
+  color: var(--gray, #95a5a6);
+}
+
+.degree-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px; /* Reduced from 10px */
+}
+
+.degree {
+  font-weight: normal;
+  color: var(--dark, #2c3e50);
+}
+
+.period {
+  text-align: right;
+  color: var(--gray, #95a5a6);
+}
+
+.achievement-list {
+  list-style-type: none;
+  padding-left: 3px; /* Reduced from 5px */
+  margin-top: 5px; /* Reduced from 10px */
+  margin-bottom: 0;
+}
+
+.achievement-list li {
+  margin-bottom: 2px; /* Reduced from 5px */
+}
+
+.achievement-list a {
+  color: var(--dark, #2c3e50);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-size: 0.85rem; /* Slightly smaller font */
+}
+
+.achievement-list a:hover {
+  color: var(--primary, #3498db);
+}
+
+/* Education dropdown styles */
+.education-dropdown .dropdown-toggle,
 .filter-dropdown .dropdown-toggle {
-  color: var(--gray, #95a5a6); /* Change default color to gray */
+color: var(--gray, #95a5a6);
 }
 
 .education-dropdown .dropdown-toggle:hover,
 .filter-dropdown .dropdown-toggle:hover {
-  color: var(--primary, #3498db); /* Only blue on hover */
+color: var(--primary, #3498db);
 }
-  .education-trigger {
-    color: var(--gray, #95a5a6);
+.education-trigger {
+  color: var(--gray, #95a5a6);
     font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 6px 0;
+    padding: 0; /* Completely removed padding */
     transition: all 0.2s ease;
+    margin: 0; /* Removed all margins */
+    font-size: 0.85rem; /* Smaller font size */
+    line-height: 1.2; /* Tighter line height */
+}
+
+.education-trigger:hover {
+  color: var(--primary, #3498db);
+}
+
+.education-trigger.active {
+  color: var(--primary, #3498db);
+}
+
+.chevron-icon {
+  margin-right: 4px; /* Reduced from 8px */
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.education-content {
+  padding-top: 5px; /* Reduced from 10px */
+  padding-bottom: 5px; /* Reduced from 10px */
+  animation: fadeIn 0.3s ease-out;
+}
+
+.education-description {
+  color: var(--gray, #95a5a6);
+  font-size: 0.85rem; /* Reduced from 0.9rem */
+  line-height: 1.3; /* Reduced from 1.5 */
+  margin: 0;
+  padding-left: 4px; /* Reduced from 8px */
+  border-left: 2px solid var(--primary, #3498db);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); } /* Reduced from -10px */
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .university-line, .degree-line {
+    flex-direction: column;
   }
   
-  .education-trigger:hover {
-    color: var(--primary, #3498db);
+  .location, .period {
+    text-align: left;
+    margin-top: 1px; /* Reduced from 2px */
   }
-  
-  .education-trigger.active {
-    color: var(--primary, #3498db);
-  }
-  
-  .chevron-icon {
-    margin-right: 8px;
-    transition: transform 0.3s ease;
-  }
-  
-  .chevron-icon.rotated {
-    transform: rotate(180deg);
-  }
-  
-  .education-content {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    animation: fadeIn 0.3s ease-out;
-  }
-  
-  .education-description {
-    color: var(--gray, #95a5a6);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 0;
-    padding-left: 8px;
-    border-left: 2px solid var(--primary, #3498db);
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @media (max-width: 768px) {
-    .university-line, .degree-line {
-      flex-direction: column;
-    }
-    
-    .location, .period {
-      text-align: left;
-      margin-top: 2px;
-    }
-  }
+}

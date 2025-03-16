@@ -120,7 +120,7 @@ import { RouterModule } from '@angular/router';
     .achievement-list {
       list-style-type: none;
       padding-left: 5px;
-      margin-top: 10px;
+      margin-top: 1px;
       margin-bottom: 0;
     }
     
@@ -140,8 +140,8 @@ import { RouterModule } from '@angular/router';
     
     /* Education dropdown styles */
     .education-dropdown {
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: 1px;
+      margin-bottom: 1px;
     }
     
     .education-trigger {
@@ -150,7 +150,7 @@ import { RouterModule } from '@angular/router';
       cursor: pointer;
       display: flex;
       align-items: center;
-      padding: 6px 0;
+      padding: 1px 0;
       transition: all 0.2s ease;
     }
     
@@ -172,8 +172,8 @@ import { RouterModule } from '@angular/router';
     }
     
     .education-content {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: 3px;
+      padding-bottom: 3px;
       animation: fadeIn 0.3s ease-out;
     }
     

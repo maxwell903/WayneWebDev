@@ -14,8 +14,11 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding: 8px 0;
+    padding: 0; /* Completely removed padding */
     transition: all 0.2s ease;
+    margin: 0; /* Removed all margins */
+    font-size: 0.85rem; /* Smaller font size */
+    line-height: 1.2; /* Tighter line height */
   }
   
   .dropdown-toggle:hover,
