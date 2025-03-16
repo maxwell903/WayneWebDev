@@ -6,7 +6,7 @@ import { ProjectCardComponent } from '../../components/project-card/project-card
 import { ExperienceTimelineComponent } from '../../components/experience-timeline/experience-timeline.component';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
-import { EducationSummaryComponent } from '../../components/education-summary/education-summary.component';
+import { EducationSummaryComponent } from '../../components/education-information-summary/education-information-summary.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { AboutSummaryComponent } from '../../components/about-summary/about-summary.component';
 import { WorkHistorySummaryComponent } from '../../components/work-history-summary/work-history-summary.component';
