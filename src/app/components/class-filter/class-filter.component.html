@@ -1,0 +1,82 @@
+<div class="class-filter-container">
+    <div class="filter-dropdown">
+      <div 
+        class="dropdown-toggle" 
+        (click)="toggleDropdown()"
+        [class.active]="isDropdownOpen">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="16" 
+          height="16" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2" 
+          [class.rotated]="isDropdownOpen"
+          class="chevron-icon">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <span>View Course Skills & Information</span>
+      </div>
+      
+      <div class="dropdown-content" *ngIf="isDropdownOpen">
+        <div class="filter-buttons">
+          <button 
+            *ngFor="let filter of filters" 
+            [class.active]="selectedFilter === filter.value"
+            (click)="applyFilter(filter.value)"
+            class="filter-btn">
+            {{filter.label}}
+          </button>
+        </div>
+        
+        <div class="classes-list">
+          <div 
+            *ngFor="let class of filteredClasses" 
+            class="class-card"
+            [class.expanded]="class.isExpanded"
+            [class.technical]="class.category === 'technical'"
+            [class.business]="class.category === 'business'">
+            
+            <div class="class-header" (click)="toggleClass(class)">
+              <div class="class-title">
+                <span class="class-code">{{class.code}}</span>
+                <span class="class-name">{{class.title}}</span>
+              </div>
+              <div class="department-badge">{{class.department}}</div>
+            </div>
+            
+            <div class="class-skills">
+              <div 
+                *ngFor="let skill of class.skills" 
+                class="skill-tag"
+                [class.technical]="skill.category === 'technical'"
+                [class.business]="skill.category === 'business'">
+                {{skill.name}}
+              </div>
+            </div>
+            
+            <div class="class-details" *ngIf="class.isExpanded">
+              <p class="class-description">{{class.description}}</p>
+              
+              <div class="skills-details">
+                <h4>Skills Acquired:</h4>
+                <ul class="skills-list">
+                  <li *ngFor="let skill of class.skills">
+                    <span class="skill-name">{{skill.name}}</span>
+                    <span class="skill-description">{{skill.description}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Empty state when no classes match filter -->
+          <div class="empty-state" *ngIf="filteredClasses.length === 0">
+            <p>No classes found matching the selected filter.</p>
+            <button class="reset-btn" (click)="applyFilter('all')">Show All Classes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
