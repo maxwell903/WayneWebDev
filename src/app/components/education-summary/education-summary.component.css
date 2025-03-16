@@ -81,11 +81,15 @@
   }
   
   /* Education dropdown styles */
-  .education-dropdown {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
+  .education-dropdown .dropdown-toggle,
+.filter-dropdown .dropdown-toggle {
+  color: var(--gray, #95a5a6); /* Change default color to gray */
+}
+
+.education-dropdown .dropdown-toggle:hover,
+.filter-dropdown .dropdown-toggle:hover {
+  color: var(--primary, #3498db); /* Only blue on hover */
+}
   .education-trigger {
     color: var(--gray, #95a5a6);
     font-weight: bold;

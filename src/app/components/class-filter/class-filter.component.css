@@ -9,7 +9,7 @@
   }
   
   .dropdown-toggle {
-    color: var(--primary, #3498db);
+    color: var(--gray, #95a5a6);
     font-weight: bold;
     cursor: pointer;
     display: flex;

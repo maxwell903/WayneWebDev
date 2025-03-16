@@ -4,6 +4,7 @@
     padding: 0 15px;
   }
   
+  
   .about-card {
     background-color: white;
     border-radius: 8px;
@@ -59,6 +60,11 @@
     width: fit-content;
   }
   
+  :host {
+    display: block;
+    margin-top: 50px;
+  }
+
   .expand-toggle:hover {
     color: var(--primary-dark, #2980b9);
     transform: translateY(-2px);
