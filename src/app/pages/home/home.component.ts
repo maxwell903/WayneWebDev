@@ -9,6 +9,7 @@ import { Project } from '../../models/project.model';
 import { EducationSummaryComponent } from '../../components/education-summary/education-summary.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
 import { AboutSummaryComponent } from '../../components/about-summary/about-summary.component';
+import { WorkHistorySummaryComponent } from '../../components/work-history-summary/work-history-summary.component';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ import { AboutSummaryComponent } from '../../components/about-summary/about-summ
     ProjectsSummaryComponent,
     AboutSummaryComponent,
     ProjectCardComponent,
-    ExperienceTimelineComponent
+    ExperienceTimelineComponent,
+    WorkHistorySummaryComponent
   ]
 })
 export class HomeComponent implements OnInit {
