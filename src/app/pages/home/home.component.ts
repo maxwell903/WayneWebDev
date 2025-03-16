@@ -8,6 +8,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 import { EducationSummaryComponent } from '../../components/education-summary/education-summary.component';
 import { ProjectsSummaryComponent } from '../../components/projects-summary/projects-summary.component';
+import { AboutSummaryComponent } from '../../components/about-summary/about-summary.component';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ import { ProjectsSummaryComponent } from '../../components/projects-summary/proj
     RouterModule,
     EducationSummaryComponent,
     ProjectsSummaryComponent,
+    AboutSummaryComponent,
     ProjectCardComponent,
     ExperienceTimelineComponent
   ]

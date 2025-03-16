@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="work-history-card">
+    <h2>WORK HISTORY</h2>
+    
+    <div class="work-entry" *ngFor="let work of workExperiences">
+      <div class="work-line">
+        <span class="work-role">{{work.role}} - {{work.company}}</span>
+        <span class="work-period">{{work.period}}</span>
+      </div>
+      
+      <!-- Add the Skills Dropdown Component here -->
+      <app-work-history-skills-dropdown [jobId]="work.id"></app-work-history-skills-dropdown>
+      
+      <ul class="work-list">
+        <li *ngFor="let point of work.bulletPoints">
+          <a [routerLink]="['/work-history']">
+            • {{point}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

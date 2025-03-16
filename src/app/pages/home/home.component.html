@@ -1,47 +1,39 @@
 <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <h1 class="hero-title">Maxwell Wayne</h1>
-        <p class="hero-subtitle">Full-Stack Developer & MIS Professional</p>
-        <p class="hero-description">Passionate about creating elegant solutions to complex problems</p>
-        <div class="hero-cta">
-          <a routerLink="/projects" class="btn btn-primary">View Projects</a>
-          <a routerLink="/contact" class="btn btn-secondary">Get in Touch</a>
-        </div>
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Maxwell Wayne</h1>
+      <p class="hero-subtitle">Full-Stack Developer & MIS Professional</p>
+      <p class="hero-description">Passionate about creating elegant solutions to complex problems</p>
+      <div class="hero-cta">
+        <a routerLink="/projects" class="btn btn-primary">View Projects</a>
+        <a routerLink="/contact" class="btn btn-secondary">Get in Touch</a>
       </div>
     </div>
-  </section>
-  
-  <section class="summary">
-    <div class="container">
-      <h2 class="section-title">Professional Summary</h2>
-      <div class="summary-content">
-        <p>Full-stack developer with a strong foundation in Management Information Systems from The Ohio State University. Specializing in modern JavaScript frameworks and cloud deployment solutions, I build responsive and scalable web applications with clean, maintainable code.</p>
-        <p>My technical expertise combined with business acumen allows me to bridge the gap between business needs and technical implementation.</p>
-      </div>
-    </div>
-  </section>
-  
-  <app-education-summary></app-education-summary>
+  </div>
+</section>
 
-  <app-projects-summary></app-projects-summary>
-  
-  
-  <section class="featured-projects">
-    <div class="container">
-      <h2 class="section-title">Featured Projects</h2>
-      <div class="projects-grid">
-        <app-project-card *ngFor="let project of featuredProjects" [project]="project"></app-project-card>
-      </div>
-      <div class="projects-cta">
-        <a routerLink="/projects" class="btn btn-primary">View All Projects</a>
-      </div>
+<!-- About section using our new component -->
+<app-about-summary></app-about-summary>
+
+<app-education-summary></app-education-summary>
+
+<app-projects-summary></app-projects-summary>
+
+<section class="featured-projects">
+  <div class="container">
+    <h2 class="section-title">Featured Projects</h2>
+    <div class="projects-grid">
+      <app-project-card *ngFor="let project of featuredProjects" [project]="project"></app-project-card>
     </div>
-  </section>
-  
-  <section class="experience">
-    <div class="container">
-      <h2 class="section-title">Experience & Education</h2>
-      <app-experience-timeline></app-experience-timeline>
+    <div class="projects-cta">
+      <a routerLink="/projects" class="btn btn-primary">View All Projects</a>
     </div>
-  </section>
+  </div>
+</section>
+
+<section class="experience">
+  <div class="container">
+    <h2 class="section-title">Experience & Education</h2>
+    <app-experience-timeline></app-experience-timeline>
+  </div>
+</section>
