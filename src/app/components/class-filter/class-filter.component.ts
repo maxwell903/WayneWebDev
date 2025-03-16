@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface ClassSkill {
   name: string;
-  category: 'technical' | 'business';
+  category: 'technical' | 'business' | 'soft';
   description: string;
 }
 
@@ -37,16 +37,37 @@ export class ClassFilterComponent implements OnInit {
   classes: Class[] = [];
   filteredClasses: Class[] = [];
   
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (this.isDropdownOpen && !(event.target as HTMLElement).closest('.class-filter-container')) {
+      this.isDropdownOpen = false;
+    }
+  }
+  
   ngOnInit(): void {
     this.initializeClasses();
     this.applyFilter('all');
   }
   
-  toggleDropdown(): void {
+  toggleDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.isDropdownOpen = !this.isDropdownOpen;
   }
   
-  toggleClass(cls: Class): void {
+  toggleClass(cls: Class, event: Event): void {
+    event.stopPropagation();
+    
+    // Close all other classes first
+    this.filteredClasses.forEach(c => {
+      if (c !== cls) {
+        c.isExpanded = false;
+      }
+    });
+    
+    // Toggle this class
     cls.isExpanded = !cls.isExpanded;
   }
   
@@ -58,6 +79,9 @@ export class ClassFilterComponent implements OnInit {
     } else {
       this.filteredClasses = this.classes.filter(cls => cls.category === filter);
     }
+    
+    // Close all expanded classes when filter changes
+    this.filteredClasses.forEach(c => c.isExpanded = false);
   }
   
   initializeClasses(): void {
@@ -419,6 +443,276 @@ export class ClassFilterComponent implements OnInit {
             name: 'Cost-Benefit Analysis',
             category: 'business',
             description: 'Conducted thorough analyses of technology options considering both tangible and intangible factors.'
+          }
+        ]
+      },
+      {
+        code: 'BUSOBA 2320',
+        title: 'Business Statistics',
+        department: 'BUSOBA',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course covered statistical methods for business decision-making, including descriptive statistics, probability distributions, hypothesis testing, and regression analysis. I learned to apply these techniques to real business data to draw meaningful conclusions and make data-driven recommendations.',
+        skills: [
+          {
+            name: 'Statistical Analysis',
+            category: 'technical',
+            description: 'Applied statistical methods including hypothesis testing, regression analysis, and confidence intervals to business data.'
+          },
+          {
+            name: 'Data Visualization',
+            category: 'technical',
+            description: 'Created effective visualizations to communicate statistical findings and data patterns to business audiences.'
+          },
+          {
+            name: 'Quantitative Reasoning',
+            category: 'business',
+            description: 'Developed critical thinking skills to interpret statistical results in the context of business problems.'
+          },
+          {
+            name: 'Data-Driven Decision Making',
+            category: 'business',
+            description: 'Used statistical evidence to support business decisions and evaluate potential outcomes.'
+          }
+        ]
+      },
+      {
+        code: 'BUSOBA 3230',
+        title: 'Introduction to Operations Management',
+        department: 'BUSOBA',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course introduced me to the principles of designing, operating, and improving the processes that transform resources into goods and services. I learned techniques for process analysis, capacity planning, inventory management, and quality control in both manufacturing and service operations.',
+        skills: [
+          {
+            name: 'Process Analysis',
+            category: 'business',
+            description: 'Mapped and analyzed business processes to identify bottlenecks and improvement opportunities.'
+          },
+          {
+            name: 'Resource Planning',
+            category: 'business',
+            description: 'Developed capacity plans and resource allocation strategies to optimize operational efficiency.'
+          },
+          {
+            name: 'Quality Management',
+            category: 'business',
+            description: 'Applied statistical quality control techniques and continuous improvement methodologies.'
+          },
+          {
+            name: 'Operations Metrics',
+            category: 'business',
+            description: 'Established and monitored key performance indicators to measure operational effectiveness.'
+          }
+        ]
+      },
+      {
+        code: 'BUSML 3380',
+        title: 'Logistics Management',
+        department: 'BUSML',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course focused on the management of physical flow of products, services, and information through the supply chain. I learned about transportation systems, inventory management, distribution strategies, and how technology enables modern logistics networks.',
+        skills: [
+          {
+            name: 'Supply Chain Management',
+            category: 'business',
+            description: 'Analyzed end-to-end supply chain operations and coordinated multiple stakeholders across distribution networks.'
+          },
+          {
+            name: 'Inventory Control',
+            category: 'business',
+            description: 'Applied inventory models to balance stock levels, service rates, and carrying costs.'
+          },
+          {
+            name: 'Distribution Network Design',
+            category: 'business',
+            description: 'Optimized facility locations and transportation routes to minimize costs while meeting service level requirements.'
+          },
+          {
+            name: 'Logistics Technology',
+            category: 'technical',
+            description: 'Utilized supply chain software and tracking systems to improve visibility and operational efficiency.'
+          }
+        ]
+      },
+      {
+        code: 'BUSMHR 3200',
+        title: 'Organizational Behavior & Human Resources',
+        department: 'BUSMHR',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course explored individual and group behavior in organizations, including leadership styles, motivation techniques, and team management strategies. I gained insights into how organizational culture affects technology adoption and how to effectively manage technical teams.',
+        skills: [
+          {
+            name: 'Team Leadership',
+            category: 'soft',
+            description: 'Developed skills to lead diverse teams through effective communication, motivation, and conflict resolution.'
+          },
+          {
+            name: 'Organizational Analysis',
+            category: 'business',
+            description: 'Assessed organizational structures and cultures to identify factors influencing performance and change adoption.'
+          },
+          {
+            name: 'Performance Management',
+            category: 'business',
+            description: 'Designed systems to evaluate, develop, and improve individual and team performance.'
+          },
+          {
+            name: 'Change Management',
+            category: 'soft',
+            description: 'Applied strategies to facilitate organizational transitions and technology adoption with minimal resistance.'
+          }
+        ]
+      },
+      {
+        code: 'BUSMHR 2500',
+        title: 'Entrepreneurship',
+        department: 'BUSMHR',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course introduced me to entrepreneurial thinking, opportunity recognition, business model development, and startup strategies. I learned how to evaluate business ideas, develop minimum viable products, and create pitches for potential investors in technology-driven ventures.',
+        skills: [
+          {
+            name: 'Business Model Design',
+            category: 'business',
+            description: 'Created and refined business models to capture value from technological innovations and market opportunities.'
+          },
+          {
+            name: 'Market Analysis',
+            category: 'business',
+            description: 'Researched target markets, analyzed competitors, and identified unmet customer needs that technology could address.'
+          },
+          {
+            name: 'Lean Startup Methodology',
+            category: 'business',
+            description: 'Applied minimum viable product concepts and iterative development to validate business assumptions.'
+          },
+          {
+            name: 'Pitch Development',
+            category: 'soft',
+            description: 'Created compelling presentations to communicate business value propositions to potential stakeholders.'
+          }
+        ]
+      },
+      {
+        code: 'MATH 1131',
+        title: 'Calculus for Business',
+        department: 'MATH',
+        category: 'technical',
+        isExpanded: false,
+        description: 'This course covered the application of differential and integral calculus to business and economics. I learned optimization techniques for resource allocation, marginal analysis for decision-making, and quantitative methods for modeling business scenarios.',
+        skills: [
+          {
+            name: 'Optimization Techniques',
+            category: 'technical',
+            description: 'Applied calculus to find optimal solutions for business problems involving constraints and multiple variables.'
+          },
+          {
+            name: 'Quantitative Modeling',
+            category: 'technical',
+            description: 'Developed mathematical models to represent business relationships and predict outcomes.'
+          },
+          {
+            name: 'Marginal Analysis',
+            category: 'business',
+            description: 'Used calculus concepts to evaluate incremental changes in costs, revenues, and profits for business decisions.'
+          },
+          {
+            name: 'Analytical Thinking',
+            category: 'soft',
+            description: 'Approached complex problems with systematic mathematical reasoning and solution frameworks.'
+          }
+        ]
+      },
+      {
+        code: 'MATH 2366',
+        title: 'Introduction to Discrete Mathematics',
+        department: 'MATH',
+        category: 'technical',
+        isExpanded: false,
+        description: 'This course introduced me to the mathematical foundations of computer science, including set theory, logic, graph theory, combinatorics, and algorithm analysis. These concepts formed the theoretical basis for data structures and algorithms courses.',
+        skills: [
+          {
+            name: 'Logical Reasoning',
+            category: 'technical',
+            description: 'Applied formal logic to analyze and construct valid arguments and proofs.'
+          },
+          {
+            name: 'Graph Theory',
+            category: 'technical',
+            description: 'Used graph models to represent and solve problems involving relationships and connections between entities.'
+          },
+          {
+            name: 'Algorithm Analysis',
+            category: 'technical',
+            description: 'Evaluated the efficiency and correctness of algorithms using mathematical techniques.'
+          },
+          {
+            name: 'Combinatorial Analysis',
+            category: 'technical',
+            description: 'Applied counting methods and combinatorial principles to solve complex computational problems.'
+          }
+        ]
+      },
+      {
+        code: 'STAT 1430',
+        title: 'Statistics for Business Sciences',
+        department: 'STAT',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course covered statistical methods for business analysis, including descriptive statistics, probability theory, sampling distributions, confidence intervals, and hypothesis testing. I gained hands-on experience analyzing business data sets and interpreting results.',
+        skills: [
+          {
+            name: 'Statistical Testing',
+            category: 'technical',
+            description: 'Designed and conducted hypothesis tests to evaluate business claims based on sample data.'
+          },
+          {
+            name: 'Sampling Methods',
+            category: 'technical',
+            description: 'Applied appropriate sampling techniques to collect representative data for business studies.'
+          },
+          {
+            name: 'Statistical Software',
+            category: 'technical',
+            description: 'Used statistical packages to analyze large datasets and interpret results for business contexts.'
+          },
+          {
+            name: 'Inference & Estimation',
+            category: 'business',
+            description: 'Made valid inferences about populations based on sample data with specified confidence levels.'
+          }
+        ]
+      },
+      {
+        code: 'BUSMHR 2292',
+        title: 'Business Skills & Environment',
+        department: 'BUSMHR',
+        category: 'business',
+        isExpanded: false,
+        description: 'This course focused on developing essential professional skills for business environments, including communication, teamwork, and ethical decision-making. I practiced delivering presentations, writing business documents, and working in collaborative project teams.',
+        skills: [
+          {
+            name: 'Professional Communication',
+            category: 'soft',
+            description: 'Developed effective business writing and presentation skills for various professional audiences.'
+          },
+          {
+            name: 'Team Collaboration',
+            category: 'soft',
+            description: 'Worked effectively in diverse teams to achieve shared goals through coordinated effort.'
+          },
+          {
+            name: 'Business Ethics',
+            category: 'business',
+            description: 'Applied ethical frameworks to analyze business situations and make principled decisions.'
+          },
+          {
+            name: 'Time Management',
+            category: 'soft',
+            description: 'Prioritized tasks and managed competing deadlines to maximize productivity and project outcomes.'
           }
         ]
       }
