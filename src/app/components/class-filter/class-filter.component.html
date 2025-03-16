@@ -135,7 +135,8 @@
                 (click)="addSkillFilter(skill.name); $event.stopPropagation()">
                 {{skill.name}}
               </div>
-              <div *ngIf="class.skills.length > 3" class="skill-tag more">
+              <!-- Fixed the double *ngIf issue -->
+              <div class="skill-tag more" *ngIf="class.skills.length > 3">
                 +{{class.skills.length - 3}} more
               </div>
             </div>

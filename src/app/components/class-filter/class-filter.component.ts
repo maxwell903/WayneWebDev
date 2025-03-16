@@ -161,10 +161,22 @@ export class ClassFilterComponent implements OnInit {
   }
   
   isSkillHighlighted(skill: string): boolean {
-    return this.activeSkillFilters.includes(skill) || 
-           (this.searchTerm && skill.toLowerCase().includes(this.searchTerm.toLowerCase()));
+    // The issue is that (this.searchTerm && skill.toLowerCase().includes(this.searchTerm.toLowerCase()))
+    // can return a string if this.searchTerm is truthy
+    
+    // First check if this skill is in the active filters
+    if (this.activeSkillFilters.includes(skill)) {
+      return true;
+    }
+    
+    // Then check if the search term matches the skill
+    if (this.searchTerm && typeof this.searchTerm === 'string') {
+      return skill.toLowerCase().includes(this.searchTerm.toLowerCase());
+    }
+    
+    // Default case
+    return false;
   }
-  
   isClassHighlighted(cls: Class): boolean {
     // Highlight if any of the class's skills match the active filters
     if (this.activeSkillFilters.length > 0) {
@@ -242,7 +254,6 @@ export class ClassFilterComponent implements OnInit {
   
   initializeClasses(): void {
     // Initialize the classes array with our course data
-    this.filteredClasses = [...this.classes];
     this.classes = [
       {
         code: 'CSE 2111',
@@ -872,12 +883,11 @@ export class ClassFilterComponent implements OnInit {
             category: 'business',
             description: 'Made valid inferences about populations based on sample data with specified confidence levels.'
           }
-        
-    ]
-  }
-];
+        ]
+      }
+    ];
 
-// Initialize filteredClasses after classes array is populated
-this.filteredClasses = [...this.classes];
-}
+    // Initialize filteredClasses after classes array is populated
+    this.filteredClasses = [...this.classes];
+  }
 }
