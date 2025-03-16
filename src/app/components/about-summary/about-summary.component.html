@@ -1,19 +1,10 @@
 <!-- src/app/components/about-summary/about-summary.component.html -->
 <div class="container">
-    <div class="about-card">
-      <div class="about-content">
-        <div class="header-info">
-          <h1 class="name">Maxwell A. Wayne</h1>
-          <p class="contact-info">
-            <span>(513) 720-8684</span> • 
-            <span>maxwayne903-gmail.com</span> • 
-            <span>1315 Michigan Ave. Cincinnati, Ohio</span>
-          </p>
-        </div>
-        <p class="about-summary">
-          Full-stack developer with a strong foundation in Management Information Systems from The Ohio State University. Specializing in modern JavaScript frameworks and cloud deployment solutions, I build responsive and scalable web applications with clean, maintainable code.
-        </p>
-        
+  <div class="about-card">
+    <div class="about-content">
+      <!-- Added position relative to allow absolute positioning of the toggle button -->
+      <div class="header-info">
+        <!-- Read More button positioned at top right -->
         <div class="expand-toggle" (click)="toggleExpand()">
           <span>{{ isExpanded ? 'Show Less' : 'Read More' }}</span>
           <svg 
@@ -30,40 +21,53 @@
           </svg>
         </div>
         
-        <div class="expanded-content" *ngIf="isExpanded">
-          <p>
-            My technical expertise combined with business acumen allows me to bridge the gap between business needs and technical implementation.
-          </p>
+        <h1 class="name">Maxwell A. Wayne</h1>
+        <!-- Line will be added via CSS between name and contact info -->
+        <p class="contact-info">
+          <span>(513) 720-8684</span> • 
+          <span>maxwayne903-gmail.com</span> • 
+          <span>1315 Michigan Ave. Cincinnati, Ohio</span>
+        </p>
+      </div>
+      
+      <div class="expanded-content" *ngIf="isExpanded">
+        <p class="about-summary">
+          Full-stack developer with a strong foundation in Management Information Systems from The Ohio State University. Specializing in modern JavaScript frameworks and cloud deployment solutions, I build responsive and scalable web applications with clean, maintainable code.
+        </p>
+        
+        <p>
+          My technical expertise combined with business acumen allows me to bridge the gap between business needs and technical implementation.
+        </p>
+        
+        <div class="skills-highlight">
+          <div class="skill-category">
+            <h3>Frontend Development</h3>
+            <ul>
+              <li>Angular, React, TypeScript</li>
+              <li>Responsive Design, Animations</li>
+              <li>Performance Optimization</li>
+            </ul>
+          </div>
           
-          <div class="skills-highlight">
-            <div class="skill-category">
-              <h3>Frontend Development</h3>
-              <ul>
-                <li>Angular, React, TypeScript</li>
-                <li>Responsive Design, Animations</li>
-                <li>Performance Optimization</li>
-              </ul>
-            </div>
-            
-            <div class="skill-category">
-              <h3>Backend Development</h3>
-              <ul>
-                <li>Node.js, Python, Flask</li>
-                <li>RESTful APIs, Authentication</li>
-                <li>Database Design</li>
-              </ul>
-            </div>
-            
-            <div class="skill-category">
-              <h3>Business Perspective</h3>
-              <ul>
-                <li>Requirements Analysis</li>
-                <li>Process Optimization</li>
-                <li>User-Centered Solutions</li>
-              </ul>
-            </div>
+          <div class="skill-category">
+            <h3>Backend Development</h3>
+            <ul>
+              <li>Node.js, Python, Flask</li>
+              <li>RESTful APIs, Authentication</li>
+              <li>Database Design</li>
+            </ul>
+          </div>
+          
+          <div class="skill-category">
+            <h3>Business Perspective</h3>
+            <ul>
+              <li>Requirements Analysis</li>
+              <li>Process Optimization</li>
+              <li>User-Centered Solutions</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
