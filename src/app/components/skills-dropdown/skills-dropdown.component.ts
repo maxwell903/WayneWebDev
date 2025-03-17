@@ -73,8 +73,8 @@ interface SkillItem {
   `,
   styles: [`
     .skills-dropdown {
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: 2px;
+      margin-bottom: 2px;
     }
     
     .skills-trigger {
@@ -83,7 +83,7 @@ interface SkillItem {
       cursor: pointer;
       display: flex;
       align-items: center;
-      padding: 6px 0;
+      padding: 0px 0;
       transition: all 0.2s ease;
     }
     
@@ -105,8 +105,8 @@ interface SkillItem {
     }
     
     .skills-content {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
       animation: fadeIn 0.3s ease-out;
     }
     
@@ -114,14 +114,14 @@ interface SkillItem {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 2px;
     }
     
     .category-button {
       background-color: var(--light);
       border: 1px solid var(--light-gray);
       border-radius: 20px;
-      padding: 6px 12px;
+      padding: 3px 6px;
       font-size: 0.85rem;
       color: var(--gray);
       cursor: pointer;
@@ -142,14 +142,14 @@ interface SkillItem {
     }
     
     .skill-category {
-      margin-bottom: 5px;
+      margin-bottom: 2px;
     }
     
     .category-description {
       color: var(--gray);
       font-size: 0.9rem;
       font-style: italic;
-      margin-bottom: 8px;
+      margin-bottom: 2px;
       padding-left: 8px;
       border-left: 2px solid var(--primary);
     }
@@ -161,7 +161,7 @@ interface SkillItem {
     }
     
     .skill-item {
-      margin-bottom: 8px;
+      margin-bottom: 2px;
       padding-left: 8px;
       border-left: 2px solid rgba(52, 152, 219, 0.2);
     }
