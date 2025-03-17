@@ -8,6 +8,8 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 12px; /* Reduced from 25px */
+  padding-bottom: 2px;
+  padding-top: 2px;
   margin-bottom: 4px; /* Reduced from 8px */
   border-top: 3px solid var(--primary, #3498db);
   width: 100%;
@@ -18,7 +20,7 @@
   font-size: 16px;
   font-weight: bold;
   margin-top: 0;
-  margin-bottom: 8px; /* Reduced from 15px */
+  margin-bottom: 2px; /* Reduced from 15px */
   text-transform: uppercase;
   color: var(--secondary, #2c3e50);
 }
@@ -46,7 +48,7 @@
 .degree-line {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px; /* Reduced from 10px */
+  margin-bottom: 2px; /* Reduced from 10px */
 }
 
 .degree {
@@ -123,7 +125,7 @@ color: var(--primary, #3498db);
 
 .education-content {
   padding-top: 5px; /* Reduced from 10px */
-  padding-bottom: 5px; /* Reduced from 10px */
+  padding-bottom: 1px; /* Reduced from 10px */
   animation: fadeIn 0.3s ease-out;
 }
 

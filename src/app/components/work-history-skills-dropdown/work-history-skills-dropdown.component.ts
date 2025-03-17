@@ -76,14 +76,18 @@ interface SkillItem {
     }
     
     .skills-trigger {
-      color: var(--gray, #95a5a6);
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 6px 0;
-      transition: all 0.2s ease;
-    }
+  color: var(--gray, #95a5a6);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0; /* Completely removed padding */
+  transition: all 0.2s ease;
+  margin: 0; /* Removed all margins */
+  font-size: 0.85rem; /* Smaller font size */
+  line-height: 1.2; /* Tighter line height */
+}
+
     
     .skills-trigger:hover {
       color: var(--primary, #3498db);
@@ -94,7 +98,7 @@ interface SkillItem {
     }
     
     .chevron-icon {
-      margin-right: 8px;
+      margin-right: 4px;
       transition: transform 0.3s ease;
     }
     
@@ -103,28 +107,28 @@ interface SkillItem {
     }
     
     .skills-content {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
+  padding-top: 5px;
+  padding-bottom: 0px;
+  animation: fadeIn 0.3s ease-out;
+}
     .category-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 2px;
     }
     
     .category-button {
-      background-color: var(--light);
-      border: 1px solid var(--light-gray);
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      color: var(--gray);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
+  background-color: var(--light);
+  border: 1px solid var(--light-gray);
+  border-radius: 20px;
+  padding: 3px 6px; /* Reduced padding */
+  font-size: 0.85rem; /* Smaller text */
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
     
     .category-button:hover {
       background-color: rgba(52, 152, 219, 0.1);
@@ -140,7 +144,7 @@ interface SkillItem {
     }
     
     .skill-category {
-      margin-bottom: 5px;
+      margin-bottom: 2px;
     }
     
     .category-description {
@@ -159,7 +163,7 @@ interface SkillItem {
     }
     
     .skill-item {
-      margin-bottom: 8px;
+      margin-bottom: 2px;
       padding-left: 8px;
       border-left: 2px solid rgba(52, 152, 219, 0.2);
     }
