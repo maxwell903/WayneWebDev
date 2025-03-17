@@ -78,14 +78,17 @@ interface SkillItem {
     }
     
     .skills-trigger {
-      color: var(--gray, #95a5a6);
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      padding: 0px 0;
-      transition: all 0.2s ease;
-    }
+  color: var(--gray, #95a5a6);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0; /* Completely removed padding */
+  transition: all 0.2s ease;
+  margin: 0; /* Removed all margins */
+  font-size: 0.85rem; /* Smaller font size */
+  line-height: 1.2; /* Tighter line height */
+}
     
     .skills-trigger:hover {
       color: var(--primary, #3498db);
@@ -106,7 +109,7 @@ interface SkillItem {
     
     .skills-content {
       padding-top: 5px;
-      padding-bottom: 5px;
+      padding-bottom: 0px;
       animation: fadeIn 0.3s ease-out;
     }
     
